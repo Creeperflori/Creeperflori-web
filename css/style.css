@@ -11,6 +11,7 @@
     --change-color: #00d4ff;
 }
 
+
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
 body { background-color: var(--bg-dark); color: var(--text-main); overflow-x: hidden; line-height: 1.6; }
 #bgCanvas { position: fixed; top: 0; left: 0; z-index: -1; }
