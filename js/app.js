@@ -95,7 +95,6 @@ auth.onAuthStateChanged(user => {
     if(document.getElementById('news-list')) loadNews();
 });
 
-// Modal Steuerung
 function openLoginModal() { document.getElementById('login-modal').style.display = "flex"; }
 function closeLoginModal() { document.getElementById('login-modal').style.display = "none"; }
 
