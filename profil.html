@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mein Profil | Creeperflori</title>
+    
+    <link rel="stylesheet" href="css/style.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+</head>
+<body>
+
+    <canvas id="bgCanvas"></canvas>
+
+    <nav>
+        <a href="index.html">NEWS</a>
+        <a href="sozial.html">SOCIAL</a>
+        <a href="fillypath.html">FILLYPATH</a>
+        <a href="creepercave.html">CREEPERCAVE</a>
+        <a class="user-login-btn" onclick="openLoginModal()">Login</a>
+    </nav>
+
+    <div class="container">
+        <header class="chibi-header">
+            <img src="img/Creeperflori.png" alt="Profil Avatar" id="profile-avatar">
+            <h1 id="profile-title">Mein Profil</h1>
+        </header>
+
+        <div class="project-card" style="max-width: 600px; margin: 0 auto; border-left-color: var(--primary);">
+            <h2 style="margin-bottom: 20px;">Profil bearbeiten</h2>
+            
+            <label style="color: #ccc; font-size: 0.9rem; margin-bottom: 5px; display: block;">Anzeigename (Sichtbar für alle)</label>
+            <input type="text" id="prof-name" placeholder="Dein cooler Name" class="editor-input">
+            
+            <label style="color: #ccc; font-size: 0.9rem; margin-bottom: 5px; display: block;">Über mich (Bio)</label>
+            <textarea id="prof-bio" placeholder="Erzähl der Community etwas über dich..." rows="4" class="editor-input"></textarea>
+            
+            <button onclick="saveProfile()" class="save-btn btn-highlight" style="margin-top: 10px;">
+                💾 Profil Speichern
+            </button>
+
+            <button onclick="logoutUser()" class="save-btn btn-outline" style="margin-top: 15px; border-color: red !important; color: #ff4d4d !important;">
+                🚪 Ausloggen
+            </button>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
