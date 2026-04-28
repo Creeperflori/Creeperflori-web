@@ -23,6 +23,24 @@
         <a class="user-login-btn" onclick="openLoginModal()">Login</a>
     </nav>
 
+    <div id="login-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeLoginModal()">&times;</span>
+            <h2 style="margin-bottom: 20px; color: white;">Community Login</h2>
+            
+            <form onsubmit="event.preventDefault(); handleAuth('login');">
+                <input type="email" id="auth-email" placeholder="E-Mail Adresse" required autocomplete="email">
+                <input type="password" id="auth-pass" placeholder="Passwort" required autocomplete="current-password">
+                <div class="legal-notice">
+                    <input type="checkbox" id="legal-check">
+                    <label for="legal-check">Ich akzeptiere die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a>.</label>
+                </div>
+                <button type="submit" class="save-btn">Einloggen</button>
+                <button type="button" onclick="handleAuth('register')" class="save-btn btn-outline">Registrieren</button>
+            </form>
+        </div>
+    </div>
+
     <div class="container">
         <header class="chibi-header">
             <h1 style="color: #ff9900;">📩 Support Postfach</h1>
