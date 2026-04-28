@@ -4,16 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>News | Creeperflori</title>
-    
     <link rel="stylesheet" href="css/style.css">
-    
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 </head>
 <body>
-
     <canvas id="bgCanvas"></canvas>
 
     <nav>
@@ -28,15 +25,12 @@
         <div class="modal-content">
             <span class="close-modal" onclick="closeLoginModal()">&times;</span>
             <h2 style="margin-bottom: 20px; color: white;">Community Login</h2>
-            
             <input type="email" id="auth-email" placeholder="E-Mail Adresse" required>
             <input type="password" id="auth-pass" placeholder="Passwort" required>
-            
             <div class="legal-notice">
                 <input type="checkbox" id="legal-check">
                 <label for="legal-check">Ich akzeptiere die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a>.</label>
             </div>
-            
             <button onclick="handleAuth('login')" class="save-btn">Einloggen</button>
             <button onclick="handleAuth('register')" class="save-btn btn-outline">Registrieren</button>
         </div>
@@ -47,23 +41,6 @@
             <img src="img/Creeperflori.png" alt="Creeperflori Chibi">
             <h1>Creeperflori News</h1>
         </header>
-
-        <div id="admin-panel" class="admin-card" style="display:none;">
-            <h2>🛠️ Editor Hub</h2>
-            <div class="editor-controls">
-                <select id="n-type" class="editor-input">
-                    <option value="news">📰 Allgemeine News</option>
-                    <option value="patchnotes">🛠️ Patchnotes</option>
-                    <option value="changelog">📜 Changelog</option>
-                </select>
-                <input type="file" id="n-image" accept="image/*" class="editor-input">
-            </div>
-            <input type="text" id="n-title" placeholder="Titel des Beitrags" class="editor-input">
-            <textarea id="n-content" placeholder="Was gibt's Neues?" rows="5" class="editor-input"></textarea>
-            
-            <div id="upload-progress" class="progress-text"></div>
-            <button onclick="uploadNewsWithImage()" id="post-btn" class="save-btn btn-highlight">Veröffentlichen</button>
-        </div>
 
         <div id="news-list">
             <p style="text-align: center; color: gray;">Lade News...</p>
