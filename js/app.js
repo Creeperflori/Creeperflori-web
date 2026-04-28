@@ -9,7 +9,7 @@ const storage = firebase.storage();
 let isAdmin = false; 
 
 // ==========================================
-// 2. LINKS VERTEILEN (Dynamic Links)
+// 2. LINKS VERTEILEN
 // ==========================================
 function applyLinks() {
     const setLink = (id, url) => {
@@ -29,9 +29,8 @@ function applyLinks() {
 }
 
 // ==========================================
-// 3. MASTER-STEUERUNG (Login, Rechte & Seiten)
+// 3. MASTER-STEUERUNG
 // ==========================================
-// Das ist das neue "Gehirn", das alles zentral steuert!
 auth.onAuthStateChanged(user => {
     applyLinks(); 
     
@@ -40,12 +39,11 @@ auth.onAuthStateChanged(user => {
     const path = window.location.pathname;
     
     if (user) {
-        // 1. Ist der User der Admin? (Kugelsicherer Check ohne Leerzeichen und Großbuchstaben)
+        // Kugelsicherer Admin-Check
         const uEmail = user.email ? user.email.trim().toLowerCase() : "";
         const aEmail = CONFIG.adminEmail ? CONFIG.adminEmail.trim().toLowerCase() : "";
         isAdmin = (uEmail === aEmail && uEmail !== "");
 
-        // 2. Lade Nutzerdaten
         db.collection('users').doc(user.uid).onSnapshot(doc => {
             let name = user.email.split('@')[0];
             let bio = "";
@@ -55,13 +53,11 @@ auth.onAuthStateChanged(user => {
                 if (doc.data().bio) bio = doc.data().bio;
             }
             
-            // Login-Buttons updaten
             loginBtns.forEach(btn => {
                 btn.innerHTML = "👤 " + name;
                 btn.onclick = () => window.location.href = "profil.html";
             });
 
-            // Wenn wir auf dem Profil sind, Felder ausfüllen
             if (path.includes('profil.html')) {
                 const nameInput = document.getElementById('prof-name');
                 const title = document.getElementById('profile-title');
@@ -73,22 +69,16 @@ auth.onAuthStateChanged(user => {
             }
         });
 
-        // 3. Admin-Panel anzeigen (falls auf Profil)
         if(isAdmin && adminPanel) {
             adminPanel.style.display = "block";
         }
 
-        // 4. Admin-Seite schützen
         if (path.includes('admin.html')) {
-            if (isAdmin) {
-                renderAdminMessages(); // Lade Postfach
-            } else {
-                window.location.replace("index.html"); // Rauswerfen!
-            }
+            if (isAdmin) renderAdminMessages();
+            else window.location.replace("index.html");
         }
 
     } else {
-        // NICHT EINGELOGGT
         isAdmin = false;
         loginBtns.forEach(btn => {
             btn.innerHTML = "LOGIN";
@@ -97,16 +87,12 @@ auth.onAuthStateChanged(user => {
         
         if(adminPanel) adminPanel.style.display = "none";
 
-        // Wer nicht eingeloggt ist, darf nicht auf Profil oder Admin!
         if (path.includes('profil.html') || path.includes('admin.html')) {
             window.location.replace("index.html");
         }
     }
     
-    // 5. News laden (Wenn wir auf der index.html sind)
-    if(document.getElementById('news-list')) {
-        loadNews();
-    }
+    if(document.getElementById('news-list')) loadNews();
 });
 
 // Modal Steuerung
@@ -135,27 +121,17 @@ window.logoutUser = function() { auth.signOut().then(() => location.reload()); }
 window.saveProfile = function() {
     const user = auth.currentUser;
     if(!user) return;
-    
     const newName = document.getElementById('prof-name').value.trim();
     const newBio = document.getElementById('prof-bio').value.trim();
-    
     if(!newName) return alert("Bitte gib einen Namen an!");
 
-    db.collection("users").doc(user.uid).set({ 
-        displayName: newName, 
-        bio: newBio, 
-        email: user.email, 
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp() 
-    }, { merge: true })
-    .then(() => { 
-        alert("✅ Profil erfolgreich gespeichert!"); 
-        document.getElementById('profile-title').innerText = newName; 
-    })
+    db.collection("users").doc(user.uid).set({ displayName: newName, bio: newBio, email: user.email, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
+    .then(() => { alert("✅ Profil erfolgreich gespeichert!"); document.getElementById('profile-title').innerText = newName; })
     .catch(error => alert("Fehler: " + error.message));
 };
 
 // ==========================================
-// 5. NEWS & BILDER UPLOAD
+// 5. NEWS & BILDER
 // ==========================================
 async function compressImage(file, maxWidth, maxHeight, quality) {
     return new Promise((resolve) => {
@@ -206,10 +182,7 @@ window.uploadNewsWithImage = async function() {
     }
 
     db.collection("news").add({ title, content, type, image: url, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
-    .then(() => { 
-        alert("News veröffentlicht!");
-        window.location.href = "index.html"; 
-    });
+    .then(() => { alert("News veröffentlicht!"); window.location.href = "index.html"; });
 };
 
 function loadNews() {
@@ -253,7 +226,7 @@ function loadNews() {
 }
 
 // ==========================================
-// 6. KOMMENTAR LOGIK
+// 6. KOMMENTARE
 // ==========================================
 window.postComment = function(newsId) {
     const user = auth.currentUser;
@@ -266,13 +239,7 @@ window.postComment = function(newsId) {
 
     db.collection("users").doc(user.uid).get().then(userDoc => {
         const name = (userDoc.exists && userDoc.data().displayName) ? userDoc.data().displayName : user.email.split('@')[0];
-        db.collection("comments").add({ 
-            newsId: newsId, 
-            userId: user.uid, 
-            userName: name, 
-            text: text, 
-            timestamp: firebase.firestore.FieldValue.serverTimestamp() 
-        })
+        db.collection("comments").add({ newsId: newsId, userId: user.uid, userName: name, text: text, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
         .then(() => { textEl.value = ""; });
     });
 };
@@ -289,8 +256,7 @@ function loadComments(newsId) {
             const delBtn = isAdmin ? `<span onclick="deleteDoc('comments', '${doc.id}')" style="color:red; cursor:pointer; float:right; font-size:0.8rem;">❌</span>` : '';
             box.innerHTML += `
                 <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px; margin-top: 8px; font-size: 0.9rem; border: 1px solid #222;">
-                    <strong style="color:var(--primary)">${c.userName}</strong> 
-                    ${delBtn}
+                    <strong style="color:var(--primary)">${c.userName}</strong> ${delBtn}
                     <div style="margin-top: 5px; color: #ccc;">${c.text}</div>
                 </div>`;
         });
