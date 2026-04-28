@@ -14,7 +14,7 @@ const CONFIG = {
         instagram: "https://www.instagram.com/creeperflori",
         creeperCave: "https://discord.gg/DEIN_NEUER_INVITE", // Platzhalter für deinen neuen Server!
         deppenCord: "https://discord.gg/HtqwEnsb2n", // Kommt später zu den Partnern
-        serverIP: "FILLYPATH.DE",
+        serverIP: "",
         serverDiscord: "https://discord.gg/Sn4mhjPNUc"
     },
 
