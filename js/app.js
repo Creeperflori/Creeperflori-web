@@ -34,7 +34,8 @@ function applyLinks() {
 auth.onAuthStateChanged(user => {
     applyLinks(); 
     
-    const adminPanel = document.getElementById('admin-panel');
+    // Wir suchen jetzt nach dem Link im Menü!
+    const adminNavLink = document.getElementById('admin-nav-link');
     const loginBtns = document.querySelectorAll('.user-login-btn');
     const path = window.location.pathname;
     
@@ -69,13 +70,14 @@ auth.onAuthStateChanged(user => {
             }
         });
 
-        if(isAdmin && adminPanel) {
-            adminPanel.style.display = "block";
+        // HIER PASSIERT DIE MAGIE: Wenn Admin, dann zeige den Menü-Punkt!
+        if(isAdmin && adminNavLink) {
+            adminNavLink.style.display = "inline-block";
         }
 
         if (path.includes('admin.html')) {
             if (isAdmin) renderAdminMessages();
-            else window.location.replace("index.html");
+            else window.location.replace("index.html"); // Kickt normale User raus
         }
 
     } else {
@@ -85,7 +87,8 @@ auth.onAuthStateChanged(user => {
             btn.onclick = openLoginModal;
         });
         
-        if(adminPanel) adminPanel.style.display = "none";
+        // Verstecke den Button, wenn ausgeloggt
+        if(adminNavLink) adminNavLink.style.display = "none";
 
         if (path.includes('profil.html') || path.includes('admin.html')) {
             window.location.replace("index.html");
