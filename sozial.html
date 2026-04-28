@@ -3,17 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Media | Creeperflori</title>
-    
+    <title>News | Creeperflori</title>
     <link rel="stylesheet" href="css/style.css">
-    
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 </head>
 <body>
-
     <canvas id="bgCanvas"></canvas>
 
     <nav>
@@ -28,15 +25,12 @@
         <div class="modal-content">
             <span class="close-modal" onclick="closeLoginModal()">&times;</span>
             <h2 style="margin-bottom: 20px; color: white;">Community Login</h2>
-            
             <input type="email" id="auth-email" placeholder="E-Mail Adresse" required>
             <input type="password" id="auth-pass" placeholder="Passwort" required>
-            
             <div class="legal-notice">
                 <input type="checkbox" id="legal-check">
                 <label for="legal-check">Ich akzeptiere die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a>.</label>
             </div>
-            
             <button onclick="handleAuth('login')" class="save-btn">Einloggen</button>
             <button onclick="handleAuth('register')" class="save-btn btn-outline">Registrieren</button>
         </div>
@@ -45,28 +39,11 @@
     <div class="container">
         <header class="chibi-header">
             <img src="img/Creeperflori.png" alt="Creeperflori Chibi">
-            <h1>Meine Kanäle</h1>
+            <h1>Creeperflori News</h1>
         </header>
 
-        <div class="social-links-container">
-            <a href="#" id="link-twitch" target="_blank" class="social-btn btn-twitch">
-                <span class="icon">🎮</span> Twitch
-            </a>
-            <a href="#" id="link-yt" target="_blank" class="social-btn btn-youtube">
-                <span class="icon">📺</span> YouTube
-            </a>
-            <a href="#" id="link-tt" target="_blank" class="social-btn btn-tiktok">
-                <span class="icon">📱</span> TikTok
-            </a>
-            <a href="#" id="link-insta" target="_blank" class="social-btn btn-insta">
-                <span class="icon">📸</span> Instagram
-            </a>
-
-            <h3 style="text-align: center; margin-top: 35px; margin-bottom: 15px; color: var(--primary); text-transform: uppercase;">Partner & Freunde</h3>
-
-            <a href="#" id="link-discord" target="_blank" class="social-btn" style="border-left: 6px solid #5865F2;">
-                <span class="icon">🤝</span> Deppencord
-            </a>
+        <div id="news-list">
+            <p style="text-align: center; color: gray;">Lade News...</p>
         </div>
     </div>
 
