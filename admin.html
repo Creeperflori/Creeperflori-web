@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Postfach | Creeperflori</title>
-    
+    <title>Admin Dashboard | Creeperflori</title>
     <link rel="stylesheet" href="css/style.css">
-    
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -15,42 +13,40 @@
 <body>
     <canvas id="bgCanvas"></canvas>
     
-   <nav>
+    <nav>
         <a href="index.html">NEWS</a>
         <a href="sozial.html">SOCIAL</a>
         <a href="fillypath.html">FILLYPATH</a>
         <a href="creepercave.html">CREEPERCAVE</a>
-        
         <a href="admin.html" id="admin-nav-link" style="display:none; color:#ff9900; font-weight:bold; text-shadow: 0 0 10px rgba(255,153,0,0.5);">👑 ADMIN</a>
-        
         <a class="user-login-btn" onclick="openLoginModal()">Login</a>
     </nav>
 
-    <div id="login-modal" class="modal-overlay">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeLoginModal()">&times;</span>
-            <h2 style="margin-bottom: 20px; color: white;">Community Login</h2>
-            
-            <form onsubmit="event.preventDefault(); handleAuth('login');">
-                <input type="email" id="auth-email" placeholder="E-Mail Adresse" required autocomplete="email">
-                <input type="password" id="auth-pass" placeholder="Passwort" required autocomplete="current-password">
-                <div class="legal-notice">
-                    <input type="checkbox" id="legal-check">
-                    <label for="legal-check">Ich akzeptiere die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a>.</label>
-                </div>
-                <button type="submit" class="save-btn">Einloggen</button>
-                <button type="button" onclick="handleAuth('register')" class="save-btn btn-outline">Registrieren</button>
-            </form>
-        </div>
-    </div>
-
     <div class="container">
         <header class="chibi-header">
-            <h1 style="color: #ff9900;">📩 Support Postfach</h1>
-            <p style="color: #ccc;">Nur für Admins sichtbar</p>
+            <h1 style="color: #ff9900;">👑 Admin Dashboard</h1>
+            <p style="color: #ccc;">Zentrale für News und Support</p>
         </header>
 
-        <div id="admin-messages">
+        <div class="admin-card" style="max-width: 800px; margin: 0 auto 40px auto; border-left-color: var(--primary); background: #111;">
+            <h2 style="margin-bottom: 15px;">🚀 News Veröffentlichen</h2>
+            <div class="editor-controls">
+                <select id="n-type" class="editor-input">
+                    <option value="news">📰 Allgemeine News</option>
+                    <option value="patchnotes">🛠️ Patchnotes</option>
+                    <option value="changelog">📜 Changelog</option>
+                </select>
+                <input type="file" id="n-image" accept="image/*" class="editor-input">
+            </div>
+            <input type="text" id="n-title" placeholder="Titel des Beitrags" class="editor-input">
+            <textarea id="n-content" placeholder="Was gibt's Neues?" rows="5" class="editor-input"></textarea>
+            
+            <div id="upload-progress" class="progress-text"></div>
+            <button onclick="uploadNewsWithImage()" id="post-btn" class="save-btn btn-highlight">Veröffentlichen</button>
+        </div>
+
+        <h2 style="text-align: center; color: #ff9900; margin-bottom: 20px;">📩 Support Postfach</h2>
+        <div id="admin-messages" style="max-width: 800px; margin: 0 auto;">
             <p style="text-align: center; color: gray;">Lade Nachrichten...</p>
         </div>
     </div>
