@@ -6,7 +6,6 @@ const db = firebase.firestore();
 const auth = firebase.auth();
 const storage = firebase.storage();
 
-let currentUserProfile = null; 
 let isAdmin = false; 
 
 // ==========================================
@@ -30,59 +29,133 @@ function applyLinks() {
 }
 
 // ==========================================
-// 3. AUTH & LOGIN LOGIK
+// 3. MASTER-STEUERUNG (Login, Rechte & Seiten)
 // ==========================================
+// Das ist das neue "Gehirn", das alles zentral steuert!
 auth.onAuthStateChanged(user => {
     applyLinks(); 
+    
     const adminPanel = document.getElementById('admin-panel');
     const loginBtns = document.querySelectorAll('.user-login-btn');
+    const path = window.location.pathname;
     
     if (user) {
-        isAdmin = (user.email.toLowerCase() === CONFIG.adminEmail.toLowerCase());
-        
+        // 1. Ist der User der Admin? (Kugelsicherer Check ohne Leerzeichen und Großbuchstaben)
+        const uEmail = user.email ? user.email.trim().toLowerCase() : "";
+        const aEmail = CONFIG.adminEmail ? CONFIG.adminEmail.trim().toLowerCase() : "";
+        isAdmin = (uEmail === aEmail && uEmail !== "");
+
+        // 2. Lade Nutzerdaten
         db.collection('users').doc(user.uid).onSnapshot(doc => {
             let name = user.email.split('@')[0];
-            if (doc.exists && doc.data().displayName) name = doc.data().displayName;
-            currentUserProfile = { displayName: name };
+            let bio = "";
             
-            // Ändert den Login Button zum Profil-Namen
+            if (doc.exists) {
+                if (doc.data().displayName) name = doc.data().displayName;
+                if (doc.data().bio) bio = doc.data().bio;
+            }
+            
+            // Login-Buttons updaten
             loginBtns.forEach(btn => {
                 btn.innerHTML = "👤 " + name;
                 btn.onclick = () => window.location.href = "profil.html";
             });
+
+            // Wenn wir auf dem Profil sind, Felder ausfüllen
+            if (path.includes('profil.html')) {
+                const nameInput = document.getElementById('prof-name');
+                const title = document.getElementById('profile-title');
+                const bioInput = document.getElementById('prof-bio');
+                
+                if(nameInput) nameInput.value = name;
+                if(title) title.innerText = name;
+                if(bioInput) bioInput.value = bio;
+            }
         });
-        if(isAdmin && adminPanel) adminPanel.style.display = "block";
+
+        // 3. Admin-Panel anzeigen (falls auf Profil)
+        if(isAdmin && adminPanel) {
+            adminPanel.style.display = "block";
+        }
+
+        // 4. Admin-Seite schützen
+        if (path.includes('admin.html')) {
+            if (isAdmin) {
+                renderAdminMessages(); // Lade Postfach
+            } else {
+                window.location.replace("index.html"); // Rauswerfen!
+            }
+        }
+
     } else {
+        // NICHT EINGELOGGT
         isAdmin = false;
         loginBtns.forEach(btn => {
             btn.innerHTML = "LOGIN";
             btn.onclick = openLoginModal;
         });
+        
         if(adminPanel) adminPanel.style.display = "none";
+
+        // Wer nicht eingeloggt ist, darf nicht auf Profil oder Admin!
+        if (path.includes('profil.html') || path.includes('admin.html')) {
+            window.location.replace("index.html");
+        }
     }
     
-    // News laden, falls wir auf der index.html sind
-    if(document.getElementById('news-list')) loadNews();
+    // 5. News laden (Wenn wir auf der index.html sind)
+    if(document.getElementById('news-list')) {
+        loadNews();
+    }
 });
 
+// Modal Steuerung
 function openLoginModal() { document.getElementById('login-modal').style.display = "flex"; }
 function closeLoginModal() { document.getElementById('login-modal').style.display = "none"; }
 
-function handleAuth(action) {
+window.handleAuth = function(action) {
     const email = document.getElementById('auth-email').value;
     const pass = document.getElementById('auth-pass').value;
     if(!email || !pass) return alert("Bitte alle Felder ausfüllen!");
     
     if(action === 'register') {
-        if(!document.getElementById('legal-check').checked) return alert("Bitte akzeptiere die Datenschutzerklärung!");
+        const checkbox = document.getElementById('legal-check');
+        if(checkbox && !checkbox.checked) return alert("Bitte akzeptiere die Datenschutzerklärung!");
         auth.createUserWithEmailAndPassword(email, pass).then(() => location.reload()).catch(e => alert("Fehler: " + e.message));
     } else {
         auth.signInWithEmailAndPassword(email, pass).then(() => closeLoginModal()).catch(e => alert("Login fehlgeschlagen!"));
     }
-}
+};
+
+window.logoutUser = function() { auth.signOut().then(() => location.reload()); };
 
 // ==========================================
-// 4. EDITOR, NEWS & KOMMENTARE RENDEREN
+// 4. PROFIL SPEICHERN
+// ==========================================
+window.saveProfile = function() {
+    const user = auth.currentUser;
+    if(!user) return;
+    
+    const newName = document.getElementById('prof-name').value.trim();
+    const newBio = document.getElementById('prof-bio').value.trim();
+    
+    if(!newName) return alert("Bitte gib einen Namen an!");
+
+    db.collection("users").doc(user.uid).set({ 
+        displayName: newName, 
+        bio: newBio, 
+        email: user.email, 
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp() 
+    }, { merge: true })
+    .then(() => { 
+        alert("✅ Profil erfolgreich gespeichert!"); 
+        document.getElementById('profile-title').innerText = newName; 
+    })
+    .catch(error => alert("Fehler: " + error.message));
+};
+
+// ==========================================
+// 5. NEWS & BILDER UPLOAD
 // ==========================================
 async function compressImage(file, maxWidth, maxHeight, quality) {
     return new Promise((resolve) => {
@@ -108,7 +181,8 @@ window.uploadNewsWithImage = async function() {
     const title = document.getElementById('n-title').value;
     const content = document.getElementById('n-content').value;
     const type = document.getElementById('n-type').value;
-    const file = document.getElementById('n-image').files[0];
+    const fileEl = document.getElementById('n-image');
+    const file = fileEl ? fileEl.files[0] : null;
     const btn = document.getElementById('post-btn');
     const prog = document.getElementById('upload-progress');
 
@@ -132,12 +206,16 @@ window.uploadNewsWithImage = async function() {
     }
 
     db.collection("news").add({ title, content, type, image: url, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
-    .then(() => { location.reload(); });
+    .then(() => { 
+        alert("News veröffentlicht!");
+        window.location.href = "index.html"; 
+    });
 };
 
-// Lädt News UND erstellt die Kommentar-Boxen
 function loadNews() {
     const list = document.getElementById('news-list');
+    if(!list) return;
+
     db.collection("news").orderBy("timestamp", "desc").limit(10).onSnapshot(snap => {
         list.innerHTML = "";
         snap.forEach(doc => {
@@ -147,7 +225,6 @@ function loadNews() {
             const img = d.image ? `<img src="${d.image}" style="max-width:100%; max-height:400px; border-radius:8px; margin-top:10px; border:1px solid ${color}; display:block;">` : '';
             const del = isAdmin ? `<button onclick="deleteDoc('news', '${newsId}')" style="background:red; color:white; border:none; padding:8px; margin-top:15px; cursor:pointer; border-radius:4px;">🗑️ Beitrag Löschen</button>` : '';
             
-            // Das ist der neue Bereich für Kommentare unter jedem Beitrag
             const commentSection = `
                 <div style="margin-top: 25px; border-top: 1px solid #333; padding-top: 15px;">
                     <h4 style="margin-bottom: 10px; color: #ccc;">💬 Kommentare</h4>
@@ -158,8 +235,7 @@ function loadNews() {
                         <input type="text" id="comment-input-${newsId}" placeholder="Schreibe einen Kommentar..." class="editor-input" style="margin-bottom: 0;">
                         <button onclick="postComment('${newsId}')" class="save-btn" style="width: auto; padding: 0 20px;">Senden</button>
                     </div>
-                </div>
-            `;
+                </div>`;
 
             list.innerHTML += `
                 <div class="project-card" style="border-left-color: ${color}">
@@ -171,83 +247,33 @@ function loadNews() {
                     ${commentSection}
                 </div>`;
                 
-            // Ruft direkt die Kommentare für diesen Beitrag ab
             loadComments(newsId);
         });
     });
 }
 
 // ==========================================
-// 5. HELPER FUNKTIONEN (Generisches Löschen & Support)
-// ==========================================
-window.deleteDoc = function(collectionName, docId) { 
-    if(confirm("Diesen Eintrag unwiderruflich löschen?")) db.collection(collectionName).doc(docId).delete(); 
-};
-
-window.sendSupport = function(e) {
-    e.preventDefault();
-    const user = auth.currentUser;
-    const name = document.getElementById('sup-name').value;
-    const message = document.getElementById('sup-msg').value;
-    
-    const mailToSave = user ? user.email : null; // Speichert die Mail, falls eingeloggt
-    
-    db.collection("messages").add({ name: name, message: message, email: mailToSave, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
-    .then(() => { alert("Nachricht an Creeperflori gesendet!"); e.target.reset(); });
-};
-
-// ==========================================
-// 6. PROFIL LOGIK
-// ==========================================
-if (window.location.pathname.includes('profil.html')) {
-    auth.onAuthStateChanged(user => {
-        if (user) {
-            db.collection('users').doc(user.uid).get().then(doc => {
-                if (doc.exists) {
-                    const data = doc.data();
-                    if(data.displayName) {
-                        document.getElementById('prof-name').value = data.displayName;
-                        document.getElementById('profile-title').innerText = data.displayName;
-                    }
-                    if(data.bio) document.getElementById('prof-bio').value = data.bio;
-                } else {
-                    document.getElementById('prof-name').value = user.email.split('@')[0];
-                }
-            });
-        } else {
-            window.location.replace("index.html");
-        }
-    });
-}
-
-window.saveProfile = function() {
-    const user = auth.currentUser;
-    if(!user) return;
-    const newName = document.getElementById('prof-name').value.trim();
-    const newBio = document.getElementById('prof-bio').value.trim();
-    if(!newName) return alert("Bitte gib einen Namen an!");
-
-    db.collection("users").doc(user.uid).set({ displayName: newName, bio: newBio, email: user.email, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
-    .then(() => { alert("✅ Profil erfolgreich gespeichert!"); document.getElementById('profile-title').innerText = newName; })
-    .catch(error => { alert("Fehler: " + error.message); });
-};
-
-window.logoutUser = function() { auth.signOut().then(() => { window.location.replace("index.html"); }); };
-
-// ==========================================
-// 7. KOMMENTAR LOGIK
+// 6. KOMMENTAR LOGIK
 // ==========================================
 window.postComment = function(newsId) {
     const user = auth.currentUser;
-    const text = document.getElementById(`comment-input-${newsId}`).value;
+    const textEl = document.getElementById(`comment-input-${newsId}`);
+    if(!textEl) return;
+    const text = textEl.value;
 
     if(!user) return alert("Du musst eingeloggt sein, um zu kommentieren!");
     if(!text.trim()) return;
 
     db.collection("users").doc(user.uid).get().then(userDoc => {
-        const name = userDoc.exists && userDoc.data().displayName ? userDoc.data().displayName : user.email.split('@')[0];
-        db.collection("comments").add({ newsId: newsId, userId: user.uid, userName: name, text: text, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
-        .then(() => { document.getElementById(`comment-input-${newsId}`).value = ""; });
+        const name = (userDoc.exists && userDoc.data().displayName) ? userDoc.data().displayName : user.email.split('@')[0];
+        db.collection("comments").add({ 
+            newsId: newsId, 
+            userId: user.uid, 
+            userName: name, 
+            text: text, 
+            timestamp: firebase.firestore.FieldValue.serverTimestamp() 
+        })
+        .then(() => { textEl.value = ""; });
     });
 };
 
@@ -256,7 +282,7 @@ function loadComments(newsId) {
     if(!box) return;
     db.collection("comments").where("newsId", "==", newsId).orderBy("timestamp", "asc").onSnapshot(snap => {
         box.innerHTML = "";
-        if(snap.empty) { box.innerHTML = '<p style="font-size:0.85rem; color:gray;">Noch keine Kommentare. Schreib den ersten!</p>'; return; }
+        if(snap.empty) { box.innerHTML = '<p style="font-size:0.85rem; color:gray;">Noch keine Kommentare.</p>'; return; }
         
         snap.forEach(doc => {
             const c = doc.data();
@@ -272,14 +298,22 @@ function loadComments(newsId) {
 }
 
 // ==========================================
-// 8. ADMIN POSTFACH LOGIK
+// 7. HELPER & POSTFACH
 // ==========================================
-if (window.location.pathname.includes('admin.html')) {
-    auth.onAuthStateChanged(user => {
-        if (user && user.email === CONFIG.adminEmail) { renderAdminMessages(); } 
-        else { window.location.replace("index.html"); }
-    });
-}
+window.deleteDoc = function(collectionName, docId) { 
+    if(confirm("Diesen Eintrag unwiderruflich löschen?")) db.collection(collectionName).doc(docId).delete(); 
+};
+
+window.sendSupport = function(e) {
+    e.preventDefault();
+    const user = auth.currentUser;
+    const name = document.getElementById('sup-name').value;
+    const message = document.getElementById('sup-msg').value;
+    const mailToSave = user ? user.email : null; 
+    
+    db.collection("messages").add({ name, message, email: mailToSave, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
+    .then(() => { alert("Nachricht gesendet!"); e.target.reset(); });
+};
 
 function renderAdminMessages() {
     const list = document.getElementById('admin-messages');
@@ -289,7 +323,7 @@ function renderAdminMessages() {
         snap.forEach(doc => {
             const m = doc.data();
             const date = m.timestamp ? m.timestamp.toDate().toLocaleString() : "Gerade eben";
-            const replyBtn = m.email ? `<a href="mailto:${m.email}?subject=Re: Support Anfrage Creeperflori&body=Hallo ${m.name},%0D%0A%0D%0ADu hast geschrieben:%0D%0A> ${m.message}%0D%0A%0D%0A---%0D%0A" class="save-btn btn-highlight" style="text-decoration:none; display:inline-block; width:auto; padding: 8px 15px; margin-top:10px;">📧 Antworten</a>` : `<p style="font-size:0.8rem; color:gray; margin-top:10px;">(Gast-Nachricht, keine Mail hinterlegt)</p>`;
+            const replyBtn = m.email ? `<a href="mailto:${m.email}?subject=Re: Support Anfrage Creeperflori" class="save-btn btn-highlight" style="text-decoration:none; display:inline-block; width:auto; padding: 8px 15px; margin-top:10px;">📧 Antworten</a>` : `<p style="font-size:0.8rem; color:gray; margin-top:10px;">(Gast)</p>`;
 
             list.innerHTML += `
                 <div class="project-card" style="border-left-color: #ff9900;">
@@ -305,9 +339,7 @@ function renderAdminMessages() {
     });
 }
 
-// ==========================================
-// 9. ANIMATION (Grüne Partikel)
-// ==========================================
+// Hintergrund Animation
 document.addEventListener("DOMContentLoaded", () => {
     applyLinks();
     const canvas = document.getElementById('bgCanvas');
