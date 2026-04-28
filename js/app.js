@@ -38,7 +38,7 @@ auth.onAuthStateChanged(user => {
     const loginBtns = document.querySelectorAll('.user-login-btn');
     
     if (user) {
-        isAdmin = (user.email === CONFIG.adminEmail);
+        isAdmin = (user.email.toLowerCase() === CONFIG.adminEmail.toLowerCase());
         
         db.collection('users').doc(user.uid).onSnapshot(doc => {
             let name = user.email.split('@')[0];
