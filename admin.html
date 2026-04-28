@@ -4,27 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Postfach | Creeperflori</title>
+    
     <link rel="stylesheet" href="css/style.css">
+    
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 </head>
 <body>
     <canvas id="bgCanvas"></canvas>
+    
     <nav>
-        <a href="start.html">NEWS</a>
-        <a href="admin.html" style="color:var(--primary)">POSTFACH</a>
+        <a href="index.html">NEWS</a>
+        <a href="sozial.html">SOCIAL</a>
+        <a href="fillypath.html">FILLYPATH</a>
+        <a href="creepercave.html">CREEPERCAVE</a>
         <a class="user-login-btn" onclick="openLoginModal()">Login</a>
     </nav>
 
     <div class="container">
         <header class="chibi-header">
-            <h1>📩 Support Postfach</h1>
-            <p>Nur für Admins sichtbar</p>
+            <h1 style="color: #ff9900;">📩 Support Postfach</h1>
+            <p style="color: #ccc;">Nur für Admins sichtbar</p>
         </header>
 
         <div id="admin-messages">
-            <p class="loading-text">Lade Nachrichten...</p>
+            <p style="text-align: center; color: gray;">Lade Nachrichten...</p>
         </div>
     </div>
 
