@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CreeperCave | Creeperflori</title>
+    
+    <link rel="stylesheet" href="css/style.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+</head>
+<body>
+
+    <canvas id="bgCanvas"></canvas>
+
+    <nav>
+        <a href="index.html">NEWS</a>
+        <a href="sozial.html">SOCIAL</a>
+        <a href="fillypath.html">FILLYPATH</a>
+        <a href="creepercave.html">CREEPERCAVE</a>
+        <a class="user-login-btn" onclick="openLoginModal()">Login</a>
+    </nav>
+
+    <div id="login-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeLoginModal()">&times;</span>
+            <h2 style="margin-bottom: 20px; color: white;">Community Login</h2>
+            
+            <input type="email" id="auth-email" placeholder="E-Mail Adresse" required>
+            <input type="password" id="auth-pass" placeholder="Passwort" required>
+            
+            <div class="legal-notice">
+                <input type="checkbox" id="legal-check">
+                <label for="legal-check">Ich akzeptiere die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a>.</label>
+            </div>
+            
+            <button onclick="handleAuth('login')" class="save-btn">Einloggen</button>
+            <button onclick="handleAuth('register')" class="save-btn btn-outline">Registrieren</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <header class="chibi-header">
+            <img src="img/Creeperflori.png" alt="Creeperflori Chibi">
+            <h1 style="color: #5865F2; text-shadow: 0 0 15px rgba(88, 101, 242, 0.5);">CreeperCave</h1>
+        </header>
+
+        <div class="project-card" style="text-align: center; border-left-color: #5865F2; max-width: 650px; margin: 0 auto;">
+            <span class="card-badge" style="background: #5865F2; color: white;">OFFIZIELLER DISCORD</span>
+            <h2 style="margin-bottom: 15px; font-size: 2rem;">Dein Platz in der Community!</h2>
+            
+            <p style="color: #ccc; margin-bottom: 25px; font-size: 1.1rem; line-height: 1.8;">
+                Die CreeperCave ist mein offizieller Haupt-Discord. Hier passiert die ganze Magie! Tritt bei und werde Teil der besten Community.
+            </p>
+
+            <ul style="text-align: left; margin: 0 auto 35px auto; max-width: 400px; color: #fff; font-size: 1.05rem; line-height: 2; list-style-type: none; padding: 0;">
+                <li>💬 <strong style="color: var(--primary);">Direkter Kontakt:</strong> Quatsche mit mir und der Community.</li>
+                <li>🚀 <strong style="color: var(--primary);">Sneak Peeks:</strong> Exklusive Spoiler zu neuen Videos.</li>
+                <li>🎮 <strong style="color: var(--primary);">Fillypath:</strong> Eigener VIP-Bereich für den Minecraft-Server.</li>
+                <li>🔔 <strong style="color: var(--primary);">Live-Alarme:</strong> Verpasse nie wieder einen Stream!</li>
+            </ul>
+
+            <button onclick="window.open(CONFIG.links.creeperCave, '_blank')" class="save-btn" style="background: #5865F2; color: white; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 15px; box-shadow: 0 0 15px rgba(88, 101, 242, 0.4);">
+                <span style="font-size: 1.4rem;">🚀</span> Jetzt der CreeperCave beitreten
+            </button>
+        </div>
+    </div>
+
+    <footer class="support-footer">
+        <div class="footer-content">
+            <div class="footer-branding">
+                <h3>💬 Creeperflori Support</h3>
+                <p>Hast du Fragen oder Probleme? Schreib mir eine Nachricht!</p>
+                <div class="footer-links">
+                    <a href="impressum.html">Impressum</a> 
+                    <a href="datenschutz.html">Datenschutz</a>
+                </div>
+            </div>
+            <div class="footer-form-box">
+                <form onsubmit="sendSupport(event)">
+                    <input type="text" id="sup-name" placeholder="Dein Name" required class="editor-input">
+                    <textarea id="sup-msg" placeholder="Wie kann ich helfen?" rows="3" required class="editor-input"></textarea>
+                    <button type="submit" class="save-btn">Nachricht Senden</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 Creeperflori. Alle Rechte vorbehalten.</span>
+            <span>Made with ❤️ by Community</span>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
