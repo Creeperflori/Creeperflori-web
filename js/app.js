@@ -1,7 +1,6 @@
 // ==========================================
-// 1. INITIALISIERUNG AUS DER CONFIG.JS
+// 1. INITIALISIERUNG
 // ==========================================
-// Firebase wird mit den Daten aus CONFIG.firebase gestartet
 firebase.initializeApp(CONFIG.firebase);
 const db = firebase.firestore();
 const auth = firebase.auth();
@@ -21,7 +20,6 @@ function applyLinks() {
             else el.innerText = url;
         }
     };
-    // Nutzt die Links aus der config.js
     setLink('link-twitch', CONFIG.links.twitch);
     setLink('link-yt', CONFIG.links.youtube);
     setLink('link-tt', CONFIG.links.tiktok);
@@ -35,21 +33,22 @@ function applyLinks() {
 // 3. AUTH & LOGIN LOGIK
 // ==========================================
 auth.onAuthStateChanged(user => {
-    applyLinks(); // Links laden
+    applyLinks(); 
     const adminPanel = document.getElementById('admin-panel');
     const loginBtns = document.querySelectorAll('.user-login-btn');
     
     if (user) {
-        // Prüfen, ob der User die Admin-Mail aus der config.js hat
         isAdmin = (user.email === CONFIG.adminEmail);
         
         db.collection('users').doc(user.uid).onSnapshot(doc => {
             let name = user.email.split('@')[0];
             if (doc.exists && doc.data().displayName) name = doc.data().displayName;
             currentUserProfile = { displayName: name };
+            
+            // Ändert den Login Button zum Profil-Namen
             loginBtns.forEach(btn => {
                 btn.innerHTML = "👤 " + name;
-                btn.onclick = () => window.location.href = "profil.html"; // WICHTIG: Endet jetzt auf .html
+                btn.onclick = () => window.location.href = "profil.html";
             });
         });
         if(isAdmin && adminPanel) adminPanel.style.display = "block";
@@ -62,7 +61,7 @@ auth.onAuthStateChanged(user => {
         if(adminPanel) adminPanel.style.display = "none";
     }
     
-    // News laden, falls wir auf der Startseite sind
+    // News laden, falls wir auf der index.html sind
     if(document.getElementById('news-list')) loadNews();
 });
 
@@ -76,18 +75,14 @@ function handleAuth(action) {
     
     if(action === 'register') {
         if(!document.getElementById('legal-check').checked) return alert("Bitte akzeptiere die Datenschutzerklärung!");
-        auth.createUserWithEmailAndPassword(email, pass)
-            .then(() => location.reload())
-            .catch(e => alert("Fehler: " + e.message));
+        auth.createUserWithEmailAndPassword(email, pass).then(() => location.reload()).catch(e => alert("Fehler: " + e.message));
     } else {
-        auth.signInWithEmailAndPassword(email, pass)
-            .then(() => closeLoginModal())
-            .catch(e => alert("Login fehlgeschlagen!"));
+        auth.signInWithEmailAndPassword(email, pass).then(() => closeLoginModal()).catch(e => alert("Login fehlgeschlagen!"));
     }
 }
 
 // ==========================================
-// 4. EDITOR & BILDER
+// 4. EDITOR, NEWS & KOMMENTARE RENDEREN
 // ==========================================
 async function compressImage(file, maxWidth, maxHeight, quality) {
     return new Promise((resolve) => {
@@ -131,26 +126,41 @@ window.uploadNewsWithImage = async function() {
         await new Promise((res, rej) => {
             task.on('state_changed', 
                 s => { prog.innerText = "Upload: " + Math.round((s.bytesTransferred/s.totalBytes)*100) + "%"; }, 
-                rej, 
-                async () => { url = await task.snapshot.ref.getDownloadURL(); res(); }
+                rej, async () => { url = await task.snapshot.ref.getDownloadURL(); res(); }
             );
         });
     }
 
     db.collection("news").add({ title, content, type, image: url, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
-    .then(() => location.reload());
+    .then(() => { location.reload(); });
 };
 
+// Lädt News UND erstellt die Kommentar-Boxen
 function loadNews() {
     const list = document.getElementById('news-list');
     db.collection("news").orderBy("timestamp", "desc").limit(10).onSnapshot(snap => {
         list.innerHTML = "";
         snap.forEach(doc => {
             const d = doc.data();
+            const newsId = doc.id;
             const color = d.type === 'patchnotes' ? 'var(--patch-color)' : (d.type === 'changelog' ? 'var(--change-color)' : 'var(--primary)');
             const img = d.image ? `<img src="${d.image}" style="max-width:100%; max-height:400px; border-radius:8px; margin-top:10px; border:1px solid ${color}; display:block;">` : '';
-            const del = isAdmin ? `<button onclick="deleteNews('${doc.id}')" style="background:red; color:white; border:none; padding:8px; margin-top:15px; cursor:pointer; border-radius:4px;">🗑️ Beitrag Löschen</button>` : '';
+            const del = isAdmin ? `<button onclick="deleteDoc('news', '${newsId}')" style="background:red; color:white; border:none; padding:8px; margin-top:15px; cursor:pointer; border-radius:4px;">🗑️ Beitrag Löschen</button>` : '';
             
+            // Das ist der neue Bereich für Kommentare unter jedem Beitrag
+            const commentSection = `
+                <div style="margin-top: 25px; border-top: 1px solid #333; padding-top: 15px;">
+                    <h4 style="margin-bottom: 10px; color: #ccc;">💬 Kommentare</h4>
+                    <div id="comments-box-${newsId}" style="max-height: 250px; overflow-y: auto; margin-bottom: 15px;">
+                        <p style="font-size: 0.85rem; color: gray;">Lade Kommentare...</p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="comment-input-${newsId}" placeholder="Schreibe einen Kommentar..." class="editor-input" style="margin-bottom: 0;">
+                        <button onclick="postComment('${newsId}')" class="save-btn" style="width: auto; padding: 0 20px;">Senden</button>
+                    </div>
+                </div>
+            `;
+
             list.innerHTML += `
                 <div class="project-card" style="border-left-color: ${color}">
                     <span class="card-badge" style="background:${color}; color:black;">${d.type.toUpperCase()}</span>
@@ -158,30 +168,153 @@ function loadNews() {
                     ${img}
                     <p style="white-space:pre-wrap; margin-top:15px;">${d.content}</p>
                     ${del}
+                    ${commentSection}
+                </div>`;
+                
+            // Ruft direkt die Kommentare für diesen Beitrag ab
+            loadComments(newsId);
+        });
+    });
+}
+
+// ==========================================
+// 5. HELPER FUNKTIONEN (Generisches Löschen & Support)
+// ==========================================
+window.deleteDoc = function(collectionName, docId) { 
+    if(confirm("Diesen Eintrag unwiderruflich löschen?")) db.collection(collectionName).doc(docId).delete(); 
+};
+
+window.sendSupport = function(e) {
+    e.preventDefault();
+    const user = auth.currentUser;
+    const name = document.getElementById('sup-name').value;
+    const message = document.getElementById('sup-msg').value;
+    
+    const mailToSave = user ? user.email : null; // Speichert die Mail, falls eingeloggt
+    
+    db.collection("messages").add({ name: name, message: message, email: mailToSave, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
+    .then(() => { alert("Nachricht an Creeperflori gesendet!"); e.target.reset(); });
+};
+
+// ==========================================
+// 6. PROFIL LOGIK
+// ==========================================
+if (window.location.pathname.includes('profil.html')) {
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            db.collection('users').doc(user.uid).get().then(doc => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    if(data.displayName) {
+                        document.getElementById('prof-name').value = data.displayName;
+                        document.getElementById('profile-title').innerText = data.displayName;
+                    }
+                    if(data.bio) document.getElementById('prof-bio').value = data.bio;
+                } else {
+                    document.getElementById('prof-name').value = user.email.split('@')[0];
+                }
+            });
+        } else {
+            window.location.replace("index.html");
+        }
+    });
+}
+
+window.saveProfile = function() {
+    const user = auth.currentUser;
+    if(!user) return;
+    const newName = document.getElementById('prof-name').value.trim();
+    const newBio = document.getElementById('prof-bio').value.trim();
+    if(!newName) return alert("Bitte gib einen Namen an!");
+
+    db.collection("users").doc(user.uid).set({ displayName: newName, bio: newBio, email: user.email, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
+    .then(() => { alert("✅ Profil erfolgreich gespeichert!"); document.getElementById('profile-title').innerText = newName; })
+    .catch(error => { alert("Fehler: " + error.message); });
+};
+
+window.logoutUser = function() { auth.signOut().then(() => { window.location.replace("index.html"); }); };
+
+// ==========================================
+// 7. KOMMENTAR LOGIK
+// ==========================================
+window.postComment = function(newsId) {
+    const user = auth.currentUser;
+    const text = document.getElementById(`comment-input-${newsId}`).value;
+
+    if(!user) return alert("Du musst eingeloggt sein, um zu kommentieren!");
+    if(!text.trim()) return;
+
+    db.collection("users").doc(user.uid).get().then(userDoc => {
+        const name = userDoc.exists && userDoc.data().displayName ? userDoc.data().displayName : user.email.split('@')[0];
+        db.collection("comments").add({ newsId: newsId, userId: user.uid, userName: name, text: text, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
+        .then(() => { document.getElementById(`comment-input-${newsId}`).value = ""; });
+    });
+};
+
+function loadComments(newsId) {
+    const box = document.getElementById(`comments-box-${newsId}`);
+    if(!box) return;
+    db.collection("comments").where("newsId", "==", newsId).orderBy("timestamp", "asc").onSnapshot(snap => {
+        box.innerHTML = "";
+        if(snap.empty) { box.innerHTML = '<p style="font-size:0.85rem; color:gray;">Noch keine Kommentare. Schreib den ersten!</p>'; return; }
+        
+        snap.forEach(doc => {
+            const c = doc.data();
+            const delBtn = isAdmin ? `<span onclick="deleteDoc('comments', '${doc.id}')" style="color:red; cursor:pointer; float:right; font-size:0.8rem;">❌</span>` : '';
+            box.innerHTML += `
+                <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px; margin-top: 8px; font-size: 0.9rem; border: 1px solid #222;">
+                    <strong style="color:var(--primary)">${c.userName}</strong> 
+                    ${delBtn}
+                    <div style="margin-top: 5px; color: #ccc;">${c.text}</div>
                 </div>`;
         });
     });
 }
-window.deleteNews = function(id) { if(confirm("Wirklich löschen?")) db.collection("news").doc(id).delete(); };
 
 // ==========================================
-// 5. HELPER FUNKTIONEN & ANIMATION
+// 8. ADMIN POSTFACH LOGIK
 // ==========================================
-window.sendSupport = function(e) {
-    e.preventDefault();
-    const name = document.getElementById('sup-name').value;
-    const message = document.getElementById('sup-msg').value;
-    db.collection("messages").add({ name, message, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
-    .then(() => { alert("Nachricht an Creeperflori gesendet!"); e.target.reset(); });
-};
+if (window.location.pathname.includes('admin.html')) {
+    auth.onAuthStateChanged(user => {
+        if (user && user.email === CONFIG.adminEmail) { renderAdminMessages(); } 
+        else { window.location.replace("index.html"); }
+    });
+}
 
+function renderAdminMessages() {
+    const list = document.getElementById('admin-messages');
+    if(!list) return;
+    db.collection("messages").orderBy("timestamp", "desc").onSnapshot(snap => {
+        list.innerHTML = "";
+        snap.forEach(doc => {
+            const m = doc.data();
+            const date = m.timestamp ? m.timestamp.toDate().toLocaleString() : "Gerade eben";
+            const replyBtn = m.email ? `<a href="mailto:${m.email}?subject=Re: Support Anfrage Creeperflori&body=Hallo ${m.name},%0D%0A%0D%0ADu hast geschrieben:%0D%0A> ${m.message}%0D%0A%0D%0A---%0D%0A" class="save-btn btn-highlight" style="text-decoration:none; display:inline-block; width:auto; padding: 8px 15px; margin-top:10px;">📧 Antworten</a>` : `<p style="font-size:0.8rem; color:gray; margin-top:10px;">(Gast-Nachricht, keine Mail hinterlegt)</p>`;
+
+            list.innerHTML += `
+                <div class="project-card" style="border-left-color: #ff9900;">
+                    <small style="color:gray;">📅 ${date}</small>
+                    <h3 style="margin-top:5px;">Von: ${m.name}</h3>
+                    <p style="margin: 15px 0; background: #111; padding: 15px; border-radius: 8px; font-style: italic;">"${m.message}"</p>
+                    <div style="display:flex; justify-content: space-between; align-items: center;">
+                        ${replyBtn}
+                        <button onclick="deleteDoc('messages', '${doc.id}')" style="background:none; border:1px solid red; color:red; cursor:pointer; padding: 8px 15px; border-radius: 5px; font-weight:bold;">🗑️ Löschen</button>
+                    </div>
+                </div>`;
+        });
+    });
+}
+
+// ==========================================
+// 9. ANIMATION (Grüne Partikel)
+// ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     applyLinks();
     const canvas = document.getElementById('bgCanvas');
     if(!canvas) return;
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-    let p = Array.from({length: 30}, () => ({x: Math.random()*canvas.width, y: Math.random()*canvas.height, v: Math.random()*-0.8-0.2}));
+    let p = Array.from({length: 40}, () => ({x: Math.random()*canvas.width, y: Math.random()*canvas.height, v: Math.random()*-0.8-0.2}));
     function draw() {
         ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle = "#32CD32";
         p.forEach(i => { i.y += i.v; if(i.y < -10) i.y = canvas.height+10; ctx.globalAlpha = 0.2; ctx.fillRect(i.x, i.y, 2, 2); });
