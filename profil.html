@@ -13,7 +13,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 </head>
 <body>
-
     <canvas id="bgCanvas"></canvas>
 
     <nav>
@@ -24,6 +23,24 @@
         <a class="user-login-btn" onclick="openLoginModal()">Login</a>
     </nav>
 
+    <div id="login-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeLoginModal()">&times;</span>
+            <h2 style="margin-bottom: 20px; color: white;">Community Login</h2>
+            
+            <form onsubmit="event.preventDefault(); handleAuth('login');">
+                <input type="email" id="auth-email" placeholder="E-Mail Adresse" required autocomplete="email">
+                <input type="password" id="auth-pass" placeholder="Passwort" required autocomplete="current-password">
+                <div class="legal-notice">
+                    <input type="checkbox" id="legal-check">
+                    <label for="legal-check">Ich akzeptiere die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a>.</label>
+                </div>
+                <button type="submit" class="save-btn">Einloggen</button>
+                <button type="button" onclick="handleAuth('register')" class="save-btn btn-outline">Registrieren</button>
+            </form>
+        </div>
+    </div>
+
     <div class="container">
         <header class="chibi-header">
             <img src="img/Creeperflori.png" alt="Profil Avatar" id="profile-avatar">
@@ -32,20 +49,35 @@
 
         <div class="project-card" style="max-width: 600px; margin: 0 auto; border-left-color: var(--primary);">
             <h2 style="margin-bottom: 20px;">Profil bearbeiten</h2>
-            
-            <label style="color: #ccc; font-size: 0.9rem; margin-bottom: 5px; display: block;">Anzeigename (Sichtbar für alle)</label>
+            <label style="color: #ccc; font-size: 0.9rem; margin-bottom: 5px; display: block;">Anzeigename</label>
             <input type="text" id="prof-name" placeholder="Dein cooler Name" class="editor-input">
-            
-            <label style="color: #ccc; font-size: 0.9rem; margin-bottom: 5px; display: block;">Über mich (Bio)</label>
+            <label style="color: #ccc; font-size: 0.9rem; margin-bottom: 5px; display: block;">Über mich</label>
             <textarea id="prof-bio" placeholder="Erzähl der Community etwas über dich..." rows="4" class="editor-input"></textarea>
+            <button onclick="saveProfile()" class="save-btn btn-highlight" style="margin-top: 10px;">💾 Profil Speichern</button>
+            <button onclick="logoutUser()" class="save-btn btn-outline" style="margin-top: 15px; border-color: red !important; color: #ff4d4d !important;">🚪 Ausloggen</button>
+        </div>
+
+        <div id="admin-panel" class="admin-card" style="display:none; max-width: 600px; margin: 40px auto 0 auto; border-left-color: #ff9900; background: #111;">
+            <h2 style="margin-bottom: 15px; color: #ff9900;">👑 Admin Zentrale</h2>
             
-            <button onclick="saveProfile()" class="save-btn btn-highlight" style="margin-top: 10px;">
-                💾 Profil Speichern
+            <button onclick="window.location.href='admin.html'" class="save-btn" style="background: #ff9900; color: black; margin-bottom: 25px;">
+                📩 Zum Support-Postfach wechseln
             </button>
 
-            <button onclick="logoutUser()" class="save-btn btn-outline" style="margin-top: 15px; border-color: red !important; color: #ff4d4d !important;">
-                🚪 Ausloggen
-            </button>
+            <h3 style="margin-bottom: 15px; font-size: 1.1rem;">News Veröffentlichen</h3>
+            <div class="editor-controls">
+                <select id="n-type" class="editor-input">
+                    <option value="news">📰 Allgemeine News</option>
+                    <option value="patchnotes">🛠️ Patchnotes</option>
+                    <option value="changelog">📜 Changelog</option>
+                </select>
+                <input type="file" id="n-image" accept="image/*" class="editor-input">
+            </div>
+            <input type="text" id="n-title" placeholder="Titel des Beitrags" class="editor-input">
+            <textarea id="n-content" placeholder="Was gibt's Neues?" rows="5" class="editor-input"></textarea>
+            
+            <div id="upload-progress" class="progress-text"></div>
+            <button onclick="uploadNewsWithImage()" id="post-btn" class="save-btn btn-highlight">🚀 News Veröffentlichen</button>
         </div>
     </div>
 
