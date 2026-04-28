@@ -11,7 +11,6 @@
     --change-color: #00d4ff;
 }
 
-
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
 body { background-color: var(--bg-dark); color: var(--text-main); overflow-x: hidden; line-height: 1.6; }
 #bgCanvas { position: fixed; top: 0; left: 0; z-index: -1; }
@@ -37,7 +36,22 @@ nav a:hover { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); 
 .card-badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; margin-bottom: 15px; color: black; }
 
 /* ==========================================
-   4. FORMULARE, EDITOR & BUTTONS
+   4. PREMIUM SOCIAL MEDIA BUTTONS (Hier sind sie!)
+   ========================================== */
+.social-links-container { display: flex; flex-direction: column; gap: 15px; max-width: 400px; width: 90%; margin: 30px auto; }
+.social-btn { display: flex; align-items: center; justify-content: flex-start; padding: 15px 20px; background: linear-gradient(145deg, var(--card-bg), #050505); border: 1px solid #333; border-radius: 12px; text-decoration: none !important; color: white !important; font-size: 1.1rem; font-weight: bold; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
+.social-btn .icon { font-size: 1.5rem; margin-right: 15px; width: 30px; text-align: center; }
+.social-btn::after { content: '➔'; position: absolute; right: 20px; color: #555; transition: 0.3s; }
+.social-btn:hover { transform: translateY(-3px); filter: brightness(1.2); }
+.social-btn:hover::after { color: white; right: 15px; }
+
+.btn-twitch { border-left: 6px solid #9146FF; }
+.btn-youtube { border-left: 6px solid #FF0000; }
+.btn-tiktok { border-left: 6px solid #00f2fe; }
+.btn-insta { border-left: 6px solid #E1306C; }
+
+/* ==========================================
+   5. FORMULARE, EDITOR & BUTTONS
    ========================================== */
 .editor-input, input, textarea, select { width: 100%; padding: 12px; margin-bottom: 15px; background: #1a1a1a; border: 1px solid #333; color: white; border-radius: 5px; outline: none; }
 .editor-input:focus { border-color: var(--primary); }
@@ -51,7 +65,7 @@ nav a:hover { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); 
 .btn-highlight { background: linear-gradient(45deg, var(--primary), #228b22); box-shadow: 0 0 15px var(--primary-glow); }
 
 /* ==========================================
-   5. LOGIN MODAL
+   6. LOGIN MODAL
    ========================================== */
 .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
 .modal-content { max-width: 400px; width: 100%; background: var(--card-bg); padding: 30px; border-radius: 15px; border-left: 5px solid var(--primary); position: relative; }
@@ -61,7 +75,7 @@ nav a:hover { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); 
 .legal-notice a { color: var(--primary); text-decoration: none; }
 
 /* ==========================================
-   6. PREMIUM FOOTER
+   7. PREMIUM FOOTER
    ========================================== */
 .support-footer { background: linear-gradient(to bottom, #080808, #000000); padding: 60px 20px 20px; border-top: 2px solid var(--primary); margin-top: 80px; box-shadow: 0 -10px 30px var(--primary-glow); }
 .footer-content { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
@@ -74,7 +88,7 @@ nav a:hover { color: var(--primary); text-shadow: 0 0 10px var(--primary-glow); 
 .footer-bottom { max-width: 1000px; margin: 40px auto 0; padding-top: 20px; border-top: 1px solid #222; display: flex; justify-content: space-between; font-size: 0.8rem; color: #555; }
 
 /* ==========================================
-   7. HANDY-ANPASSUNG (RESPONSIVE)
+   8. HANDY-ANPASSUNG (RESPONSIVE)
    ========================================== */
 @media (max-width: 768px) {
     nav { padding: 10px; gap: 10px; justify-content: center; }
