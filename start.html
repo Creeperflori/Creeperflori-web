@@ -27,24 +27,29 @@
     </nav>
 
     <div id="login-modal" class="modal-overlay">
+        <div id="login-modal" class="modal-overlay">
         <div class="modal-content">
             <span class="close-modal" onclick="closeLoginModal()">&times;</span>
             <h2 style="margin-bottom: 20px; color: white;">Community Login</h2>
-            
             <form onsubmit="event.preventDefault(); handleAuth('login');">
                 <input type="email" id="auth-email" placeholder="E-Mail Adresse" required autocomplete="email">
-                <input type="password" id="auth-pass" placeholder="Passwort" required autocomplete="current-password">
                 
+                <input type="password" id="auth-pass" placeholder="Passwort" required autocomplete="current-password" style="margin-bottom: 5px;">
+                
+                <div style="text-align: right; margin-bottom: 15px;">
+                    <a href="#" onclick="resetPassword()" style="color: var(--primary); font-size: 0.85rem; text-decoration: none;">Passwort vergessen?</a>
+                </div>
+
                 <div class="legal-notice">
                     <input type="checkbox" id="legal-check">
                     <label for="legal-check">Ich akzeptiere die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a>.</label>
                 </div>
-                
                 <button type="submit" class="save-btn">Einloggen</button>
                 <button type="button" onclick="handleAuth('register')" class="save-btn btn-outline">Registrieren</button>
             </form>
         </div>
     </div>
+
 
     <div class="container">
         <header class="chibi-header">
