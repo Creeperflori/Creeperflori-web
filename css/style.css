@@ -9,32 +9,30 @@
     --text-color: #f0f0f0;
     --patch-color: #ff9900;
     --change-color: #00ccff;
+    --discord-color: #5865F2;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 body {
     background-color: var(--bg-dark);
     color: var(--text-color);
-    overflow-x: hidden; /* Verhindert seitliches Scrollen */
+    line-height: 1.6;
+    overflow-x: hidden;
 }
 
-/* FIX: Lange Wörter (wie Datenschutzerklärung) automatisch umbrechen */
+/* HANDY-FIX: Lange Wörter (Datenschutzerklärung) automatisch umbrechen */
 h1, h2, h3, h4, p, a, span {
     overflow-wrap: break-word;
     word-wrap: break-word;
     hyphens: auto;
-    -webkit-hyphens: auto;
 }
 
-/* ==========================================
-   HINTERGRUND & NAVIGATION
-   ========================================== */
 #bgCanvas {
     position: fixed;
     top: 0;
@@ -42,17 +40,21 @@ h1, h2, h3, h4, p, a, span {
     z-index: -1;
 }
 
+/* ==========================================
+   NAVIGATION
+   ========================================== */
 nav {
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.95);
     padding: 15px;
     display: flex;
     justify-content: center;
-    gap: 20px;
+    align-items: center;
+    gap: 15px;
     border-bottom: 2px solid var(--primary);
     position: sticky;
     top: 0;
-    z-index: 100;
-    flex-wrap: wrap; /* Erlaubt Umbruch auf Handys */
+    z-index: 1000;
+    flex-wrap: wrap;
 }
 
 nav a {
@@ -60,9 +62,9 @@ nav a {
     text-decoration: none;
     font-weight: bold;
     text-transform: uppercase;
-    font-size: 0.9rem;
-    cursor: pointer;
+    font-size: 0.85rem;
     transition: 0.3s;
+    cursor: pointer;
 }
 
 nav a:hover {
@@ -71,48 +73,50 @@ nav a:hover {
 
 .user-login-btn {
     border: 1px solid var(--primary);
-    padding: 5px 15px;
+    padding: 5px 12px;
     border-radius: 5px;
     color: var(--primary) !important;
 }
 
 /* ==========================================
-   LAYOUT & CONTAINER
+   LAYOUT & HEADER
    ========================================== */
 .container {
-    max-width: 1000px;
+    max-width: 900px;
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: 20px;
 }
 
 .chibi-header {
     text-align: center;
-    margin-bottom: 50px;
+    padding: 40px 0;
 }
 
 .chibi-header img {
-    width: 150px;
-    height: auto;
-    filter: drop-shadow(0 0 10px var(--primary));
+    width: 140px;
+    filter: drop-shadow(0 0 15px var(--primary));
+    margin-bottom: 10px;
 }
 
 .chibi-header h1 {
-    font-size: clamp(1.8rem, 6vw, 3rem); /* Dynamische Größe für Handy */
+    font-size: clamp(1.8rem, 8vw, 3rem);
     color: var(--primary);
-    margin-top: 15px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 /* ==========================================
-   CARDS & CONTENT
+   CARDS (NEWS & PROJEKTE)
    ========================================== */
 .project-card, .admin-card {
     background: var(--card-bg);
-    border-radius: 12px;
+    border-radius: 15px;
     padding: 25px;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     border-left: 5px solid var(--primary);
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     position: relative;
+    transition: transform 0.3s;
 }
 
 .card-badge {
@@ -123,25 +127,69 @@ nav a:hover {
     border-radius: 4px;
     font-size: 0.7rem;
     font-weight: bold;
+    color: black;
 }
 
 /* ==========================================
-   FORMULARE & BUTTONS
+   SOZIAL-SEITE & CREEPERCAVE BUTTONS
+   ========================================== */
+.social-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: 0.3s;
+    background: #222;
+    border: 1px solid #333;
+    text-align: center;
+}
+
+.social-btn:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary);
+    box-shadow: 0 5px 15px rgba(50, 205, 50, 0.3);
+}
+
+.btn-twitch { border-left: 5px solid #9146FF; }
+.btn-youtube { border-left: 5px solid #FF0000; }
+.btn-tiktok { border-left: 5px solid #000000; }
+.btn-instagram { border-left: 5px solid #E1306C; }
+.btn-discord { border-left: 5px solid var(--discord-color); }
+
+/* ==========================================
+   FORMULARE & INPUTS
    ========================================== */
 .editor-input {
     width: 100%;
-    background: #222;
-    border: 1px solid #444;
+    background: #1a1a1a;
+    border: 1px solid #333;
     color: white;
     padding: 12px;
     margin-bottom: 15px;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 1rem;
+    outline: none;
+}
+
+.editor-input:focus {
+    border-color: var(--primary);
 }
 
 .save-btn {
     width: 100%;
-    padding: 15px;
+    padding: 14px;
     border-radius: 8px;
     border: none;
     font-weight: bold;
@@ -151,8 +199,13 @@ nav a:hover {
 }
 
 .btn-highlight { background: var(--primary); color: black; }
-.btn-highlight:hover { background: white; }
-.btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+.btn-highlight:hover { background: white; box-shadow: 0 0 20px var(--primary); }
+
+.btn-outline { 
+    background: transparent; 
+    border: 2px solid var(--primary); 
+    color: var(--primary); 
+}
 
 /* ==========================================
    MODALS (LOGIN)
@@ -161,19 +214,31 @@ nav a:hover {
     display: none;
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.85);
-    z-index: 1000;
+    background: rgba(0,0,0,0.9);
+    z-index: 2000;
     justify-content: center;
     align-items: center;
+    padding: 20px;
 }
 
 .modal-content {
     background: var(--card-bg);
-    padding: 40px;
-    border-radius: 15px;
-    width: 90%;
+    padding: 30px;
+    border-radius: 20px;
+    width: 100%;
     max-width: 400px;
-    border: 1px solid var(--primary);
+    border: 2px solid var(--primary);
+    position: relative;
+    box-shadow: 0 0 30px rgba(50, 205, 50, 0.2);
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2rem;
+    color: white;
+    cursor: pointer;
 }
 
 /* ==========================================
@@ -181,24 +246,47 @@ nav a:hover {
    ========================================== */
 .support-footer {
     background: #050505;
-    padding: 60px 20px 20px 20px;
-    border-top: 1px solid #222;
-    margin-top: 100px;
+    padding: 60px 20px 30px 20px;
+    border-top: 2px solid #111;
+    margin-top: 80px;
 }
 
 .footer-content {
     max-width: 1000px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 40px;
 }
 
+.footer-branding h3 {
+    color: var(--primary);
+    margin-bottom: 15px;
+}
+
+.footer-links a {
+    color: #888;
+    text-decoration: none;
+    margin-right: 15px;
+    font-size: 0.85rem;
+}
+
+.footer-links a:hover { color: white; }
+
 .footer-bottom {
     text-align: center;
-    margin-top: 40px;
-    padding-top: 20px;
-    border-top: 1px solid #111;
+    margin-top: 50px;
     font-size: 0.8rem;
-    color: #555;
+    color: #444;
+}
+
+/* ==========================================
+   MOBILE OPTIMIERUNGEN
+   ========================================== */
+@media (max-width: 600px) {
+    nav { gap: 10px; padding: 10px; }
+    nav a { font-size: 0.75rem; }
+    .container { padding: 10px; }
+    .project-card { padding: 15px; }
+    .chibi-header img { width: 100px; }
 }
