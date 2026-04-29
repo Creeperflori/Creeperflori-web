@@ -36,10 +36,14 @@ auth.onAuthStateChanged(user => {
     
     const adminNavLink = document.getElementById('admin-nav-link');
     const loginBtns = document.querySelectorAll('.user-login-btn');
+    const guestFields = document.querySelectorAll('.guest-contact');
     const path = window.location.pathname;
     
     if (user) {
-        // Admin Check
+        // Wenn eingeloggt: Gast-Felder verstecken
+        guestFields.forEach(f => { f.style.display = 'none'; f.required = false; });
+
+        // Kugelsicherer Admin Check
         const uEmail = user.email ? user.email.trim().toLowerCase() : "";
         const aEmail = CONFIG.adminEmail ? CONFIG.adminEmail.trim().toLowerCase() : "";
         isAdmin = (uEmail === aEmail && uEmail !== "");
@@ -66,10 +70,12 @@ auth.onAuthStateChanged(user => {
             }
         });
 
+        // Admin-Knopf in der Navigation anzeigen
         if(isAdmin && adminNavLink) {
             adminNavLink.style.display = "inline-block";
         }
 
+        // Unbefugte aus dem Dashboard werfen
         if (path.includes('admin.html')) {
             if (isAdmin) renderAdminMessages();
             else window.location.replace("index.html");
@@ -83,6 +89,9 @@ auth.onAuthStateChanged(user => {
         });
         
         if(adminNavLink) adminNavLink.style.display = "none";
+        
+        // Wenn NICHT eingeloggt: Gast-Felder anzeigen und als Pflichtfeld markieren
+        guestFields.forEach(f => { f.style.display = 'block'; f.required = true; });
 
         if (path.includes('profil.html') || path.includes('admin.html')) {
             window.location.replace("index.html");
@@ -157,7 +166,7 @@ window.uploadNewsWithImage = async function() {
     const title = document.getElementById('n-title').value;
     const content = document.getElementById('n-content').value;
     const type = document.getElementById('n-type').value;
-    const category = document.getElementById('n-category').value; // NEU: general oder fillypath
+    const category = document.getElementById('n-category').value; 
     const fileEl = document.getElementById('n-image');
     const file = fileEl ? fileEl.files[0] : null;
     const btn = document.getElementById('post-btn');
@@ -186,7 +195,6 @@ window.uploadNewsWithImage = async function() {
     .then(() => { alert("Veröffentlicht!"); window.location.href = "index.html"; });
 };
 
-// Intelligentes News-Laden (Filtert automatisch nach Seite)
 function loadNews() {
     const path = window.location.pathname;
     const isFillyPage = path.includes('fillypath.html');
@@ -202,9 +210,9 @@ function loadNews() {
 
         snap.forEach(doc => {
             const d = doc.data();
-            const cat = d.category || 'general'; // Falls alte Beiträge keine Kategorie haben
+            const cat = d.category || 'general'; 
             
-            if (cat !== targetCat) return; // Überspringt alles, was nicht hierher gehört
+            if (cat !== targetCat) return; 
             count++;
 
             const newsId = doc.id;
@@ -286,52 +294,57 @@ window.deleteDoc = function(collectionName, docId) {
     if(confirm("Diesen Eintrag unwiderruflich löschen?")) db.collection(collectionName).doc(docId).delete(); 
 };
 
-// Schaltet die Minecraft-Felder im Formular ein/aus
+// Schaltet Felder im Formular an/aus
 window.toggleSupportFields = function() {
     const catEl = document.getElementById('sup-category');
     const mcFields = document.getElementById('mc-fields');
-    if(catEl && mcFields) {
-        mcFields.style.display = (catEl.value === 'minecraft') ? 'block' : 'none';
+    const dcFields = document.getElementById('discord-fields');
+    
+    if(catEl) {
+        if(mcFields) mcFields.style.display = (catEl.value === 'minecraft') ? 'block' : 'none';
+        if(dcFields) dcFields.style.display = (catEl.value === 'discord') ? 'block' : 'none';
     }
 };
 
-// Intelligentes Absenden (Erkennt, welche Felder da sind)
 window.sendSupport = function(e) {
     e.preventDefault();
     const user = auth.currentUser;
     
-    // Basis-Felder (Gibt es auf jeder Seite im Footer)
-    const nameEl = document.getElementById('sup-name');
-    const msgEl = document.getElementById('sup-msg');
+    // Gast-Kontakt Check
+    const contactEl = document.getElementById('sup-contact');
+    let finalEmail = user ? user.email : null;
     
-    // Extra-Felder (Gibt es nur auf der Fillypath-Seite)
-    const catEl = document.getElementById('sup-category');
-    const mcNameEl = document.getElementById('sup-mc-name');
-    const platEl = document.getElementById('sup-platform');
+    if (!user && contactEl && contactEl.value.trim() !== "") {
+        finalEmail = contactEl.value.trim();
+    } else if (!user && contactEl && contactEl.value.trim() === "") {
+        return alert("Bitte gib eine Kontaktmöglichkeit an!");
+    }
 
     const data = {
-        name: nameEl ? nameEl.value : "Unbekannt",
-        message: msgEl ? msgEl.value : "",
-        email: user ? user.email : null,
-        category: catEl ? catEl.value : "allgemein",
+        name: document.getElementById('sup-name') ? document.getElementById('sup-name').value : "Unbekannt",
+        message: document.getElementById('sup-msg') ? document.getElementById('sup-msg').value : "",
+        email: finalEmail,
+        category: document.getElementById('sup-category') ? document.getElementById('sup-category').value : "allgemein",
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
     };
 
-    // Wenn Minecraft ausgewählt wurde, speichere die extra Infos
+    // Extra Daten
     if(data.category === 'minecraft') {
-        data.minecraftName = mcNameEl ? mcNameEl.value : "Nicht angegeben";
-        data.platform = platEl ? platEl.value : "Nicht angegeben";
+        data.minecraftName = document.getElementById('sup-mc-name') ? document.getElementById('sup-mc-name').value : "Keine Angabe";
+        data.platform = document.getElementById('sup-platform') ? document.getElementById('sup-platform').value : "Keine Angabe";
+    } else if (data.category === 'discord') {
+        data.discordName = document.getElementById('sup-discord-name') ? document.getElementById('sup-discord-name').value : "Keine Angabe";
     }
 
     db.collection("messages").add(data).then(() => {
         alert("Deine Nachricht wurde erfolgreich gesendet!");
         e.target.reset();
-        if(document.getElementById('mc-fields')) {
-            document.getElementById('mc-fields').style.display = 'none';
-        }
+        if(document.getElementById('mc-fields')) document.getElementById('mc-fields').style.display = 'none';
+        if(document.getElementById('discord-fields')) document.getElementById('discord-fields').style.display = 'none';
     });
 };
 
+// Admin Dashboard Nachrichten Laden
 function renderAdminMessages() {
     const list = document.getElementById('admin-messages');
     if(!list) return;
@@ -340,20 +353,31 @@ function renderAdminMessages() {
         snap.forEach(doc => {
             const m = doc.data();
             const date = m.timestamp ? m.timestamp.toDate().toLocaleString() : "Gerade eben";
-            const replyBtn = m.email ? `<a href="mailto:${m.email}?subject=Re: Support Anfrage Creeperflori" class="save-btn btn-highlight" style="text-decoration:none; display:inline-block; width:auto; padding: 8px 15px; margin-top:10px;">📧 Antworten</a>` : `<p style="font-size:0.8rem; color:gray; margin-top:10px;">(Gast)</p>`;
             
-            // NEU: Minecraft Info Box (wird nur angezeigt, wenn es eine Minecraft-Anfrage ist)
-            const mcInfo = (m.category === 'minecraft') ? `
+            // Check ob es eine echte E-Mail Adresse ist für den "Antworten" Button
+            const isEmail = m.email && m.email.includes('@');
+            const replyBtn = isEmail ? 
+                `<a href="mailto:${m.email}?subject=Re: Support Anfrage Creeperflori" class="save-btn btn-highlight" style="text-decoration:none; display:inline-block; width:auto; padding: 8px 15px; margin-top:10px;">📧 Antworten</a>` 
+                : `<p style="font-size:0.9rem; color:#ff9900; margin-top:10px; background: rgba(255,153,0,0.1); padding: 5px; border-radius: 4px;"><strong>Kontakt-Info:</strong> ${m.email || '(Gast - Keine Info)'}</p>`;
+            
+            // Layout anpassen je nach Art der Nachricht
+            let extraInfo = '';
+            let badgeColor = "#555";
+
+            if(m.category === 'minecraft') {
+                badgeColor = "#32CD32";
+                extraInfo = `
                 <div style="background: rgba(50, 205, 50, 0.1); padding: 10px; border-radius: 5px; margin: 10px 0; border: 1px solid var(--primary);">
                     <strong style="color:var(--primary);">MC Name:</strong> ${m.minecraftName} <br>
                     <strong style="color:var(--primary);">Plattform:</strong> ${m.platform}
-                </div>
-            ` : '';
-
-            // Kategorie-Badge (Farbe ändert sich je nach Problem)
-            let badgeColor = "#555";
-            if(m.category === 'minecraft') badgeColor = "#32CD32";
-            if(m.category === 'discord') badgeColor = "#5865F2";
+                </div>`;
+            } else if (m.category === 'discord') {
+                badgeColor = "#5865F2";
+                extraInfo = `
+                <div style="background: rgba(88, 101, 242, 0.1); padding: 10px; border-radius: 5px; margin: 10px 0; border: 1px solid #5865F2;">
+                    <strong style="color:#5865F2;">Discord Name:</strong> ${m.discordName}
+                </div>`;
+            }
 
             list.innerHTML += `
                 <div class="project-card" style="border-left-color: ${badgeColor};">
@@ -361,7 +385,7 @@ function renderAdminMessages() {
                     <small style="color:gray; float:right;">📅 ${date}</small>
                     <h3 style="margin-top:15px;">Von: ${m.name}</h3>
                     
-                    ${mcInfo}
+                    ${extraInfo}
                     
                     <p style="margin: 15px 0; background: #111; padding: 15px; border-radius: 8px; font-style: italic;">"${m.message}"</p>
                     
