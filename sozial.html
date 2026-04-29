@@ -73,29 +73,55 @@
         </div>
     </div>
 
-    <footer class="support-footer">
+        <footer class="support-footer">
         <div class="footer-content">
             <div class="footer-branding">
                 <h3>💬 Creeperflori Support</h3>
-                <p>Hast du Fragen oder Probleme? Schreib mir eine Nachricht!</p>
+                <p>Hast du Fragen oder Probleme? Schreib mir hier direkt eine Nachricht!</p>
                 <div class="footer-links">
                     <a href="impressum.html">Impressum</a> 
                     <a href="datenschutz.html">Datenschutz</a>
                 </div>
             </div>
+
             <div class="footer-form-box">
                 <form onsubmit="sendSupport(event)">
                     <input type="text" id="sup-name" placeholder="Dein Name" required class="editor-input">
-                    <textarea id="sup-msg" placeholder="Wie kann ich helfen?" rows="3" required class="editor-input"></textarea>
-                    <button type="submit" class="save-btn">Nachricht Senden</button>
+                    
+                    <input type="text" id="sup-contact" class="guest-contact editor-input" placeholder="E-Mail / Discord für Rückfragen" style="display:none; border-color: #ff9900;">
+
+                    <select id="sup-category" class="editor-input" onchange="toggleSupportFields()">
+                        <option value="allgemein">Allgemeine Frage</option>
+                        <option value="discord">Discord Support</option>
+                        <option value="minecraft">Fillypath (Minecraft)</option>
+                    </select>
+
+                    <div id="discord-fields" style="display: none; margin-bottom: 15px;">
+                        <input type="text" id="sup-discord-name" placeholder="Dein Discord Name" class="editor-input" style="border-color: #5865F2;">
+                    </div>
+
+                    <div id="mc-fields" style="display: none; margin-bottom: 15px;">
+                        <input type="text" id="sup-mc-name" placeholder="Minecraft Ingame Name" class="editor-input" style="border-color: #32CD32;">
+                        <select id="sup-platform" class="editor-input" style="border-color: #32CD32;">
+                            <option value="PC / Java">PC / Java</option>
+                            <option value="Handy/Tablet">Handy / Tablet</option>
+                            <option value="Konsole">Konsole (Xbox/PS/Switch)</option>
+                            <option value="Laptop (Bedrock)">Laptop (Windows 10)</option>
+                        </select>
+                    </div>
+
+                    <textarea id="sup-msg" placeholder="Wie kann ich dir helfen?" rows="3" required class="editor-input"></textarea>
+                    
+                    <button type="submit" class="save-btn btn-highlight">Nachricht Senden</button>
                 </form>
             </div>
         </div>
         <div class="footer-bottom">
             <span>&copy; 2026 Creeperflori. Alle Rechte vorbehalten.</span>
-            <span>Made with ❤️ by Community</span>
+            <span>Made with ❤️ for Community</span>
         </div>
     </footer>
+
 
     <script src="js/config.js"></script>
     <script src="js/app.js"></script>
