@@ -57,23 +57,30 @@
             <h2 style="margin-bottom: 10px;">🆘 Support-Anfrage</h2>
             <p style="color: #ccc; margin-bottom: 20px;">Du hast ein Problem? Wir helfen dir!</p>
             
-            <form onsubmit="sendSupport(event)">
+            form onsubmit="sendSupport(event)">
                 <input type="text" id="sup-name" placeholder="Dein Name" required class="editor-input">
                 
+                <input type="text" id="sup-contact" class="guest-contact editor-input" placeholder="Deine E-Mail / Kontaktmöglichkeit" style="display:none; border-color: #ff9900; background: rgba(255, 153, 0, 0.1);">
+
                 <label style="color: #ccc; font-size: 0.9rem; display: block; margin-bottom: 5px;">Wo liegt das Problem?</label>
                 <select id="sup-category" class="editor-input" onchange="toggleSupportFields()">
+                    <option value="allgemein">Allgemeine Frage</option>
                     <option value="discord">Discord (CreeperCave / DeppenCord)</option>
                     <option value="minecraft">Minecraft Server (Fillypath)</option>
-                    <option value="allgemein">Allgemeine Frage</option>
                 </select>
 
-                <div id="mc-fields" style="display: none; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #333;">
+                <div id="discord-fields" style="display: none; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #5865F2;">
+                    <label style="color: #5865F2; font-weight: bold; display: block; margin-bottom: 10px;">Discord Details:</label>
+                    <input type="text" id="sup-discord-name" placeholder="Dein Discord Name (z.B. user#1234)" class="editor-input" style="margin-bottom: 0;">
+                </div>
+
+                <div id="mc-fields" style="display: none; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #32CD32;">
                     <label style="color: var(--primary); font-weight: bold; display: block; margin-bottom: 10px;">Minecraft Details:</label>
                     
                     <input type="text" id="sup-mc-name" placeholder="Dein Minecraft Name" class="editor-input">
                     
                     <label style="color: #ccc; font-size: 0.8rem; display: block; margin-bottom: 5px;">Auf welcher Plattform spielst du?</label>
-                    <select id="sup-platform" class="editor-input">
+                    <select id="sup-platform" class="editor-input" style="margin-bottom: 0;">
                         <option value="PC / Java">PC / Java Edition</option>
                         <option value="Handy">Smartphone (Android/iOS)</option>
                         <option value="Tablet">Tablet (iPad/Android)</option>
@@ -87,7 +94,7 @@
                 <textarea id="sup-msg" placeholder="Beschreibe dein Problem so genau wie möglich..." rows="5" required class="editor-input"></textarea>
                 
                 <button type="submit" class="save-btn btn-highlight">Anfrage absenden</button>
-            </form>
+        </form>
         </div>
     </div>
 
