@@ -22,13 +22,19 @@
         <a class="user-login-btn" onclick="openLoginModal()">Login</a>
     </nav>
 
-    <div id="login-modal" class="modal-overlay">
+        <div id="login-modal" class="modal-overlay">
         <div class="modal-content">
             <span class="close-modal" onclick="closeLoginModal()">&times;</span>
             <h2 style="margin-bottom: 20px; color: white;">Community Login</h2>
             <form onsubmit="event.preventDefault(); handleAuth('login');">
                 <input type="email" id="auth-email" placeholder="E-Mail Adresse" required autocomplete="email">
-                <input type="password" id="auth-pass" placeholder="Passwort" required autocomplete="current-password">
+                
+                <input type="password" id="auth-pass" placeholder="Passwort" required autocomplete="current-password" style="margin-bottom: 5px;">
+                
+                <div style="text-align: right; margin-bottom: 15px;">
+                    <a href="#" onclick="resetPassword()" style="color: var(--primary); font-size: 0.85rem; text-decoration: none;">Passwort vergessen?</a>
+                </div>
+
                 <div class="legal-notice">
                     <input type="checkbox" id="legal-check">
                     <label for="legal-check">Ich akzeptiere die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a>.</label>
@@ -39,18 +45,6 @@
         </div>
     </div>
 
-    <div class="container">
-        <header class="chibi-header">
-            <img src="img/Creeperflori.png" alt="Creeperflori Minecraft">
-            <h1 style="color: #32CD32;">Fillypath Server</h1>
-            <p>IP: <span id="text-ip" style="font-weight: bold; color: white;">Lade...</span></p>
-        </header>
-
-        <h2 style="margin-bottom: 20px;">🛠️ Server-Updates & News</h2>
-        <div id="fillypath-news-list">
-            <p style="text-align: center; color: gray;">Lade Server-Updates...</p>
-        </div>
-    </div>
 
     <footer class="support-footer">
         <div class="footer-content">
