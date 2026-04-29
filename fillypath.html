@@ -3,17 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fillypath Server | Creeperflori</title>
-    
+    <title>Fillypath Minecraft | Creeperflori</title>
     <link rel="stylesheet" href="css/style.css">
-    
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 </head>
 <body>
-
     <canvas id="bgCanvas"></canvas>
 
     <nav>
@@ -21,83 +18,72 @@
         <a href="sozial.html">SOCIAL</a>
         <a href="fillypath.html">FILLYPATH</a>
         <a href="creepercave.html">CREEPERCAVE</a>
-        
-        <a href="admin.html" id="admin-nav-link" style="display:none; color:#ff9900; font-weight:bold; text-shadow: 0 0 10px rgba(255,153,0,0.5);">👑 ADMIN</a>
-        
+        <a href="admin.html" id="admin-nav-link" style="display:none; color:#ff9900; font-weight:bold;">👑 ADMIN</a>
         <a class="user-login-btn" onclick="openLoginModal()">Login</a>
     </nav>
 
-    <div id="login-modal" class="modal-overlay">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeLoginModal()">&times;</span>
-            <h2 style="margin-bottom: 20px; color: white;">Community Login</h2>
-            
-            <input type="email" id="auth-email" placeholder="E-Mail Adresse" required>
-            <input type="password" id="auth-pass" placeholder="Passwort" required>
-            
-            <div class="legal-notice">
-                <input type="checkbox" id="legal-check">
-                <label for="legal-check">Ich akzeptiere die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a>.</label>
-            </div>
-            
-            <button onclick="handleAuth('login')" class="save-btn">Einloggen</button>
-            <button onclick="handleAuth('register')" class="save-btn btn-outline">Registrieren</button>
-        </div>
-    </div>
-
     <div class="container">
         <header class="chibi-header">
-            <img src="img/Creeperflori.png" alt="Creeperflori Chibi">
-            <h1>Fillypath</h1>
+            <img src="img/Creeperflori.png" alt="Creeperflori Minecraft">
+            <h1 style="color: #32CD32;">Fillypath Server</h1>
+            <p>IP: <span id="text-ip" style="font-weight: bold; color: white;">Lade...</span></p>
         </header>
 
-        <div class="project-card" style="text-align: center; border-left-color: var(--primary); max-width: 600px; margin: 0 auto;">
-            <span class="card-badge" style="background: var(--primary); color: black;">MINECRAFT SERVER</span>
-            <h2 style="margin-bottom: 15px; font-size: 2rem;">Komm auf den Server!</h2>
+        <h2 style="margin-bottom: 20px;">🛠️ Server-Updates & News</h2>
+        <div id="fillypath-news-list">
+            <p style="color: gray;">Suche nach Server-Updates...</p>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #333; margin: 40px 0;">
+
+        <div class="project-card" style="max-width: 700px; margin: 0 auto; border-left-color: #32CD32;">
+            <h2>🆘 Support-Anfrage</h2>
+            <p style="color: #ccc; margin-bottom: 20px;">Du hast ein Problem? Wir helfen dir!</p>
             
-            <p style="color: #ccc; margin-bottom: 30px; font-size: 1.1rem; line-height: 1.8;">
-                Tauche ein in die Welt von Fillypath! Erlebe spannende Abenteuer, baue epische Projekte und spiele zusammen mit der Community.
-            </p>
-
-            <div style="display: flex; flex-direction: column; gap: 15px; max-width: 300px; margin: 0 auto;">
+            <form onsubmit="sendImprovedSupport(event)">
+                <input type="text" id="sup-name" placeholder="Dein Name" required class="editor-input">
                 
-                <button onclick="navigator.clipboard.writeText(CONFIG.links.serverIP).then(() => alert('Die IP ' + CONFIG.links.serverIP + ' wurde kopiert!'));" class="save-btn btn-highlight" style="font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                    <span style="font-size: 1.3rem;">📋</span> IP Kopieren
-                </button>
+                <label style="color: #ccc; font-size: 0.9rem;">Wo liegt das Problem?</label>
+                <select id="sup-category" class="editor-input" onchange="toggleSupportFields()">
+                    <option value="discord">Discord (CreeperCave / DeppenCord)</option>
+                    <option value="minecraft">Minecraft Server (Fillypath)</option>
+                    <option value="allgemein">Allgemeine Frage</option>
+                </select>
 
-                <a href="#" id="link-server-discord" target="_blank" class="social-btn" style="border-left: 6px solid #5865F2; justify-content: center;">
-                    <span class="icon">🎧</span> Fillypath Discord
-                </a>
+                <div id="mc-fields" style="display: none; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <label style="color: var(--primary); font-weight: bold; display: block; margin-bottom: 10px;">Minecraft Details:</label>
+                    
+                    <input type="text" id="sup-mc-name" placeholder="Dein Minecraft Name" class="editor-input">
+                    
+                    <label style="color: #ccc; font-size: 0.8rem;">Auf welcher Plattform spielst du?</label>
+                    <select id="sup-platform" class="editor-input">
+                        <option value="pc">PC / Java Edition</option>
+                        <option value="handy">Smartphone (Android/iOS)</option>
+                        <option value="tablet">Tablet (iPad/Android)</option>
+                        <option value="laptop">Laptop (Bedrock)</option>
+                        <option value="xbox">Xbox</option>
+                        <option value="ps">PlayStation</option>
+                        <option value="switch">Nintendo Switch</option>
+                    </select>
+                </div>
+
+                <textarea id="sup-msg" placeholder="Beschreibe dein Problem so genau wie möglich..." rows="5" required class="editor-input"></textarea>
                 
-            </div>
+                <button type="submit" class="save-btn btn-highlight">Anfrage absenden</button>
+            </form>
         </div>
     </div>
-
-    <footer class="support-footer">
-        <div class="footer-content">
-            <div class="footer-branding">
-                <h3>💬 Creeperflori Support</h3>
-                <p>Hast du Fragen oder Probleme? Schreib mir eine Nachricht!</p>
-                <div class="footer-links">
-                    <a href="impressum.html">Impressum</a> 
-                    <a href="datenschutz.html">Datenschutz</a>
-                </div>
-            </div>
-            <div class="footer-form-box">
-                <form onsubmit="sendSupport(event)">
-                    <input type="text" id="sup-name" placeholder="Dein Name" required class="editor-input">
-                    <textarea id="sup-msg" placeholder="Wie kann ich helfen?" rows="3" required class="editor-input"></textarea>
-                    <button type="submit" class="save-btn">Nachricht Senden</button>
-                </form>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <span>&copy; 2026 Creeperflori. Alle Rechte vorbehalten.</span>
-            <span>Made with ❤️ by Community</span>
-        </div>
-    </footer>
 
     <script src="js/config.js"></script>
     <script src="js/app.js"></script>
+    
+    <script>
+        // Logik zum Einblenden der Minecraft-Felder
+        function toggleSupportFields() {
+            const cat = document.getElementById('sup-category').value;
+            const mcFields = document.getElementById('mc-fields');
+            mcFields.style.display = (cat === 'minecraft') ? 'block' : 'none';
+        }
+    </script>
 </body>
 </html>
