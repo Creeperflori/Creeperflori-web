@@ -18,9 +18,26 @@
         <a href="sozial.html">SOCIAL</a>
         <a href="fillypath.html">FILLYPATH</a>
         <a href="creepercave.html">CREEPERCAVE</a>
-        <a href="admin.html" id="admin-nav-link" style="display:none; color:#ff9900; font-weight:bold;">👑 ADMIN</a>
+        <a href="admin.html" id="admin-nav-link" style="display:none; color:#ff9900; font-weight:bold; text-shadow: 0 0 10px rgba(255,153,0,0.5);">👑 ADMIN</a>
         <a class="user-login-btn" onclick="openLoginModal()">Login</a>
     </nav>
+
+    <div id="login-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeLoginModal()">&times;</span>
+            <h2 style="margin-bottom: 20px; color: white;">Community Login</h2>
+            <form onsubmit="event.preventDefault(); handleAuth('login');">
+                <input type="email" id="auth-email" placeholder="E-Mail Adresse" required autocomplete="email">
+                <input type="password" id="auth-pass" placeholder="Passwort" required autocomplete="current-password">
+                <div class="legal-notice">
+                    <input type="checkbox" id="legal-check">
+                    <label for="legal-check">Ich akzeptiere die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a>.</label>
+                </div>
+                <button type="submit" class="save-btn">Einloggen</button>
+                <button type="button" onclick="handleAuth('register')" class="save-btn btn-outline">Registrieren</button>
+            </form>
+        </div>
+    </div>
 
     <div class="container">
         <header class="chibi-header">
@@ -31,39 +48,39 @@
 
         <h2 style="margin-bottom: 20px;">🛠️ Server-Updates & News</h2>
         <div id="fillypath-news-list">
-            <p style="color: gray;">Suche nach Server-Updates...</p>
+            <p style="text-align: center; color: gray;">Lade Server-Updates...</p>
         </div>
 
-        <hr style="border: 0; border-top: 1px solid #333; margin: 40px 0;">
+        <hr style="border: 0; border-top: 1px solid #333; margin: 50px 0;">
 
         <div class="project-card" style="max-width: 700px; margin: 0 auto; border-left-color: #32CD32;">
-            <h2>🆘 Support-Anfrage</h2>
+            <h2 style="margin-bottom: 10px;">🆘 Support-Anfrage</h2>
             <p style="color: #ccc; margin-bottom: 20px;">Du hast ein Problem? Wir helfen dir!</p>
             
-            <form onsubmit="sendImprovedSupport(event)">
+            <form onsubmit="sendSupport(event)">
                 <input type="text" id="sup-name" placeholder="Dein Name" required class="editor-input">
                 
-                <label style="color: #ccc; font-size: 0.9rem;">Wo liegt das Problem?</label>
+                <label style="color: #ccc; font-size: 0.9rem; display: block; margin-bottom: 5px;">Wo liegt das Problem?</label>
                 <select id="sup-category" class="editor-input" onchange="toggleSupportFields()">
                     <option value="discord">Discord (CreeperCave / DeppenCord)</option>
                     <option value="minecraft">Minecraft Server (Fillypath)</option>
                     <option value="allgemein">Allgemeine Frage</option>
                 </select>
 
-                <div id="mc-fields" style="display: none; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                <div id="mc-fields" style="display: none; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #333;">
                     <label style="color: var(--primary); font-weight: bold; display: block; margin-bottom: 10px;">Minecraft Details:</label>
                     
                     <input type="text" id="sup-mc-name" placeholder="Dein Minecraft Name" class="editor-input">
                     
-                    <label style="color: #ccc; font-size: 0.8rem;">Auf welcher Plattform spielst du?</label>
+                    <label style="color: #ccc; font-size: 0.8rem; display: block; margin-bottom: 5px;">Auf welcher Plattform spielst du?</label>
                     <select id="sup-platform" class="editor-input">
-                        <option value="pc">PC / Java Edition</option>
-                        <option value="handy">Smartphone (Android/iOS)</option>
-                        <option value="tablet">Tablet (iPad/Android)</option>
-                        <option value="laptop">Laptop (Bedrock)</option>
-                        <option value="xbox">Xbox</option>
-                        <option value="ps">PlayStation</option>
-                        <option value="switch">Nintendo Switch</option>
+                        <option value="PC / Java">PC / Java Edition</option>
+                        <option value="Handy">Smartphone (Android/iOS)</option>
+                        <option value="Tablet">Tablet (iPad/Android)</option>
+                        <option value="Laptop (Bedrock)">Laptop (Windows Bedrock)</option>
+                        <option value="Xbox">Xbox</option>
+                        <option value="PlayStation">PlayStation</option>
+                        <option value="Nintendo Switch">Nintendo Switch</option>
                     </select>
                 </div>
 
@@ -76,14 +93,5 @@
 
     <script src="js/config.js"></script>
     <script src="js/app.js"></script>
-    
-    <script>
-        // Logik zum Einblenden der Minecraft-Felder
-        function toggleSupportFields() {
-            const cat = document.getElementById('sup-category').value;
-            const mcFields = document.getElementById('mc-fields');
-            mcFields.style.display = (cat === 'minecraft') ? 'block' : 'none';
-        }
-    </script>
 </body>
 </html>
