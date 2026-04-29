@@ -30,14 +30,22 @@
 
         <div class="admin-card" style="max-width: 800px; margin: 0 auto 40px auto; border-left-color: var(--primary); background: #111;">
             <h2 style="margin-bottom: 15px;">🚀 News Veröffentlichen</h2>
+            
             <div class="editor-controls">
+                <select id="n-category" class="editor-input" style="border-color: #ff9900;">
+                    <option value="general">🏠 Startseite (Allgemeine News)</option>
+                    <option value="fillypath">⛏️ Fillypath (Minecraft Server)</option>
+                </select>
+
                 <select id="n-type" class="editor-input">
-                    <option value="news">📰 Allgemeine News</option>
+                    <option value="news">📰 Normale News</option>
                     <option value="patchnotes">🛠️ Patchnotes</option>
                     <option value="changelog">📜 Changelog</option>
                 </select>
+                
                 <input type="file" id="n-image" accept="image/*" class="editor-input">
             </div>
+            
             <input type="text" id="n-title" placeholder="Titel des Beitrags" class="editor-input">
             <textarea id="n-content" placeholder="Was gibt's Neues?" rows="5" class="editor-input"></textarea>
             
