@@ -34,13 +34,12 @@ function applyLinks() {
 auth.onAuthStateChanged(user => {
     applyLinks(); 
     
-    // Wir suchen jetzt nach dem Link im Menü!
     const adminNavLink = document.getElementById('admin-nav-link');
     const loginBtns = document.querySelectorAll('.user-login-btn');
     const path = window.location.pathname;
     
     if (user) {
-        // Kugelsicherer Admin-Check
+        // Admin Check
         const uEmail = user.email ? user.email.trim().toLowerCase() : "";
         const aEmail = CONFIG.adminEmail ? CONFIG.adminEmail.trim().toLowerCase() : "";
         isAdmin = (uEmail === aEmail && uEmail !== "");
@@ -48,12 +47,10 @@ auth.onAuthStateChanged(user => {
         db.collection('users').doc(user.uid).onSnapshot(doc => {
             let name = user.email.split('@')[0];
             let bio = "";
-            
             if (doc.exists) {
                 if (doc.data().displayName) name = doc.data().displayName;
                 if (doc.data().bio) bio = doc.data().bio;
             }
-            
             loginBtns.forEach(btn => {
                 btn.innerHTML = "👤 " + name;
                 btn.onclick = () => window.location.href = "profil.html";
@@ -63,21 +60,19 @@ auth.onAuthStateChanged(user => {
                 const nameInput = document.getElementById('prof-name');
                 const title = document.getElementById('profile-title');
                 const bioInput = document.getElementById('prof-bio');
-                
                 if(nameInput) nameInput.value = name;
                 if(title) title.innerText = name;
                 if(bioInput) bioInput.value = bio;
             }
         });
 
-        // HIER PASSIERT DIE MAGIE: Wenn Admin, dann zeige den Menü-Punkt!
         if(isAdmin && adminNavLink) {
             adminNavLink.style.display = "inline-block";
         }
 
         if (path.includes('admin.html')) {
             if (isAdmin) renderAdminMessages();
-            else window.location.replace("index.html"); // Kickt normale User raus
+            else window.location.replace("index.html");
         }
 
     } else {
@@ -87,7 +82,6 @@ auth.onAuthStateChanged(user => {
             btn.onclick = openLoginModal;
         });
         
-        // Verstecke den Button, wenn ausgeloggt
         if(adminNavLink) adminNavLink.style.display = "none";
 
         if (path.includes('profil.html') || path.includes('admin.html')) {
@@ -95,9 +89,13 @@ auth.onAuthStateChanged(user => {
         }
     }
     
-    if(document.getElementById('news-list')) loadNews();
+    // News laden, egal ob Startseite oder Fillypath
+    if(document.getElementById('news-list') || document.getElementById('fillypath-news-list')) {
+        loadNews();
+    }
 });
 
+// Modal Steuerung
 function openLoginModal() { document.getElementById('login-modal').style.display = "flex"; }
 function closeLoginModal() { document.getElementById('login-modal').style.display = "none"; }
 
@@ -159,6 +157,7 @@ window.uploadNewsWithImage = async function() {
     const title = document.getElementById('n-title').value;
     const content = document.getElementById('n-content').value;
     const type = document.getElementById('n-type').value;
+    const category = document.getElementById('n-category').value; // NEU: general oder fillypath
     const fileEl = document.getElementById('n-image');
     const file = fileEl ? fileEl.files[0] : null;
     const btn = document.getElementById('post-btn');
@@ -183,18 +182,31 @@ window.uploadNewsWithImage = async function() {
         });
     }
 
-    db.collection("news").add({ title, content, type, image: url, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
-    .then(() => { alert("News veröffentlicht!"); window.location.href = "index.html"; });
+    db.collection("news").add({ title, content, type, category, image: url, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
+    .then(() => { alert("Veröffentlicht!"); window.location.href = "index.html"; });
 };
 
+// Intelligentes News-Laden (Filtert automatisch nach Seite)
 function loadNews() {
-    const list = document.getElementById('news-list');
+    const path = window.location.pathname;
+    const isFillyPage = path.includes('fillypath.html');
+    const listId = isFillyPage ? 'fillypath-news-list' : 'news-list';
+    const list = document.getElementById(listId);
     if(!list) return;
 
-    db.collection("news").orderBy("timestamp", "desc").limit(10).onSnapshot(snap => {
+    const targetCat = isFillyPage ? 'fillypath' : 'general';
+
+    db.collection("news").orderBy("timestamp", "desc").limit(20).onSnapshot(snap => {
         list.innerHTML = "";
+        let count = 0;
+
         snap.forEach(doc => {
             const d = doc.data();
+            const cat = d.category || 'general'; // Falls alte Beiträge keine Kategorie haben
+            
+            if (cat !== targetCat) return; // Überspringt alles, was nicht hierher gehört
+            count++;
+
             const newsId = doc.id;
             const color = d.type === 'patchnotes' ? 'var(--patch-color)' : (d.type === 'changelog' ? 'var(--change-color)' : 'var(--primary)');
             const img = d.image ? `<img src="${d.image}" style="max-width:100%; max-height:400px; border-radius:8px; margin-top:10px; border:1px solid ${color}; display:block;">` : '';
@@ -203,9 +215,7 @@ function loadNews() {
             const commentSection = `
                 <div style="margin-top: 25px; border-top: 1px solid #333; padding-top: 15px;">
                     <h4 style="margin-bottom: 10px; color: #ccc;">💬 Kommentare</h4>
-                    <div id="comments-box-${newsId}" style="max-height: 250px; overflow-y: auto; margin-bottom: 15px;">
-                        <p style="font-size: 0.85rem; color: gray;">Lade Kommentare...</p>
-                    </div>
+                    <div id="comments-box-${newsId}" style="max-height: 250px; overflow-y: auto; margin-bottom: 15px;"></div>
                     <div style="display: flex; gap: 10px;">
                         <input type="text" id="comment-input-${newsId}" placeholder="Schreibe einen Kommentar..." class="editor-input" style="margin-bottom: 0;">
                         <button onclick="postComment('${newsId}')" class="save-btn" style="width: auto; padding: 0 20px;">Senden</button>
@@ -224,6 +234,10 @@ function loadNews() {
                 
             loadComments(newsId);
         });
+
+        if(count === 0) {
+            list.innerHTML = `<p style="text-align:center; color:gray;">Noch keine Beiträge in dieser Kategorie vorhanden.</p>`;
+        }
     });
 }
 
@@ -266,21 +280,56 @@ function loadComments(newsId) {
 }
 
 // ==========================================
-// 7. HELPER & POSTFACH
+// 7. HELPER & INTELLIGENTES POSTFACH
 // ==========================================
 window.deleteDoc = function(collectionName, docId) { 
     if(confirm("Diesen Eintrag unwiderruflich löschen?")) db.collection(collectionName).doc(docId).delete(); 
 };
 
+// Schaltet die Minecraft-Felder im Formular ein/aus
+window.toggleSupportFields = function() {
+    const catEl = document.getElementById('sup-category');
+    const mcFields = document.getElementById('mc-fields');
+    if(catEl && mcFields) {
+        mcFields.style.display = (catEl.value === 'minecraft') ? 'block' : 'none';
+    }
+};
+
+// Intelligentes Absenden (Erkennt, welche Felder da sind)
 window.sendSupport = function(e) {
     e.preventDefault();
     const user = auth.currentUser;
-    const name = document.getElementById('sup-name').value;
-    const message = document.getElementById('sup-msg').value;
-    const mailToSave = user ? user.email : null; 
     
-    db.collection("messages").add({ name, message, email: mailToSave, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
-    .then(() => { alert("Nachricht gesendet!"); e.target.reset(); });
+    // Basis-Felder (Gibt es auf jeder Seite im Footer)
+    const nameEl = document.getElementById('sup-name');
+    const msgEl = document.getElementById('sup-msg');
+    
+    // Extra-Felder (Gibt es nur auf der Fillypath-Seite)
+    const catEl = document.getElementById('sup-category');
+    const mcNameEl = document.getElementById('sup-mc-name');
+    const platEl = document.getElementById('sup-platform');
+
+    const data = {
+        name: nameEl ? nameEl.value : "Unbekannt",
+        message: msgEl ? msgEl.value : "",
+        email: user ? user.email : null,
+        category: catEl ? catEl.value : "allgemein",
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    // Wenn Minecraft ausgewählt wurde, speichere die extra Infos
+    if(data.category === 'minecraft') {
+        data.minecraftName = mcNameEl ? mcNameEl.value : "Nicht angegeben";
+        data.platform = platEl ? platEl.value : "Nicht angegeben";
+    }
+
+    db.collection("messages").add(data).then(() => {
+        alert("Deine Nachricht wurde erfolgreich gesendet!");
+        e.target.reset();
+        if(document.getElementById('mc-fields')) {
+            document.getElementById('mc-fields').style.display = 'none';
+        }
+    });
 };
 
 function renderAdminMessages() {
@@ -292,12 +341,30 @@ function renderAdminMessages() {
             const m = doc.data();
             const date = m.timestamp ? m.timestamp.toDate().toLocaleString() : "Gerade eben";
             const replyBtn = m.email ? `<a href="mailto:${m.email}?subject=Re: Support Anfrage Creeperflori" class="save-btn btn-highlight" style="text-decoration:none; display:inline-block; width:auto; padding: 8px 15px; margin-top:10px;">📧 Antworten</a>` : `<p style="font-size:0.8rem; color:gray; margin-top:10px;">(Gast)</p>`;
+            
+            // NEU: Minecraft Info Box (wird nur angezeigt, wenn es eine Minecraft-Anfrage ist)
+            const mcInfo = (m.category === 'minecraft') ? `
+                <div style="background: rgba(50, 205, 50, 0.1); padding: 10px; border-radius: 5px; margin: 10px 0; border: 1px solid var(--primary);">
+                    <strong style="color:var(--primary);">MC Name:</strong> ${m.minecraftName} <br>
+                    <strong style="color:var(--primary);">Plattform:</strong> ${m.platform}
+                </div>
+            ` : '';
+
+            // Kategorie-Badge (Farbe ändert sich je nach Problem)
+            let badgeColor = "#555";
+            if(m.category === 'minecraft') badgeColor = "#32CD32";
+            if(m.category === 'discord') badgeColor = "#5865F2";
 
             list.innerHTML += `
-                <div class="project-card" style="border-left-color: #ff9900;">
-                    <small style="color:gray;">📅 ${date}</small>
-                    <h3 style="margin-top:5px;">Von: ${m.name}</h3>
+                <div class="project-card" style="border-left-color: ${badgeColor};">
+                    <span class="card-badge" style="background:${badgeColor}; color:white;">${m.category.toUpperCase()}</span>
+                    <small style="color:gray; float:right;">📅 ${date}</small>
+                    <h3 style="margin-top:15px;">Von: ${m.name}</h3>
+                    
+                    ${mcInfo}
+                    
                     <p style="margin: 15px 0; background: #111; padding: 15px; border-radius: 8px; font-style: italic;">"${m.message}"</p>
+                    
                     <div style="display:flex; justify-content: space-between; align-items: center;">
                         ${replyBtn}
                         <button onclick="deleteDoc('messages', '${doc.id}')" style="background:none; border:1px solid red; color:red; cursor:pointer; padding: 8px 15px; border-radius: 5px; font-weight:bold;">🗑️ Löschen</button>
