@@ -9,7 +9,7 @@ const storage = firebase.storage();
 let isAdmin = false; 
 
 // ==========================================
-// 2. LINKS VERTEILEN
+// 2. NAVIGATION & LINKS
 // ==========================================
 function applyLinks() {
     const setLink = (id, url) => {
@@ -29,7 +29,7 @@ function applyLinks() {
 }
 
 // ==========================================
-// 3. MASTER-STEUERUNG
+// 3. MASTER AUTH-STEUERUNG
 // ==========================================
 auth.onAuthStateChanged(user => {
     applyLinks(); 
@@ -40,21 +40,18 @@ auth.onAuthStateChanged(user => {
     const path = window.location.pathname;
     
     if (user) {
-        // Wenn eingeloggt: Gast-Felder verstecken
+        // Gast-Kontakt-Felder verstecken, wenn eingeloggt
         guestFields.forEach(f => { f.style.display = 'none'; f.required = false; });
 
-        // Kugelsicherer Admin Check
+        // Admin Check (Kugelsicher)
         const uEmail = user.email ? user.email.trim().toLowerCase() : "";
         const aEmail = CONFIG.adminEmail ? CONFIG.adminEmail.trim().toLowerCase() : "";
         isAdmin = (uEmail === aEmail && uEmail !== "");
 
         db.collection('users').doc(user.uid).onSnapshot(doc => {
             let name = user.email.split('@')[0];
-            let bio = "";
-            if (doc.exists) {
-                if (doc.data().displayName) name = doc.data().displayName;
-                if (doc.data().bio) bio = doc.data().bio;
-            }
+            if (doc.exists && doc.data().displayName) name = doc.data().displayName;
+            
             loginBtns.forEach(btn => {
                 btn.innerHTML = "👤 " + name;
                 btn.onclick = () => window.location.href = "profil.html";
@@ -66,16 +63,12 @@ auth.onAuthStateChanged(user => {
                 const bioInput = document.getElementById('prof-bio');
                 if(nameInput) nameInput.value = name;
                 if(title) title.innerText = name;
-                if(bioInput) bioInput.value = bio;
+                if(bioInput && doc.exists) bioInput.value = doc.data().bio || "";
             }
         });
 
-        // Admin-Knopf in der Navigation anzeigen
-        if(isAdmin && adminNavLink) {
-            adminNavLink.style.display = "inline-block";
-        }
+        if(isAdmin && adminNavLink) adminNavLink.style.display = "inline-block";
 
-        // Unbefugte aus dem Dashboard werfen
         if (path.includes('admin.html')) {
             if (isAdmin) renderAdminMessages();
             else window.location.replace("index.html");
@@ -90,7 +83,7 @@ auth.onAuthStateChanged(user => {
         
         if(adminNavLink) adminNavLink.style.display = "none";
         
-        // Wenn NICHT eingeloggt: Gast-Felder anzeigen und als Pflichtfeld markieren
+        // Gast-Kontakt anzeigen, wenn ausgeloggt
         guestFields.forEach(f => { f.style.display = 'block'; f.required = true; });
 
         if (path.includes('profil.html') || path.includes('admin.html')) {
@@ -98,25 +91,22 @@ auth.onAuthStateChanged(user => {
         }
     }
     
-    // News laden, egal ob Startseite oder Fillypath
-    if(document.getElementById('news-list') || document.getElementById('fillypath-news-list')) {
-        loadNews();
-    }
+    if(document.getElementById('news-list') || document.getElementById('fillypath-news-list')) loadNews();
 });
 
-// Modal Steuerung
+// Modal Funktionen
 function openLoginModal() { document.getElementById('login-modal').style.display = "flex"; }
 function closeLoginModal() { document.getElementById('login-modal').style.display = "none"; }
 
 window.handleAuth = function(action) {
     const email = document.getElementById('auth-email').value;
     const pass = document.getElementById('auth-pass').value;
-    if(!email || !pass) return alert("Bitte alle Felder ausfüllen!");
+    if(!email || !pass) return alert("Bitte E-Mail und Passwort eingeben!");
     
     if(action === 'register') {
         const checkbox = document.getElementById('legal-check');
         if(checkbox && !checkbox.checked) return alert("Bitte akzeptiere die Datenschutzerklärung!");
-        auth.createUserWithEmailAndPassword(email, pass).then(() => location.reload()).catch(e => alert("Fehler: " + e.message));
+        auth.createUserWithEmailAndPassword(email, pass).then(() => location.reload()).catch(e => alert(e.message));
     } else {
         auth.signInWithEmailAndPassword(email, pass).then(() => closeLoginModal()).catch(e => alert("Login fehlgeschlagen!"));
     }
@@ -125,22 +115,31 @@ window.handleAuth = function(action) {
 window.logoutUser = function() { auth.signOut().then(() => location.reload()); };
 
 // ==========================================
-// 4. PROFIL SPEICHERN
+// 4. PASSWORT VERGESSEN
 // ==========================================
-window.saveProfile = function() {
-    const user = auth.currentUser;
-    if(!user) return;
-    const newName = document.getElementById('prof-name').value.trim();
-    const newBio = document.getElementById('prof-bio').value.trim();
-    if(!newName) return alert("Bitte gib einen Namen an!");
-
-    db.collection("users").doc(user.uid).set({ displayName: newName, bio: newBio, email: user.email, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
-    .then(() => { alert("✅ Profil erfolgreich gespeichert!"); document.getElementById('profile-title').innerText = newName; })
-    .catch(error => alert("Fehler: " + error.message));
+window.resetPassword = function() {
+    const email = document.getElementById('auth-email').value;
+    if(!email) return alert("Bitte gib oben zuerst deine E-Mail-Adresse ein!");
+    auth.sendPasswordResetEmail(email).then(() => {
+        alert("✅ Reset-E-Mail gesendet! Prüfe dein Postfach.");
+    }).catch(e => alert("Fehler: " + e.message));
 };
 
 // ==========================================
-// 5. NEWS & BILDER
+// 5. PROFIL SPEICHERN
+// ==========================================
+window.saveProfile = function() {
+    const user = auth.currentUser;
+    const name = document.getElementById('prof-name').value.trim();
+    const bio = document.getElementById('prof-bio').value.trim();
+    if(!name) return alert("Name darf nicht leer sein!");
+
+    db.collection("users").doc(user.uid).set({ displayName: name, bio: bio, email: user.email }, { merge: true })
+    .then(() => alert("✅ Gespeichert!"));
+};
+
+// ==========================================
+// 6. NEWS SYSTEM (Upload & Load)
 // ==========================================
 async function compressImage(file, maxWidth, maxHeight, quality) {
     return new Promise((resolve) => {
@@ -166,239 +165,153 @@ window.uploadNewsWithImage = async function() {
     const title = document.getElementById('n-title').value;
     const content = document.getElementById('n-content').value;
     const type = document.getElementById('n-type').value;
-    const category = document.getElementById('n-category').value; 
-    const fileEl = document.getElementById('n-image');
-    const file = fileEl ? fileEl.files[0] : null;
+    const category = document.getElementById('n-category').value;
+    const file = document.getElementById('n-image').files[0];
     const btn = document.getElementById('post-btn');
-    const prog = document.getElementById('upload-progress');
 
-    if(!title || !content) return alert("Titel und Inhalt fehlen!");
+    if(!title || !content) return alert("Felder ausfüllen!");
     btn.disabled = true;
     let url = "";
 
     if (file) {
-        prog.style.display = "block";
-        prog.innerText = "Komprimiere Bild...";
         const compressed = await compressImage(file, 1200, 1200, 0.8);
         const ref = storage.ref(`news_images/${Date.now()}_img.jpg`);
-        const task = ref.put(compressed);
-        
-        await new Promise((res, rej) => {
-            task.on('state_changed', 
-                s => { prog.innerText = "Upload: " + Math.round((s.bytesTransferred/s.totalBytes)*100) + "%"; }, 
-                rej, async () => { url = await task.snapshot.ref.getDownloadURL(); res(); }
-            );
-        });
+        const task = await ref.put(compressed);
+        url = await task.ref.getDownloadURL();
     }
 
     db.collection("news").add({ title, content, type, category, image: url, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
-    .then(() => { alert("Veröffentlicht!"); window.location.href = "index.html"; });
+    .then(() => { alert("Veröffentlicht!"); location.reload(); });
 };
 
 function loadNews() {
-    const path = window.location.pathname;
-    const isFillyPage = path.includes('fillypath.html');
-    const listId = isFillyPage ? 'fillypath-news-list' : 'news-list';
-    const list = document.getElementById(listId);
+    const isFilly = window.location.pathname.includes('fillypath.html');
+    const targetCat = isFilly ? 'fillypath' : 'general';
+    const list = document.getElementById(isFilly ? 'fillypath-news-list' : 'news-list');
     if(!list) return;
-
-    const targetCat = isFillyPage ? 'fillypath' : 'general';
 
     db.collection("news").orderBy("timestamp", "desc").limit(20).onSnapshot(snap => {
         list.innerHTML = "";
         let count = 0;
-
         snap.forEach(doc => {
             const d = doc.data();
-            const cat = d.category || 'general'; 
-            
-            if (cat !== targetCat) return; 
+            if ((d.category || 'general') !== targetCat) return;
             count++;
 
-            const newsId = doc.id;
             const color = d.type === 'patchnotes' ? 'var(--patch-color)' : (d.type === 'changelog' ? 'var(--change-color)' : 'var(--primary)');
-            const img = d.image ? `<img src="${d.image}" style="max-width:100%; max-height:400px; border-radius:8px; margin-top:10px; border:1px solid ${color}; display:block;">` : '';
-            const del = isAdmin ? `<button onclick="deleteDoc('news', '${newsId}')" style="background:red; color:white; border:none; padding:8px; margin-top:15px; cursor:pointer; border-radius:4px;">🗑️ Beitrag Löschen</button>` : '';
-            
-            const commentSection = `
-                <div style="margin-top: 25px; border-top: 1px solid #333; padding-top: 15px;">
-                    <h4 style="margin-bottom: 10px; color: #ccc;">💬 Kommentare</h4>
-                    <div id="comments-box-${newsId}" style="max-height: 250px; overflow-y: auto; margin-bottom: 15px;"></div>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="comment-input-${newsId}" placeholder="Schreibe einen Kommentar..." class="editor-input" style="margin-bottom: 0;">
-                        <button onclick="postComment('${newsId}')" class="save-btn" style="width: auto; padding: 0 20px;">Senden</button>
-                    </div>
-                </div>`;
+            const img = d.image ? `<img src="${d.image}" style="max-width:100%; border-radius:8px; margin-top:10px;">` : '';
+            const del = isAdmin ? `<button onclick="deleteDoc('news', '${doc.id}')" style="background:red; color:white; border:none; padding:5px; margin-top:10px; cursor:pointer;">🗑 Löschen</button>` : '';
 
             list.innerHTML += `
                 <div class="project-card" style="border-left-color: ${color}">
                     <span class="card-badge" style="background:${color}; color:black;">${d.type.toUpperCase()}</span>
                     <h3>${d.title}</h3>
                     ${img}
-                    <p style="white-space:pre-wrap; margin-top:15px;">${d.content}</p>
+                    <p style="white-space:pre-wrap; margin-top:10px;">${d.content}</p>
                     ${del}
-                    ${commentSection}
+                    <div id="comments-box-${doc.id}" style="margin-top:20px; border-top:1px solid #333; padding-top:10px;"></div>
+                    <div style="display:flex; gap:10px; margin-top:10px;">
+                        <input type="text" id="comment-input-${doc.id}" placeholder="Kommentieren..." class="editor-input" style="margin-bottom:0;">
+                        <button onclick="postComment('${doc.id}')" class="save-btn btn-highlight" style="width:auto;">OK</button>
+                    </div>
                 </div>`;
-                
-            loadComments(newsId);
+            loadComments(doc.id);
         });
-
-        if(count === 0) {
-            list.innerHTML = `<p style="text-align:center; color:gray;">Noch keine Beiträge in dieser Kategorie vorhanden.</p>`;
-        }
+        if(count === 0) list.innerHTML = "<p>Keine News vorhanden.</p>";
     });
 }
 
-// ==========================================
-// 6. KOMMENTARE
-// ==========================================
+// Kommentare
 window.postComment = function(newsId) {
     const user = auth.currentUser;
-    const textEl = document.getElementById(`comment-input-${newsId}`);
-    if(!textEl) return;
-    const text = textEl.value;
-
-    if(!user) return alert("Du musst eingeloggt sein, um zu kommentieren!");
+    const text = document.getElementById(`comment-input-${newsId}`).value;
+    if(!user) return alert("Logge dich ein!");
     if(!text.trim()) return;
 
-    db.collection("users").doc(user.uid).get().then(userDoc => {
-        const name = (userDoc.exists && userDoc.data().displayName) ? userDoc.data().displayName : user.email.split('@')[0];
-        db.collection("comments").add({ newsId: newsId, userId: user.uid, userName: name, text: text, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
-        .then(() => { textEl.value = ""; });
+    db.collection("users").doc(user.uid).get().then(doc => {
+        const name = doc.exists ? doc.data().displayName : user.email.split('@')[0];
+        db.collection("comments").add({ newsId, userName: name, text, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
+        .then(() => document.getElementById(`comment-input-${newsId}`).value = "");
     });
 };
 
 function loadComments(newsId) {
     const box = document.getElementById(`comments-box-${newsId}`);
-    if(!box) return;
     db.collection("comments").where("newsId", "==", newsId).orderBy("timestamp", "asc").onSnapshot(snap => {
         box.innerHTML = "";
-        if(snap.empty) { box.innerHTML = '<p style="font-size:0.85rem; color:gray;">Noch keine Kommentare.</p>'; return; }
-        
         snap.forEach(doc => {
             const c = doc.data();
-            const delBtn = isAdmin ? `<span onclick="deleteDoc('comments', '${doc.id}')" style="color:red; cursor:pointer; float:right; font-size:0.8rem;">❌</span>` : '';
-            box.innerHTML += `
-                <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px; margin-top: 8px; font-size: 0.9rem; border: 1px solid #222;">
-                    <strong style="color:var(--primary)">${c.userName}</strong> ${delBtn}
-                    <div style="margin-top: 5px; color: #ccc;">${c.text}</div>
-                </div>`;
+            const del = isAdmin ? `<span onclick="deleteDoc('comments', '${doc.id}')" style="color:red; cursor:pointer; float:right;">❌</span>` : '';
+            box.innerHTML += `<div style="font-size:0.9rem; margin-bottom:5px;"><strong>${c.userName}:</strong> ${c.text} ${del}</div>`;
         });
     });
 }
 
 // ==========================================
-// 7. HELPER & INTELLIGENTES POSTFACH
+// 7. SUPPORT SYSTEM
 // ==========================================
-window.deleteDoc = function(collectionName, docId) { 
-    if(confirm("Diesen Eintrag unwiderruflich löschen?")) db.collection(collectionName).doc(docId).delete(); 
-};
+window.deleteDoc = function(col, id) { if(confirm("Löschen?")) db.collection(col).doc(id).delete(); };
 
-// Schaltet Felder im Formular an/aus
 window.toggleSupportFields = function() {
-    const catEl = document.getElementById('sup-category');
-    const mcFields = document.getElementById('mc-fields');
-    const dcFields = document.getElementById('discord-fields');
-    
-    if(catEl) {
-        if(mcFields) mcFields.style.display = (catEl.value === 'minecraft') ? 'block' : 'none';
-        if(dcFields) dcFields.style.display = (catEl.value === 'discord') ? 'block' : 'none';
-    }
+    const cat = document.getElementById('sup-category').value;
+    const mc = document.getElementById('mc-fields');
+    const dc = document.getElementById('discord-fields');
+    if(mc) mc.style.display = (cat === 'minecraft') ? 'block' : 'none';
+    if(dc) dc.style.display = (cat === 'discord') ? 'block' : 'none';
 };
 
 window.sendSupport = function(e) {
     e.preventDefault();
     const user = auth.currentUser;
+    const contact = document.getElementById('sup-contact').value;
     
-    // Gast-Kontakt Check
-    const contactEl = document.getElementById('sup-contact');
-    let finalEmail = user ? user.email : null;
-    
-    if (!user && contactEl && contactEl.value.trim() !== "") {
-        finalEmail = contactEl.value.trim();
-    } else if (!user && contactEl && contactEl.value.trim() === "") {
-        return alert("Bitte gib eine Kontaktmöglichkeit an!");
-    }
+    if(!user && !contact) return alert("Bitte Kontakt angeben!");
 
     const data = {
-        name: document.getElementById('sup-name') ? document.getElementById('sup-name').value : "Unbekannt",
-        message: document.getElementById('sup-msg') ? document.getElementById('sup-msg').value : "",
-        email: finalEmail,
-        category: document.getElementById('sup-category') ? document.getElementById('sup-category').value : "allgemein",
+        name: document.getElementById('sup-name').value,
+        message: document.getElementById('sup-msg').value,
+        category: document.getElementById('sup-category').value,
+        email: user ? user.email : contact,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
     };
 
-    // Extra Daten
     if(data.category === 'minecraft') {
-        data.minecraftName = document.getElementById('sup-mc-name') ? document.getElementById('sup-mc-name').value : "Keine Angabe";
-        data.platform = document.getElementById('sup-platform') ? document.getElementById('sup-platform').value : "Keine Angabe";
-    } else if (data.category === 'discord') {
-        data.discordName = document.getElementById('sup-discord-name') ? document.getElementById('sup-discord-name').value : "Keine Angabe";
+        data.mcName = document.getElementById('sup-mc-name').value;
+        data.platform = document.getElementById('sup-platform').value;
+    } else if(data.category === 'discord') {
+        data.discordName = document.getElementById('sup-discord-name').value;
     }
 
     db.collection("messages").add(data).then(() => {
-        alert("Deine Nachricht wurde erfolgreich gesendet!");
+        alert("Gesendet!");
         e.target.reset();
-        if(document.getElementById('mc-fields')) document.getElementById('mc-fields').style.display = 'none';
-        if(document.getElementById('discord-fields')) document.getElementById('discord-fields').style.display = 'none';
+        window.toggleSupportFields();
     });
 };
 
-// Admin Dashboard Nachrichten Laden
 function renderAdminMessages() {
     const list = document.getElementById('admin-messages');
-    if(!list) return;
     db.collection("messages").orderBy("timestamp", "desc").onSnapshot(snap => {
         list.innerHTML = "";
         snap.forEach(doc => {
             const m = doc.data();
-            const date = m.timestamp ? m.timestamp.toDate().toLocaleString() : "Gerade eben";
+            const badge = m.category === 'minecraft' ? '#32CD32' : (m.category === 'discord' ? '#5865F2' : '#555');
+            const extra = m.category === 'minecraft' ? `<p><strong>MC:</strong> ${m.mcName} (${m.platform})</p>` : (m.category === 'discord' ? `<p><strong>DC:</strong> ${m.discordName}</p>` : '');
             
-            // Check ob es eine echte E-Mail Adresse ist für den "Antworten" Button
-            const isEmail = m.email && m.email.includes('@');
-            const replyBtn = isEmail ? 
-                `<a href="mailto:${m.email}?subject=Re: Support Anfrage Creeperflori" class="save-btn btn-highlight" style="text-decoration:none; display:inline-block; width:auto; padding: 8px 15px; margin-top:10px;">📧 Antworten</a>` 
-                : `<p style="font-size:0.9rem; color:#ff9900; margin-top:10px; background: rgba(255,153,0,0.1); padding: 5px; border-radius: 4px;"><strong>Kontakt-Info:</strong> ${m.email || '(Gast - Keine Info)'}</p>`;
-            
-            // Layout anpassen je nach Art der Nachricht
-            let extraInfo = '';
-            let badgeColor = "#555";
-
-            if(m.category === 'minecraft') {
-                badgeColor = "#32CD32";
-                extraInfo = `
-                <div style="background: rgba(50, 205, 50, 0.1); padding: 10px; border-radius: 5px; margin: 10px 0; border: 1px solid var(--primary);">
-                    <strong style="color:var(--primary);">MC Name:</strong> ${m.minecraftName} <br>
-                    <strong style="color:var(--primary);">Plattform:</strong> ${m.platform}
-                </div>`;
-            } else if (m.category === 'discord') {
-                badgeColor = "#5865F2";
-                extraInfo = `
-                <div style="background: rgba(88, 101, 242, 0.1); padding: 10px; border-radius: 5px; margin: 10px 0; border: 1px solid #5865F2;">
-                    <strong style="color:#5865F2;">Discord Name:</strong> ${m.discordName}
-                </div>`;
-            }
-
             list.innerHTML += `
-                <div class="project-card" style="border-left-color: ${badgeColor};">
-                    <span class="card-badge" style="background:${badgeColor}; color:white;">${m.category.toUpperCase()}</span>
-                    <small style="color:gray; float:right;">📅 ${date}</small>
-                    <h3 style="margin-top:15px;">Von: ${m.name}</h3>
-                    
-                    ${extraInfo}
-                    
-                    <p style="margin: 15px 0; background: #111; padding: 15px; border-radius: 8px; font-style: italic;">"${m.message}"</p>
-                    
-                    <div style="display:flex; justify-content: space-between; align-items: center;">
-                        ${replyBtn}
-                        <button onclick="deleteDoc('messages', '${doc.id}')" style="background:none; border:1px solid red; color:red; cursor:pointer; padding: 8px 15px; border-radius: 5px; font-weight:bold;">🗑️ Löschen</button>
-                    </div>
+                <div class="project-card" style="border-left-color:${badge}">
+                    <span class="card-badge" style="background:${badge}; color:white;">${m.category.toUpperCase()}</span>
+                    <h3>${m.name}</h3>
+                    <p><strong>Kontakt:</strong> ${m.email}</p>
+                    ${extra}
+                    <p style="font-style:italic; margin:10px 0;">"${m.message}"</p>
+                    <button onclick="deleteDoc('messages', '${doc.id}')" style="color:red; background:none; border:none; cursor:pointer;">Löschen</button>
                 </div>`;
         });
     });
 }
 
-// Hintergrund Animation
+// Background & Init
 document.addEventListener("DOMContentLoaded", () => {
     applyLinks();
     const canvas = document.getElementById('bgCanvas');
