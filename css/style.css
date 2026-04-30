@@ -72,15 +72,10 @@ nav a:hover { color: var(--primary); }
 /* ==========================================
    LAYOUT & HEADER
    ========================================== */
-.container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
+.container { max-width: 900px; margin: 0 auto; padding: 20px; }
 .chibi-header { text-align: center; padding: 40px 0; }
 
-/* FIX: RUNDES BILD */
+/* RUNDES BILD */
 .round-chibi { 
     width: 150px; 
     height: 150px;
@@ -113,44 +108,24 @@ nav a:hover { color: var(--primary); }
 }
 
 /* ==========================================
-   SOCIAL BUTTONS
+   SOCIAL BUTTONS (ALS LISTE)
    ========================================== */
-.social-wrapper { max-width: 800px; margin: 0 auto; }
+.social-wrapper { max-width: 600px; margin: 0 auto; }
 
-/* FIX: DISCORD ZENTRIERT */
-.discord-central {
+.social-list {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: var(--discord-color) !important;
-    padding: 30px !important;
-    margin-bottom: 20px;
-    border-radius: 12px;
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-    font-size: 1.3rem;
-    transition: 0.3s;
-    box-shadow: 0 5px 20px rgba(88, 101, 242, 0.4);
-}
-.discord-central:hover { transform: translateY(-5px); }
-.discord-central img { width: 60px; margin-bottom: 10px; }
-
-.social-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 15px;
 }
 
 .social-btn {
     display: block;
-    padding: 15px;
+    padding: 18px;
     border-radius: 10px;
     text-decoration: none;
     color: white;
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     text-align: center;
     background: #1a1a1a;
     border: 1px solid #333;
@@ -162,12 +137,13 @@ nav a:hover { color: var(--primary); }
 .btn-youtube { border-left: 5px solid #FF0000; }
 .btn-tiktok { border-left: 5px solid #000000; }
 .btn-instagram { border-left: 5px solid #E1306C; }
+.btn-discord { border-left: 5px solid var(--discord-color); }
 
 /* ==========================================
-   MODAL (LOGIN) - ZENTRIERT
+   MODAL (LOGIN & DATENSCHUTZ)
    ========================================== */
 .modal-overlay {
-    display: none; /* Flex wird durch JS gesetzt */
+    display: none; 
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.85); z-index: 2000;
     align-items: center; justify-content: center;
@@ -185,6 +161,25 @@ nav a:hover { color: var(--primary); }
 
 .close-modal { position: absolute; top: 10px; right: 15px; font-size: 2rem; color: white; cursor: pointer; }
 
+/* DATENSCHUTZ POPUP SPEZIAL */
+.datenschutz-box {
+    max-width: 600px !important;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+.legal-scroll-area {
+    overflow-y: auto;
+    text-align: left;
+    padding-right: 15px;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+.legal-scroll-area p { margin-bottom: 10px; line-height: 1.5; }
+.legal-scroll-area::-webkit-scrollbar { width: 8px; }
+.legal-scroll-area::-webkit-scrollbar-track { background: #111; border-radius: 4px; }
+.legal-scroll-area::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
 /* ==========================================
    FORMULARE & BUTTONS
    ========================================== */
@@ -200,48 +195,26 @@ nav a:hover { color: var(--primary); }
 .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
 
 /* ==========================================
-   SUPPORT BOX (NEU) & FOOTER
+   SUPPORT BOX & FOOTER
    ========================================== */
 .support-footer { background: #050505; padding: 50px 20px; border-top: 2px solid #111; margin-top: 80px; }
 
-.round-chibi {
-    width: 150px; height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid var(--primary);
-    box-shadow: 0 0 15px var(--primary);
-    margin-bottom: 15px;
-}
-
-/* SUPPORT BOX */
 .support-box {
-    background: rgba(20, 20, 20, 0.8);
+    background: #111;
     border: 2px solid var(--primary);
-    padding: 25px;
+    padding: 30px;
     border-radius: 15px;
-    max-width: 600px;
+    max-width: 700px;
     margin: 0 auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-/* SOCIAL LISTE (UNTEREINANDER) */
-.social-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    max-width: 500px;
-    margin: 0 auto;
-}
+.footer-bottom { text-align: center; margin-top: 40px; font-size: 0.8rem; color: #444; }
 
-/* DATENSCHUTZ POPUP SPEZIAL */
-.datenschutz-box {
-    max-width: 500px !important;
-    max-height: 70vh;
+/* MOBILE OPTIMIERUNG */
+@media (max-width: 600px) {
+    nav { gap: 10px; padding: 10px; }
+    nav a { font-size: 0.75rem; }
+    .round-chibi { width: 120px; height: 120px; }
+    .support-box { padding: 20px; }
 }
-.legal-scroll-area {
-    overflow-y: auto;
-    text-align: left;
-    padding-right: 10px;
-    font-size: 0.9rem;
-    color: #ccc;
-}
-.legal-scroll-area p { margin-bottom: 10px; }
