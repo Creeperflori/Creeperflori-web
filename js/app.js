@@ -103,8 +103,70 @@ window.resetPassword = function() {
 };
 
 // ==========================================
-// 5. NEWS LADEN
+// 5. NEWS POSTEN & LADEN
 // ==========================================
+// Bild komprimieren bevor es hochgeladen wird (Spart Speicherplatz)
+async function compressImage(file, maxWidth, maxHeight, quality) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => {
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let w = img.width, h = img.height;
+                if (w > h) { if (w > maxWidth) { h *= maxWidth / w; w = maxWidth; } }
+                else { if (h > maxHeight) { w *= maxHeight / h; h = maxHeight; } }
+                canvas.width = w; canvas.height = h;
+                canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                canvas.toBlob(blob => resolve(blob), 'image/jpeg', quality);
+            };
+        };
+    });
+}
+
+// News veröffentlichen (Für die Admin Seite)
+window.uploadNewsWithImage = async function() {
+    const title = document.getElementById('n-title').value;
+    const content = document.getElementById('n-content').value;
+    const type = document.getElementById('n-type').value;
+    const category = document.getElementById('n-category').value;
+    const file = document.getElementById('n-image') ? document.getElementById('n-image').files[0] : null;
+    const btn = document.getElementById('post-btn');
+
+    if(!title || !content) return alert("Bitte Titel und Inhalt ausfüllen!");
+    btn.disabled = true;
+    btn.innerText = "Lädt hoch...";
+    let url = "";
+
+    try {
+        if (file) {
+            const compressed = await compressImage(file, 1200, 1200, 0.8);
+            const ref = storage.ref(`news_images/${Date.now()}_img.jpg`);
+            const task = await ref.put(compressed);
+            url = await task.ref.getDownloadURL();
+        }
+
+        await db.collection("news").add({ 
+            title, 
+            content, 
+            type, 
+            category, 
+            image: url, 
+            timestamp: firebase.firestore.FieldValue.serverTimestamp() 
+        });
+
+        alert("Beitrag erfolgreich veröffentlicht!"); 
+        location.reload();
+    } catch (error) {
+        alert("Fehler beim Hochladen: " + error.message);
+        btn.disabled = false;
+        btn.innerText = "Beitrag veröffentlichen";
+    }
+};
+
+// News auf der Webseite laden
 function loadNews() {
     const isFilly = window.location.pathname.includes('fillypath.html');
     const targetCat = isFilly ? 'fillypath' : 'general';
@@ -137,7 +199,7 @@ function loadNews() {
 }
 
 // Löschen-Funktion (Hilfsfunktion für Admins)
-window.deleteDoc = function(col, id) { if(confirm("Endgültig löschen?")) db.collection(col).doc(id).delete(); };
+window.deleteDoc = function(col, id) { if(confirm("Bist du sicher, dass du das endgültig löschen möchtest?")) db.collection(col).doc(id).delete(); };
 
 // ==========================================
 // 6. SUPPORT SYSTEM (Die intelligente Box)
