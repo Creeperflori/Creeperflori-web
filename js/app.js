@@ -15,6 +15,7 @@ function applyLinks() {
         const el = document.getElementById(id);
         if(el) { if(el.tagName === 'A') el.href = url; else el.innerText = url; }
     };
+    // Zieht die Links aus deiner config.js
     setLink('link-twitch', CONFIG.links.twitch);
     setLink('link-yt', CONFIG.links.youtube);
     setLink('link-tt', CONFIG.links.tiktok);
@@ -25,7 +26,7 @@ function applyLinks() {
 }
 
 // ==========================================
-// 3. MASTER-STEUERUNG & AUTH
+// 3. MASTER-STEUERUNG & AUTH (Für alle Seiten)
 // ==========================================
 auth.onAuthStateChanged(user => {
     applyLinks(); 
@@ -35,11 +36,13 @@ auth.onAuthStateChanged(user => {
     const path = window.location.pathname;
     
     if (user) {
+        // User ist eingeloggt
         guestFields.forEach(f => { f.style.display = 'none'; f.required = false; });
         const uEmail = user.email ? user.email.trim().toLowerCase() : "";
         const aEmail = CONFIG.adminEmail ? CONFIG.adminEmail.trim().toLowerCase() : "";
         isAdmin = (uEmail === aEmail && uEmail !== "");
 
+        // Profilnamen laden und Button anpassen
         db.collection('users').doc(user.uid).onSnapshot(doc => {
             let name = user.email.split('@')[0];
             if (doc.exists && doc.data().displayName) name = doc.data().displayName;
@@ -49,15 +52,15 @@ auth.onAuthStateChanged(user => {
             });
         });
 
+        // Admin Rechte prüfen
         if(isAdmin && adminNavLink) adminNavLink.style.display = "inline-block";
-        
-        // Admin Routing
         if (path.includes('admin.html')) {
             if (isAdmin) renderAdminMessages();
             else window.location.replace("index.html");
         }
 
     } else {
+        // User ist NICHT eingeloggt
         isAdmin = false;
         loginBtns.forEach(btn => {
             btn.innerHTML = "LOGIN";
@@ -65,9 +68,14 @@ auth.onAuthStateChanged(user => {
         });
         if(adminNavLink) adminNavLink.style.display = "none";
         guestFields.forEach(f => { f.style.display = 'block'; f.required = true; });
-        if (path.includes('profil.html') || path.includes('admin.html')) window.location.replace("index.html");
+        
+        // Wenn Gast auf geschützte Seite will -> zurück zur Startseite
+        if (path.includes('profil.html') || path.includes('admin.html')) {
+            window.location.replace("index.html");
+        }
     }
     
+    // News laden, falls die Seite einen News-Container hat
     if(document.getElementById('news-list') || document.getElementById('fillypath-news-list')) loadNews();
 });
 
@@ -105,7 +113,6 @@ window.resetPassword = function() {
 // ==========================================
 // 5. NEWS POSTEN & LADEN
 // ==========================================
-// Bild komprimieren bevor es hochgeladen wird (Spart Speicherplatz)
 async function compressImage(file, maxWidth, maxHeight, quality) {
     return new Promise((resolve) => {
         const reader = new FileReader();
@@ -126,7 +133,6 @@ async function compressImage(file, maxWidth, maxHeight, quality) {
     });
 }
 
-// News veröffentlichen (Für die Admin Seite)
 window.uploadNewsWithImage = async function() {
     const title = document.getElementById('n-title').value;
     const content = document.getElementById('n-content').value;
@@ -166,9 +172,8 @@ window.uploadNewsWithImage = async function() {
     }
 };
 
-// News auf der Webseite laden
 function loadNews() {
-    const isFilly = window.location.pathname.includes('fillypath.html');
+    const isFilly = window.location.pathname.includes('fillypath.html') || window.location.pathname.includes('minecraft.html');
     const targetCat = isFilly ? 'fillypath' : 'general';
     const list = document.getElementById(isFilly ? 'fillypath-news-list' : 'news-list');
     if(!list) return;
@@ -181,7 +186,7 @@ function loadNews() {
             if ((d.category || 'general') !== targetCat) return;
             count++;
 
-            const color = d.type === 'patchnotes' ? 'var(--patch-color)' : (d.type === 'changelog' ? '#00ccff' : 'var(--primary)');
+            const color = d.type === 'patchnotes' ? '#ff9900' : (d.type === 'changelog' ? '#00ccff' : '#32CD32');
             const img = d.image ? `<img src="${d.image}" style="max-width:100%; border-radius:8px; margin-top:10px;">` : '';
             const del = isAdmin ? `<button onclick="deleteDoc('news', '${doc.id}')" style="background:red; color:white; border:none; padding:8px; margin-top:10px; border-radius:4px; cursor:pointer;">🗑 Löschen</button>` : '';
             
@@ -198,11 +203,10 @@ function loadNews() {
     });
 }
 
-// Löschen-Funktion (Hilfsfunktion für Admins)
-window.deleteDoc = function(col, id) { if(confirm("Bist du sicher, dass du das endgültig löschen möchtest?")) db.collection(col).doc(id).delete(); };
+window.deleteDoc = function(col, id) { if(confirm("Endgültig löschen?")) db.collection(col).doc(id).delete(); };
 
 // ==========================================
-// 6. SUPPORT SYSTEM (Die intelligente Box)
+// 6. SUPPORT SYSTEM (FOOTER BOX)
 // ==========================================
 window.toggleSupportFields = function() {
     const cat = document.getElementById('sup-category').value;
@@ -294,12 +298,12 @@ function renderAdminMessages() {
 
                     <div style="display:flex; justify-content:space-between; align-items: center; margin-top: 20px;">
                         ${replyLink}
-                        <button onclick="deleteDoc('messages', '${doc.id}')" style="color:#ff4444; background:transparent; border:1px solid #ff4444; padding:8px 20px; border-radius:5px; cursor:pointer; transition: 0.3s;">🗑️ Schließen / Löschen</button>
+                        <button onclick="deleteDoc('messages', '${doc.id}')" style="color:#ff4444; background:transparent; border:1px solid #ff4444; padding:8px 20px; border-radius:5px; cursor:pointer; transition: 0.3s;">🗑️ Löschen</button>
                     </div>
                 </div>`;
         });
         
-        if(count === 0) list.innerHTML = "<p style='text-align:center; color:gray; font-size: 1.2rem; padding: 40px;'>Alles erledigt! Keine Support-Tickets offen. 🎉</p>";
+        if(count === 0) list.innerHTML = "<p style='text-align:center; color:gray; padding: 20px;'>Keine Support-Tickets offen.</p>";
     });
 }
 
