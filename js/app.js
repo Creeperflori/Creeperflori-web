@@ -1,328 +1,66 @@
-// ==========================================
-// 1. INITIALISIERUNG
-// ==========================================
 firebase.initializeApp(CONFIG.firebase);
 const db = firebase.firestore();
 const auth = firebase.auth();
-const storage = firebase.storage();
 
-let isAdmin = false; 
+// LOGIN / MODAL LOGIK
+function openLoginModal() { document.getElementById('login-modal').style.display = 'flex'; }
+function closeLoginModal() { document.getElementById('login-modal').style.display = 'none'; }
 
-// ==========================================
-// 2. NAVIGATION & LINKS
-// ==========================================
-function applyLinks() {
-    const setLink = (id, url) => {
-        const el = document.getElementById(id);
-        if(el) {
-            if(el.tagName === 'A') el.href = url;
-            else el.innerText = url;
-        }
-    };
-    setLink('link-twitch', CONFIG.links.twitch);
-    setLink('link-yt', CONFIG.links.youtube);
-    setLink('link-tt', CONFIG.links.tiktok);
-    setLink('link-insta', CONFIG.links.instagram);
-    setLink('link-discord', CONFIG.links.deppenCord);
-    setLink('link-server-discord', CONFIG.links.serverDiscord); 
-    setLink('text-ip', CONFIG.links.serverIP);
-}
-
-// ==========================================
-// 3. MASTER AUTH-STEUERUNG
-// ==========================================
 auth.onAuthStateChanged(user => {
-    applyLinks(); 
-    
-    const adminNavLink = document.getElementById('admin-nav-link');
     const loginBtns = document.querySelectorAll('.user-login-btn');
     const guestFields = document.querySelectorAll('.guest-contact');
-    const path = window.location.pathname;
     
     if (user) {
-        // Gast-Kontakt-Felder verstecken, wenn eingeloggt
-        guestFields.forEach(f => { f.style.display = 'none'; f.required = false; });
-
-        // Admin Check (Kugelsicher)
-        const uEmail = user.email ? user.email.trim().toLowerCase() : "";
-        const aEmail = CONFIG.adminEmail ? CONFIG.adminEmail.trim().toLowerCase() : "";
-        isAdmin = (uEmail === aEmail && uEmail !== "");
-
-        db.collection('users').doc(user.uid).onSnapshot(doc => {
-            let name = user.email.split('@')[0];
-            if (doc.exists && doc.data().displayName) name = doc.data().displayName;
-            
-            loginBtns.forEach(btn => {
-                btn.innerHTML = "👤 " + name;
-                btn.onclick = () => window.location.href = "profil.html";
-            });
-
-            if (path.includes('profil.html')) {
-                const nameInput = document.getElementById('prof-name');
-                const title = document.getElementById('profile-title');
-                const bioInput = document.getElementById('prof-bio');
-                if(nameInput) nameInput.value = name;
-                if(title) title.innerText = name;
-                if(bioInput && doc.exists) bioInput.value = doc.data().bio || "";
-            }
-        });
-
-        if(isAdmin && adminNavLink) adminNavLink.style.display = "inline-block";
-
-        if (path.includes('admin.html')) {
-            if (isAdmin) renderAdminMessages();
-            else window.location.replace("index.html");
-        }
-
-    } else {
-        isAdmin = false;
+        guestFields.forEach(f => f.style.display = 'none');
         loginBtns.forEach(btn => {
-            btn.innerHTML = "LOGIN";
+            btn.innerText = "PROFIL";
+            btn.onclick = () => window.location.href = 'profil.html';
+        });
+    } else {
+        guestFields.forEach(f => f.style.display = 'block');
+        loginBtns.forEach(btn => {
+            btn.innerText = "LOGIN";
             btn.onclick = openLoginModal;
         });
-        
-        if(adminNavLink) adminNavLink.style.display = "none";
-        
-        // Gast-Kontakt anzeigen, wenn ausgeloggt
-        guestFields.forEach(f => { f.style.display = 'block'; f.required = true; });
-
-        if (path.includes('profil.html') || path.includes('admin.html')) {
-            window.location.replace("index.html");
-        }
     }
-    
-    if(document.getElementById('news-list') || document.getElementById('fillypath-news-list')) loadNews();
+    // News laden falls auf der richtigen Seite
+    if(document.getElementById('news-list')) loadNews();
 });
 
-// Modal Funktionen
-function openLoginModal() { document.getElementById('login-modal').style.display = "flex"; }
-function closeLoginModal() { document.getElementById('login-modal').style.display = "none"; }
-
-window.handleAuth = function(action) {
-    const email = document.getElementById('auth-email').value;
-    const pass = document.getElementById('auth-pass').value;
-    if(!email || !pass) return alert("Bitte E-Mail und Passwort eingeben!");
-    
-    if(action === 'register') {
-        const checkbox = document.getElementById('legal-check');
-        if(checkbox && !checkbox.checked) return alert("Bitte akzeptiere die Datenschutzerklärung!");
-        auth.createUserWithEmailAndPassword(email, pass).then(() => location.reload()).catch(e => alert(e.message));
-    } else {
-        auth.signInWithEmailAndPassword(email, pass).then(() => closeLoginModal()).catch(e => alert("Login fehlgeschlagen!"));
-    }
-};
-
-window.logoutUser = function() { auth.signOut().then(() => location.reload()); };
-
-// ==========================================
-// 4. PASSWORT VERGESSEN
-// ==========================================
+// PASSWORT VERGESSEN
 window.resetPassword = function() {
     const email = document.getElementById('auth-email').value;
-    if(!email) return alert("Bitte gib oben zuerst deine E-Mail-Adresse ein!");
-    auth.sendPasswordResetEmail(email).then(() => {
-        alert("✅ Reset-E-Mail gesendet! Prüfe dein Postfach.");
-    }).catch(e => alert("Fehler: " + e.message));
+    if(!email) return alert("Gib erst deine E-Mail ein!");
+    auth.sendPasswordResetEmail(email).then(() => alert("E-Mail gesendet!"));
 };
 
-// ==========================================
-// 5. PROFIL SPEICHERN
-// ==========================================
-window.saveProfile = function() {
-    const user = auth.currentUser;
-    const name = document.getElementById('prof-name').value.trim();
-    const bio = document.getElementById('prof-bio').value.trim();
-    if(!name) return alert("Name darf nicht leer sein!");
-
-    db.collection("users").doc(user.uid).set({ displayName: name, bio: bio, email: user.email }, { merge: true })
-    .then(() => alert("✅ Gespeichert!"));
-};
-
-// ==========================================
-// 6. NEWS SYSTEM (Upload & Load)
-// ==========================================
-async function compressImage(file, maxWidth, maxHeight, quality) {
-    return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = e => {
-            const img = new Image();
-            img.src = e.target.result;
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                let w = img.width, h = img.height;
-                if (w > h) { if (w > maxWidth) { h *= maxWidth / w; w = maxWidth; } }
-                else { if (h > maxHeight) { w *= maxHeight / h; h = maxHeight; } }
-                canvas.width = w; canvas.height = h;
-                canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                canvas.toBlob(blob => resolve(blob), 'image/jpeg', quality);
-            };
-        };
-    });
-}
-
-window.uploadNewsWithImage = async function() {
-    const title = document.getElementById('n-title').value;
-    const content = document.getElementById('n-content').value;
-    const type = document.getElementById('n-type').value;
-    const category = document.getElementById('n-category').value;
-    const file = document.getElementById('n-image').files[0];
-    const btn = document.getElementById('post-btn');
-
-    if(!title || !content) return alert("Felder ausfüllen!");
-    btn.disabled = true;
-    let url = "";
-
-    if (file) {
-        const compressed = await compressImage(file, 1200, 1200, 0.8);
-        const ref = storage.ref(`news_images/${Date.now()}_img.jpg`);
-        const task = await ref.put(compressed);
-        url = await task.ref.getDownloadURL();
-    }
-
-    db.collection("news").add({ title, content, type, category, image: url, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
-    .then(() => { alert("Veröffentlicht!"); location.reload(); });
-};
-
-function loadNews() {
-    const isFilly = window.location.pathname.includes('fillypath.html');
-    const targetCat = isFilly ? 'fillypath' : 'general';
-    const list = document.getElementById(isFilly ? 'fillypath-news-list' : 'news-list');
-    if(!list) return;
-
-    db.collection("news").orderBy("timestamp", "desc").limit(20).onSnapshot(snap => {
-        list.innerHTML = "";
-        let count = 0;
-        snap.forEach(doc => {
-            const d = doc.data();
-            if ((d.category || 'general') !== targetCat) return;
-            count++;
-
-            const color = d.type === 'patchnotes' ? 'var(--patch-color)' : (d.type === 'changelog' ? 'var(--change-color)' : 'var(--primary)');
-            const img = d.image ? `<img src="${d.image}" style="max-width:100%; border-radius:8px; margin-top:10px;">` : '';
-            const del = isAdmin ? `<button onclick="deleteDoc('news', '${doc.id}')" style="background:red; color:white; border:none; padding:5px; margin-top:10px; cursor:pointer;">🗑 Löschen</button>` : '';
-
-            list.innerHTML += `
-                <div class="project-card" style="border-left-color: ${color}">
-                    <span class="card-badge" style="background:${color}; color:black;">${d.type.toUpperCase()}</span>
-                    <h3>${d.title}</h3>
-                    ${img}
-                    <p style="white-space:pre-wrap; margin-top:10px;">${d.content}</p>
-                    ${del}
-                    <div id="comments-box-${doc.id}" style="margin-top:20px; border-top:1px solid #333; padding-top:10px;"></div>
-                    <div style="display:flex; gap:10px; margin-top:10px;">
-                        <input type="text" id="comment-input-${doc.id}" placeholder="Kommentieren..." class="editor-input" style="margin-bottom:0;">
-                        <button onclick="postComment('${doc.id}')" class="save-btn btn-highlight" style="width:auto;">OK</button>
-                    </div>
-                </div>`;
-            loadComments(doc.id);
-        });
-        if(count === 0) list.innerHTML = "<p>Keine News vorhanden.</p>";
-    });
-}
-
-// Kommentare
-window.postComment = function(newsId) {
-    const user = auth.currentUser;
-    const text = document.getElementById(`comment-input-${newsId}`).value;
-    if(!user) return alert("Logge dich ein!");
-    if(!text.trim()) return;
-
-    db.collection("users").doc(user.uid).get().then(doc => {
-        const name = doc.exists ? doc.data().displayName : user.email.split('@')[0];
-        db.collection("comments").add({ newsId, userName: name, text, timestamp: firebase.firestore.FieldValue.serverTimestamp() })
-        .then(() => document.getElementById(`comment-input-${newsId}`).value = "");
-    });
-};
-
-function loadComments(newsId) {
-    const box = document.getElementById(`comments-box-${newsId}`);
-    db.collection("comments").where("newsId", "==", newsId).orderBy("timestamp", "asc").onSnapshot(snap => {
-        box.innerHTML = "";
-        snap.forEach(doc => {
-            const c = doc.data();
-            const del = isAdmin ? `<span onclick="deleteDoc('comments', '${doc.id}')" style="color:red; cursor:pointer; float:right;">❌</span>` : '';
-            box.innerHTML += `<div style="font-size:0.9rem; margin-bottom:5px;"><strong>${c.userName}:</strong> ${c.text} ${del}</div>`;
-        });
-    });
-}
-
-// ==========================================
-// 7. SUPPORT SYSTEM
-// ==========================================
-window.deleteDoc = function(col, id) { if(confirm("Löschen?")) db.collection(col).doc(id).delete(); };
-
-window.toggleSupportFields = function() {
-    const cat = document.getElementById('sup-category').value;
-    const mc = document.getElementById('mc-fields');
-    const dc = document.getElementById('discord-fields');
-    if(mc) mc.style.display = (cat === 'minecraft') ? 'block' : 'none';
-    if(dc) dc.style.display = (cat === 'discord') ? 'block' : 'none';
-};
-
+// SUPPORT SENDEN
 window.sendSupport = function(e) {
     e.preventDefault();
     const user = auth.currentUser;
     const contact = document.getElementById('sup-contact').value;
-    
-    if(!user && !contact) return alert("Bitte Kontakt angeben!");
+    const msg = document.getElementById('sup-msg').value;
 
-    const data = {
+    db.collection("messages").add({
         name: document.getElementById('sup-name').value,
-        message: document.getElementById('sup-msg').value,
-        category: document.getElementById('sup-category').value,
         email: user ? user.email : contact,
+        message: msg,
+        category: document.getElementById('sup-category').value,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    };
-
-    if(data.category === 'minecraft') {
-        data.mcName = document.getElementById('sup-mc-name').value;
-        data.platform = document.getElementById('sup-platform').value;
-    } else if(data.category === 'discord') {
-        data.discordName = document.getElementById('sup-discord-name').value;
-    }
-
-    db.collection("messages").add(data).then(() => {
-        alert("Gesendet!");
+    }).then(() => {
+        alert("Nachricht gesendet!");
         e.target.reset();
-        window.toggleSupportFields();
     });
 };
 
-function renderAdminMessages() {
-    const list = document.getElementById('admin-messages');
-    db.collection("messages").orderBy("timestamp", "desc").onSnapshot(snap => {
+// NEWS LADEN (Beispiel)
+function loadNews() {
+    const list = document.getElementById('news-list');
+    db.collection("news").orderBy("timestamp", "desc").limit(10).onSnapshot(snap => {
         list.innerHTML = "";
         snap.forEach(doc => {
-            const m = doc.data();
-            const badge = m.category === 'minecraft' ? '#32CD32' : (m.category === 'discord' ? '#5865F2' : '#555');
-            const extra = m.category === 'minecraft' ? `<p><strong>MC:</strong> ${m.mcName} (${m.platform})</p>` : (m.category === 'discord' ? `<p><strong>DC:</strong> ${m.discordName}</p>` : '');
-            
-            list.innerHTML += `
-                <div class="project-card" style="border-left-color:${badge}">
-                    <span class="card-badge" style="background:${badge}; color:white;">${m.category.toUpperCase()}</span>
-                    <h3>${m.name}</h3>
-                    <p><strong>Kontakt:</strong> ${m.email}</p>
-                    ${extra}
-                    <p style="font-style:italic; margin:10px 0;">"${m.message}"</p>
-                    <button onclick="deleteDoc('messages', '${doc.id}')" style="color:red; background:none; border:none; cursor:pointer;">Löschen</button>
-                </div>`;
+            const d = doc.data();
+            list.innerHTML += `<div class="project-card"><h3>${d.title}</h3><p>${d.content}</p></div>`;
         });
     });
 }
-
-// Background & Init
-document.addEventListener("DOMContentLoaded", () => {
-    applyLinks();
-    const canvas = document.getElementById('bgCanvas');
-    if(!canvas) return;
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-    let p = Array.from({length: 40}, () => ({x: Math.random()*canvas.width, y: Math.random()*canvas.height, v: Math.random()*-0.8-0.2}));
-    function draw() {
-        ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle = "#32CD32";
-        p.forEach(i => { i.y += i.v; if(i.y < -10) i.y = canvas.height+10; ctx.globalAlpha = 0.2; ctx.fillRect(i.x, i.y, 2, 2); });
-        requestAnimationFrame(draw);
-    }
-    draw();
-});
