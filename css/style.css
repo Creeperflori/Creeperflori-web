@@ -204,21 +204,44 @@ nav a:hover { color: var(--primary); }
    ========================================== */
 .support-footer { background: #050505; padding: 50px 20px; border-top: 2px solid #111; margin-top: 80px; }
 
+.round-chibi {
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--primary);
+    box-shadow: 0 0 15px var(--primary);
+    margin-bottom: 15px;
+}
+
+/* SUPPORT BOX */
 .support-box {
-    background: #111;
+    background: rgba(20, 20, 20, 0.8);
     border: 2px solid var(--primary);
-    padding: 30px;
+    padding: 25px;
     border-radius: 15px;
-    max-width: 700px;
+    max-width: 600px;
     margin: 0 auto;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-.footer-bottom { text-align: center; margin-top: 40px; font-size: 0.8rem; color: #444; }
-
-/* MOBILE OPTIMIERUNG */
-@media (max-width: 600px) {
-    nav { gap: 10px; padding: 10px; }
-    nav a { font-size: 0.75rem; }
-    .round-chibi { width: 120px; height: 120px; }
+/* SOCIAL LISTE (UNTEREINANDER) */
+.social-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 500px;
+    margin: 0 auto;
 }
+
+/* DATENSCHUTZ POPUP SPEZIAL */
+.datenschutz-box {
+    max-width: 500px !important;
+    max-height: 70vh;
+}
+.legal-scroll-area {
+    overflow-y: auto;
+    text-align: left;
+    padding-right: 10px;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+.legal-scroll-area p { margin-bottom: 10px; }
