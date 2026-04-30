@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creeperflori | News</title>
+    <title>News | Creeperflori</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -47,87 +47,52 @@
             <span class="close-modal" onclick="closeDatenschutzModal()">&times;</span>
             <h2 style="color: var(--primary); margin-bottom: 15px;">Datenschutzerklärung</h2>
             <div class="legal-scroll-area">
-                <p>Diese Datenschutzerklärung klärt dich über die Art, den Umfang und den Zweck der Verarbeitung von personenbezogenen Daten auf unserer Website auf. Sie entspricht dem Schweizer Datenschutzgesetz (DSG) sowie der Europäischen Datenschutz-Grundverordnung (DSGVO).</p>
-
-                <p style="margin-top: 15px; color: var(--primary);"><strong>1. Verantwortlicher</strong></p>
-                <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:<br>
-                <strong>Creeperflori</strong><br>
-                E-Mail: [DEINE E-MAIL ADRESSE EINTRAGEN]<br>
-                Discord: Creeperflori#XXXX</p>
-
-                <p style="margin-top: 15px; color: var(--primary);"><strong>2. Welche Daten wir erfassen und warum</strong></p>
-                <p><strong>a) Beim Besuch der Website (Hosting):</strong><br>
-                Diese Website wird über "GitHub Pages" (GitHub Inc., USA) gehostet. Bei jedem Aufruf speichert der Server automatisch Logfiles (z.B. IP-Adresse, Browsertyp, Datum/Uhrzeit). Dies ist technisch notwendig, um die Website sicher und stabil anzuzeigen (Art. 6 Abs. 1 lit. f DSGVO).</p>
-                
-                <p><strong>b) Bei Registrierung & Login (Community Login):</strong><br>
-                Wenn du dir einen Account erstellst, speichern wir deine <strong>E-Mail-Adresse</strong> und ein <strong>verschlüsseltes Passwort</strong>. Dies dient ausschließlich dazu, dir den Zugang zu deinem Profil und zukünftigen Community-Funktionen zu ermöglichen (Art. 6 Abs. 1 lit. b DSGVO).</p>
-
-                <p><strong>c) Beim Nutzen des Support-Formulars:</strong><br>
-                Wenn du uns kontaktierst, erfassen wir deinen Namen, deine E-Mail/Discord-Tag, deine Nachricht und optional (falls angegeben) Minecraft-Daten (Name, Plattform). Diese Daten nutzen wir ausschließlich, um dein Anliegen zu bearbeiten (Art. 6 Abs. 1 lit. b DSGVO).</p>
-
-                <p style="margin-top: 15px; color: var(--primary);"><strong>3. Weitergabe von Daten an Dritte (Google Firebase)</strong></p>
-                <p>Für unsere Datenbank, das Login-System (Authentifizierung) und die Speicherung von News und Support-Nachrichten nutzen wir <strong>Google Firebase</strong> (Google Ireland Limited, Irland / Google LLC, USA). <br>
-                Google verarbeitet die Daten in unserem Auftrag. Deine Passwörter werden bei Google streng verschlüsselt gespeichert – wir haben keinen Zugriff auf dein Klartext-Passwort. Für die Datenübermittlung in die USA stützt sich Google auf Standardvertragsklauseln und das EU-US Data Privacy Framework, um ein sicheres Datenschutzniveau zu garantieren.</p>
-
-                <p style="margin-top: 15px; color: var(--primary);"><strong>4. Cookies & Speicherung auf dem Gerät</strong></p>
-                <p>Wir verwenden keine Tracking- oder Werbe-Cookies. Das Login-System nutzt jedoch den lokalen Speicher deines Browsers (Local Storage / Session Storage), um deinen Anmeldestatus zu speichern, damit du dich nicht bei jedem Klick neu einloggen musst. Dies ist technisch zwingend erforderlich.</p>
-
-                <p style="margin-top: 15px; color: var(--primary);"><strong>5. Deine Rechte</strong></p>
-                <p>Du hast jederzeit das Recht auf:<br>
-                - <strong>Auskunft:</strong> Welche Daten wir von dir haben.<br>
-                - <strong>Löschung:</strong> Du kannst jederzeit verlangen, dass wir deinen Account, deine Kommentare oder Support-Nachrichten komplett löschen.<br>
-                - <strong>Berichtigung:</strong> Falsche Daten korrigieren zu lassen.<br>
-                Schreibe uns für all diese Anliegen einfach eine Nachricht über das Support-Formular oder per E-Mail.</p>
-
-                <p style="margin-top: 15px; color: var(--primary);"><strong>6. Datensicherheit</strong></p>
-                <p>Wir schützen deine Daten durch SSL/TLS-Verschlüsselung (erkennbar am "https://" in der Adresszeile) und durch die hohen Sicherheitsstandards unserer Server-Anbieter (GitHub & Google Firebase).</p>
+                <p>Diese Erklärung entspricht dem Schweizer Datenschutzgesetz (DSG) und der EU-DSGVO.</p>
+                <p><strong>1. Verantwortlicher:</strong> Creeperflori. Kontakt via Support-Formular.</p>
+                <p><strong>2. Daten:</strong> Wir speichern E-Mail und Namen via Google Firebase nur für Login und Support-Anfragen.</p>
+                <p><strong>3. Hosting:</strong> Die Seite läuft auf GitHub Pages.</p>
+                <p><strong>4. Deine Rechte:</strong> Du hast das Recht auf Auskunft und Löschung deiner Daten (Account/Nachrichten).</p>
             </div>
+        </div>
+    </div>
 
     <div class="container">
         <header class="chibi-header">
             <img src="img/Creeperflori.png" alt="Creeperflori" class="round-chibi">
-            <h1>News & Updates</h1>
+            <h1>Creeperflori News</h1>
         </header>
         <div id="news-list">
-            <p style="text-align:center; color:gray;">Lade Beiträge...</p>
+            <p style="text-align:center; color:gray;">Lade News...</p>
         </div>
     </div>
 
     <footer class="support-footer">
         <div class="container">
             <div class="support-box">
-                <h2 style="text-align: center; margin-bottom: 10px;">💬 Support & Kontakt</h2>
-                <p style="text-align: center; color: #ccc; margin-bottom: 20px;">Hast du Fragen? Schreib uns direkt hier!</p>
-                
+                <h2 style="text-align: center; margin-bottom: 10px;">🆘 Support & Kontakt</h2>
                 <form onsubmit="sendSupport(event)">
                     <input type="text" id="sup-name" placeholder="Dein Name" required class="editor-input">
                     <input type="text" id="sup-contact" class="guest-contact editor-input" placeholder="E-Mail oder Discord für Rückfragen" style="display:none; border-color: #ff9900;">
-
                     <select id="sup-category" class="editor-input" onchange="toggleSupportFields()">
                         <option value="allgemein">Allgemeine Frage</option>
                         <option value="discord">Discord Support</option>
                         <option value="minecraft">Fillypath (Minecraft)</option>
                     </select>
-
                     <div id="discord-fields" style="display: none; margin-bottom: 15px;">
                         <input type="text" id="sup-discord-name" placeholder="Dein Discord Name" class="editor-input" style="border-color: #5865F2;">
                     </div>
-
                     <div id="mc-fields" style="display: none; margin-bottom: 15px;">
                         <input type="text" id="sup-mc-name" placeholder="Minecraft Ingame Name" class="editor-input" style="border-color: #32CD32; margin-bottom: 10px;">
-                        <select id="sup-platform" class="editor-input" style="border-color: #32CD32; margin-bottom: 0;">
+                        <select id="sup-platform" class="editor-input" style="border-color: #32CD32;">
                             <option value="PC / Java">PC / Java</option>
                             <option value="Handy/Tablet">Handy / Tablet</option>
-                            <option value="Konsole">Konsole (Xbox/PS/Switch)</option>
-                            <option value="Laptop (Bedrock)">Laptop (Windows 10)</option>
+                            <option value="Konsole">Konsole</option>
                         </select>
                     </div>
-
-                    <textarea id="sup-msg" placeholder="Wie können wir dir helfen?" rows="4" required class="editor-input"></textarea>
-                    <button type="submit" class="save-btn btn-highlight">Nachricht Senden</button>
+                    <textarea id="sup-msg" placeholder="Wie können wir helfen?" rows="4" required class="editor-input"></textarea>
+                    <button type="submit" class="save-btn btn-highlight">Senden</button>
                 </form>
-                
-                <p style="margin-top:15px; font-size:0.8rem; text-align:center;">
+                <p style="text-align:center; margin-top:15px; font-size:0.8rem;">
                     <a href="#" onclick="openDatenschutzModal(); return false;" style="color:#888;">Datenschutz</a>
                 </p>
             </div>
