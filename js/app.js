@@ -1,66 +1,192 @@
+// ==========================================
+// 1. INITIALISIERUNG
+// ==========================================
 firebase.initializeApp(CONFIG.firebase);
 const db = firebase.firestore();
 const auth = firebase.auth();
+const storage = firebase.storage();
+let isAdmin = false; 
 
-// LOGIN / MODAL LOGIK
-function openLoginModal() { document.getElementById('login-modal').style.display = 'flex'; }
-function closeLoginModal() { document.getElementById('login-modal').style.display = 'none'; }
+// ==========================================
+// 2. LINKS VERTEILEN
+// ==========================================
+function applyLinks() {
+    const setLink = (id, url) => {
+        const el = document.getElementById(id);
+        if(el) { if(el.tagName === 'A') el.href = url; else el.innerText = url; }
+    };
+    setLink('link-twitch', CONFIG.links.twitch);
+    setLink('link-yt', CONFIG.links.youtube);
+    setLink('link-tt', CONFIG.links.tiktok);
+    setLink('link-insta', CONFIG.links.instagram);
+    setLink('link-discord', CONFIG.links.deppenCord);
+    setLink('link-partner-discord', CONFIG.links.deppenCord); // Falls du einen separaten Partnerlink hast, passe das in der config.js an
+    setLink('text-ip', CONFIG.links.serverIP);
+}
 
+// ==========================================
+// 3. MASTER-STEUERUNG & AUTH
+// ==========================================
 auth.onAuthStateChanged(user => {
+    applyLinks(); 
+    const adminNavLink = document.getElementById('admin-nav-link');
     const loginBtns = document.querySelectorAll('.user-login-btn');
     const guestFields = document.querySelectorAll('.guest-contact');
+    const path = window.location.pathname;
     
     if (user) {
-        guestFields.forEach(f => f.style.display = 'none');
-        loginBtns.forEach(btn => {
-            btn.innerText = "PROFIL";
-            btn.onclick = () => window.location.href = 'profil.html';
+        guestFields.forEach(f => { f.style.display = 'none'; f.required = false; });
+        const uEmail = user.email ? user.email.trim().toLowerCase() : "";
+        const aEmail = CONFIG.adminEmail ? CONFIG.adminEmail.trim().toLowerCase() : "";
+        isAdmin = (uEmail === aEmail && uEmail !== "");
+
+        db.collection('users').doc(user.uid).onSnapshot(doc => {
+            let name = user.email.split('@')[0];
+            if (doc.exists && doc.data().displayName) name = doc.data().displayName;
+            loginBtns.forEach(btn => {
+                btn.innerHTML = "👤 " + name;
+                btn.onclick = () => window.location.href = "profil.html";
+            });
         });
+
+        if(isAdmin && adminNavLink) adminNavLink.style.display = "inline-block";
+        if (path.includes('admin.html') && !isAdmin) window.location.replace("index.html");
     } else {
-        guestFields.forEach(f => f.style.display = 'block');
+        isAdmin = false;
         loginBtns.forEach(btn => {
-            btn.innerText = "LOGIN";
+            btn.innerHTML = "LOGIN";
             btn.onclick = openLoginModal;
         });
+        if(adminNavLink) adminNavLink.style.display = "none";
+        guestFields.forEach(f => { f.style.display = 'block'; f.required = true; });
+        if (path.includes('profil.html') || path.includes('admin.html')) window.location.replace("index.html");
     }
-    // News laden falls auf der richtigen Seite
-    if(document.getElementById('news-list')) loadNews();
+    
+    if(document.getElementById('news-list') || document.getElementById('fillypath-news-list')) loadNews();
 });
 
-// PASSWORT VERGESSEN
-window.resetPassword = function() {
+// ==========================================
+// 4. MODAL STEUERUNG (LOGIN & DATENSCHUTZ)
+// ==========================================
+function openLoginModal() { document.getElementById('login-modal').style.display = "flex"; }
+function closeLoginModal() { document.getElementById('login-modal').style.display = "none"; }
+
+window.openDatenschutzModal = function() { document.getElementById('datenschutz-modal').style.display = "flex"; };
+window.closeDatenschutzModal = function() { document.getElementById('datenschutz-modal').style.display = "none"; };
+
+window.handleAuth = function(action) {
     const email = document.getElementById('auth-email').value;
-    if(!email) return alert("Gib erst deine E-Mail ein!");
-    auth.sendPasswordResetEmail(email).then(() => alert("E-Mail gesendet!"));
+    const pass = document.getElementById('auth-pass').value;
+    if(!email || !pass) return alert("Bitte E-Mail und Passwort eingeben!");
+    
+    if(action === 'register') {
+        const checkbox = document.getElementById('legal-check');
+        if(checkbox && !checkbox.checked) return alert("Bitte akzeptiere die Datenschutzerklärung!");
+        auth.createUserWithEmailAndPassword(email, pass).then(() => location.reload()).catch(e => alert(e.message));
+    } else {
+        auth.signInWithEmailAndPassword(email, pass).then(() => closeLoginModal()).catch(e => alert("Login fehlgeschlagen!"));
+    }
 };
 
-// SUPPORT SENDEN
+window.logoutUser = function() { auth.signOut().then(() => location.reload()); };
+
+window.resetPassword = function() {
+    const email = document.getElementById('auth-email').value;
+    if(!email) return alert("Bitte gib oben im Feld zuerst deine E-Mail-Adresse ein!");
+    auth.sendPasswordResetEmail(email).then(() => alert("✅ Reset-E-Mail gesendet! Prüfe dein Postfach.")).catch(e => alert("Fehler: " + e.message));
+};
+
+// ==========================================
+// 5. NEWS LADEN
+// ==========================================
+function loadNews() {
+    const isFilly = window.location.pathname.includes('fillypath.html');
+    const targetCat = isFilly ? 'fillypath' : 'general';
+    const list = document.getElementById(isFilly ? 'fillypath-news-list' : 'news-list');
+    if(!list) return;
+
+    db.collection("news").orderBy("timestamp", "desc").limit(20).onSnapshot(snap => {
+        list.innerHTML = "";
+        let count = 0;
+        snap.forEach(doc => {
+            const d = doc.data();
+            if ((d.category || 'general') !== targetCat) return;
+            count++;
+
+            const color = d.type === 'patchnotes' ? 'var(--patch-color)' : (d.type === 'changelog' ? '#00ccff' : 'var(--primary)');
+            const img = d.image ? `<img src="${d.image}" style="max-width:100%; border-radius:8px; margin-top:10px;">` : '';
+            const del = isAdmin ? `<button onclick="deleteDoc('news', '${doc.id}')" style="background:red; color:white; border:none; padding:8px; margin-top:10px; border-radius:4px; cursor:pointer;">🗑 Löschen</button>` : '';
+            
+            list.innerHTML += `
+                <div class="project-card" style="border-left-color: ${color}">
+                    <span class="card-badge" style="background:${color}; color:black;">${d.type.toUpperCase()}</span>
+                    <h3>${d.title}</h3>
+                    ${img}
+                    <p style="white-space:pre-wrap; margin-top:10px;">${d.content}</p>
+                    ${del}
+                </div>`;
+        });
+        if(count === 0) list.innerHTML = "<p style='text-align:center; color:gray;'>Keine News vorhanden.</p>";
+    });
+}
+
+// Löschen-Funktion (Hilfsfunktion für Admins)
+window.deleteDoc = function(col, id) { if(confirm("Endgültig löschen?")) db.collection(col).doc(id).delete(); };
+
+// ==========================================
+// 6. SUPPORT SYSTEM (Die intelligente Box)
+// ==========================================
+window.toggleSupportFields = function() {
+    const cat = document.getElementById('sup-category').value;
+    const mc = document.getElementById('mc-fields');
+    const dc = document.getElementById('discord-fields');
+    if(mc) mc.style.display = (cat === 'minecraft') ? 'block' : 'none';
+    if(dc) dc.style.display = (cat === 'discord') ? 'block' : 'none';
+};
+
 window.sendSupport = function(e) {
     e.preventDefault();
     const user = auth.currentUser;
     const contact = document.getElementById('sup-contact').value;
-    const msg = document.getElementById('sup-msg').value;
+    
+    if(!user && !contact) return alert("Bitte Kontaktmöglichkeit (E-Mail oder Discord) angeben!");
 
-    db.collection("messages").add({
+    const data = {
         name: document.getElementById('sup-name').value,
-        email: user ? user.email : contact,
-        message: msg,
+        message: document.getElementById('sup-msg').value,
         category: document.getElementById('sup-category').value,
+        email: user ? user.email : contact,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    }).then(() => {
-        alert("Nachricht gesendet!");
+    };
+
+    if(data.category === 'minecraft') {
+        data.mcName = document.getElementById('sup-mc-name').value;
+        data.platform = document.getElementById('sup-platform').value;
+    } else if(data.category === 'discord') {
+        data.discordName = document.getElementById('sup-discord-name').value;
+    }
+
+    db.collection("messages").add(data).then(() => {
+        alert("Deine Anfrage wurde erfolgreich gesendet!");
         e.target.reset();
+        window.toggleSupportFields(); // Versteckt die Extrafelder wieder
     });
 };
 
-// NEWS LADEN (Beispiel)
-function loadNews() {
-    const list = document.getElementById('news-list');
-    db.collection("news").orderBy("timestamp", "desc").limit(10).onSnapshot(snap => {
-        list.innerHTML = "";
-        snap.forEach(doc => {
-            const d = doc.data();
-            list.innerHTML += `<div class="project-card"><h3>${d.title}</h3><p>${d.content}</p></div>`;
-        });
-    });
-}
+// ==========================================
+// 7. HINTERGRUND ANIMATION
+// ==========================================
+document.addEventListener("DOMContentLoaded", () => {
+    applyLinks();
+    const canvas = document.getElementById('bgCanvas');
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    let p = Array.from({length: 40}, () => ({x: Math.random()*canvas.width, y: Math.random()*canvas.height, v: Math.random()*-0.8-0.2}));
+    function draw() {
+        ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle = "#32CD32";
+        p.forEach(i => { i.y += i.v; if(i.y < -10) i.y = canvas.height+10; ctx.globalAlpha = 0.2; ctx.fillRect(i.x, i.y, 2, 2); });
+        requestAnimationFrame(draw);
+    }
+    draw();
+});
