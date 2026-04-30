@@ -18,105 +18,133 @@
         <a href="sozial.html">SOCIAL</a>
         <a href="fillypath.html">FILLYPATH</a>
         <a href="creepercave.html">CREEPERCAVE</a>
-        <a href="admin.html" id="admin-nav-link" style="display:none; color:#ff9900; font-weight:bold; text-shadow: 0 0 10px rgba(255,153,0,0.5);">👑 ADMIN</a>
+        <a href="admin.html" id="admin-nav-link" style="display:none; color:#ff9900;">👑 ADMIN</a>
         <a class="user-login-btn" onclick="openLoginModal()">Login</a>
     </nav>
 
-        <div id="login-modal" class="modal-overlay">
+    <div id="login-modal" class="modal-overlay">
         <div class="modal-content">
             <span class="close-modal" onclick="closeLoginModal()">&times;</span>
-            <h2 style="margin-bottom: 20px; color: white;">Community Login</h2>
+            <h2 style="margin-bottom: 20px;">Community Login</h2>
             <form onsubmit="event.preventDefault(); handleAuth('login');">
-                <input type="email" id="auth-email" placeholder="E-Mail Adresse" required autocomplete="email">
-                
-                <input type="password" id="auth-pass" placeholder="Passwort" required autocomplete="current-password" style="margin-bottom: 5px;">
-                
+                <input type="email" id="auth-email" placeholder="E-Mail Adresse" required class="editor-input">
+                <input type="password" id="auth-pass" placeholder="Passwort" required class="editor-input" style="margin-bottom: 5px;">
                 <div style="text-align: right; margin-bottom: 15px;">
                     <a href="#" onclick="resetPassword()" style="color: var(--primary); font-size: 0.85rem; text-decoration: none;">Passwort vergessen?</a>
                 </div>
-
-                <div class="legal-notice">
+                <div class="legal-notice" style="margin-bottom: 15px; font-size: 0.85rem;">
                     <input type="checkbox" id="legal-check">
-                    <label for="legal-check">Ich akzeptiere die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a>.</label>
+                    <label for="legal-check">Ich akzeptiere die <a href="#" onclick="openDatenschutzModal(); return false;" style="color:var(--primary);">Datenschutzerklärung</a>.</label>
                 </div>
-                <button type="submit" class="save-btn">Einloggen</button>
+                <button type="submit" class="save-btn btn-highlight" style="margin-bottom: 10px;">Einloggen</button>
                 <button type="button" onclick="handleAuth('register')" class="save-btn btn-outline">Registrieren</button>
             </form>
         </div>
     </div>
 
+    <div id="datenschutz-modal" class="modal-overlay">
+        <div class="modal-content datenschutz-box">
+            <span class="close-modal" onclick="closeDatenschutzModal()">&times;</span>
+            <h2 style="color: var(--primary); margin-bottom: 15px;">Datenschutzerklärung</h2>
+            <div class="legal-scroll-area">
+                <p>Diese Datenschutzerklärung klärt dich über die Art, den Umfang und den Zweck der Verarbeitung von personenbezogenen Daten auf unserer Website auf. Sie entspricht den Anforderungen des revidierten Schweizer Datenschutzgesetzes (revDSG) sowie der Europäischen Datenschutz-Grundverordnung (DSGVO).</p>
+
+                <p style="margin-top: 15px; color: var(--primary);"><strong>1. Verantwortliche Stelle</strong></p>
+                <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:<br>
+                <strong>CReeperflori</strong><br>
+                <br>
+                E-Mail: creeper.flori44@gmail.com<br>
+                Discord: Creeperflori</p>
+
+                <p style="margin-top: 15px; color: var(--primary);"><strong>2. Welche Daten wir erfassen und Rechtsgrundlage</strong></p>
+                <p><strong>a) Hosting:</strong> Diese Website wird über "GitHub Pages" gehostet. Bei jedem Aufruf der Webseite erfasst das System automatisch Logfiles (z.B. IP-Adresse, Browsertyp). Dies ist technisch notwendig (Art. 31 Abs. 1 DSG / Art. 6 Abs. 1 lit. f DSGVO).</p>
+                <p><strong>b) Registrierung & Login:</strong> Wenn du dir einen Account erstellst, speichern wir E-Mail-Adresse und Passwort verschlüsselt, um dir Zugang zu gewähren (Art. 31 Abs. 1 DSG / Art. 6 Abs. 1 lit. a und b DSGVO).</p>
+                <p><strong>c) Support-Formular:</strong> Kontaktierst du uns, erfassen wir Name, E-Mail/Discord, Nachricht und optional Spieldaten zur Bearbeitung deines Anliegens (Art. 31 Abs. 1 DSG / Art. 6 Abs. 1 lit. b DSGVO).</p>
+
+                <p style="margin-top: 15px; color: var(--primary);"><strong>3. Weitergabe von Daten an Dritte (Google Firebase)</strong></p>
+                <p>Für unsere Datenbank und Logins nutzen wir Google Firebase (Google Ireland Limited / Google LLC, USA). Passwörter werden streng verschlüsselt gespeichert. Google stützt sich für Datenübermittlungen in die USA auf Standardvertragsklauseln (SCC) und das EU-US/Swiss-US Data Privacy Framework.</p>
+
+                <p style="margin-top: 15px; color: var(--primary);"><strong>4. Cookies & Lokaler Speicher</strong></p>
+                <p>Wir verwenden keine Werbe-Cookies. Das Login-System nutzt jedoch den lokalen Speicher deines Browsers (Local/Session Storage), um den Anmeldestatus zu halten. Dies ist technisch zwingend erforderlich.</p>
+
+                <p style="margin-top: 15px; color: var(--primary);"><strong>5. Dauer der Speicherung & Deine Rechte</strong></p>
+                <p>Wir speichern Daten nur so lange wie nötig. Du hast jederzeit das Recht auf Auskunft, Berichtigung und Löschung deines Accounts und deiner Daten. Schreibe uns dazu einfach über das Support-Formular.</p>
+            </div>
+        </div>
+    </div>
 
     <div class="container">
         <header class="chibi-header">
-            <img src="img/Creeperflori.png" alt="Creeperflori Minecraft">
-            <h1 style="color: #32CD32;">Fillypath Server</h1>
-            <p>IP: <span id="text-ip" style="font-weight: bold; color: white;">Lade...</span></p>
+            <img src="img/Creeperflori.png" alt="Creeperflori" class="round-chibi" style="border-color: #32CD32; box-shadow: 0 0 20px rgba(50, 205, 50, 0.5);">
+            <h1 style="color: #32CD32;">Fillypath</h1>
+            <p style="color: #ccc;">Das offizielle Minecraft Community Projekt</p>
         </header>
 
-        <h2 style="margin-bottom: 20px;">🛠️ Server-Updates & News</h2>
+        <div class="project-card" style="text-align: center; max-width: 700px; margin: 0 auto; margin-bottom: 40px; border-left-color: #32CD32;">
+            <h2 style="margin-bottom: 20px; color: white;">Komm auf den Server! 🌍</h2>
+            <p style="margin-bottom: 20px; font-size: 1.1rem; color: #ccc;">
+                Erlebe mit uns ein einzigartiges Survival-Abenteuer. Baue epische Städte, handle mit anderen Spielern und erkunde die Welt von Fillypath.
+            </p>
+            
+            <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 8px; border: 1px dashed #32CD32; margin-bottom: 20px;">
+                <p style="font-size: 0.9rem; color: gray; margin-bottom: 5px;">Server IP-Adresse:</p>
+                <h3 id="text-ip" style="color: #32CD32; letter-spacing: 1px; user-select: all;">fillypath.de</h3>
+            </div>
+
+            <button onclick="navigator.clipboard.writeText(document.getElementById('text-ip').innerText); alert('IP kopiert!');" class="save-btn btn-highlight" style="display: inline-block; width: auto; padding: 12px 30px;">
+                IP KOPIEREN
+            </button>
+        </div>
+
+        <hr style="border-color: #333; margin: 40px 0;">
+
+        <h2 style="text-align: center; color: var(--primary); margin-bottom: 20px;">🛠️ Patchnotes & Updates</h2>
         <div id="fillypath-news-list">
-            <p style="text-align: center; color: gray;">Lade Server-Updates...</p>
+            <p style="text-align:center; color:gray;">Lade Server-Updates...</p>
         </div>
     </div>
 
     <footer class="support-footer">
-        <div class="footer-content">
-            <div class="footer-branding">
-                <h3>💬 Creeperflori Support</h3>
-                <p>Hast du Fragen oder Probleme? Schreib mir hier direkt eine Nachricht!</p>
-                <div class="footer-links">
-                    <a href="impressum.html">Impressum</a> 
-                    <a href="datenschutz.html">Datenschutz</a>
-                </div>
-            </div>
-
-            <div class="footer-form-box">
+        <div class="container">
+            <div class="support-box">
+                <h2 style="text-align: center; margin-bottom: 10px;">🆘 Support & Kontakt</h2>
                 <form onsubmit="sendSupport(event)">
                     <input type="text" id="sup-name" placeholder="Dein Name" required class="editor-input">
+                    <input type="text" id="sup-contact" class="guest-contact editor-input" placeholder="E-Mail oder Discord für Rückfragen" style="display:none; border-color: #ff9900;">
                     
-                    <input type="text" id="sup-contact" class="guest-contact editor-input" placeholder="E-Mail / Discord für Rückfragen" style="display:none; border-color: #ff9900;">
-
                     <select id="sup-category" class="editor-input" onchange="toggleSupportFields()">
                         <option value="allgemein">Allgemeine Frage</option>
                         <option value="discord">Discord Support</option>
                         <option value="minecraft" selected>Fillypath (Minecraft)</option>
                     </select>
-
+                    
                     <div id="discord-fields" style="display: none; margin-bottom: 15px;">
                         <input type="text" id="sup-discord-name" placeholder="Dein Discord Name" class="editor-input" style="border-color: #5865F2;">
                     </div>
-
-                    <div id="mc-fields" style="display: none; margin-bottom: 15px;">
-                        <input type="text" id="sup-mc-name" placeholder="Minecraft Ingame Name" class="editor-input" style="border-color: #32CD32;">
+                    
+                    <div id="mc-fields" style="display: block; margin-bottom: 15px;">
+                        <input type="text" id="sup-mc-name" placeholder="Minecraft Ingame Name" class="editor-input" style="border-color: #32CD32; margin-bottom: 10px;">
                         <select id="sup-platform" class="editor-input" style="border-color: #32CD32;">
                             <option value="PC / Java">PC / Java</option>
                             <option value="Handy/Tablet">Handy / Tablet</option>
-                            <option value="Konsole">Konsole (Xbox/PS/Switch)</option>
-                            <option value="Laptop (Bedrock)">Laptop (Windows 10)</option>
+                            <option value="Konsole">Konsole</option>
                         </select>
                     </div>
-
-                    <textarea id="sup-msg" placeholder="Wie kann ich dir helfen?" rows="3" required class="editor-input"></textarea>
                     
-                    <button type="submit" class="save-btn btn-highlight">Nachricht Senden</button>
+                    <textarea id="sup-msg" placeholder="Hast du einen Bug gefunden oder wurdest gebannt?" rows="4" required class="editor-input"></textarea>
+                    <button type="submit" class="save-btn btn-highlight">Senden</button>
                 </form>
+                <p style="text-align:center; margin-top:15px; font-size:0.8rem;">
+                    <a href="#" onclick="openDatenschutzModal(); return false;" style="color:#888;">Datenschutz</a>
+                </p>
             </div>
         </div>
         <div class="footer-bottom">
-            <span>&copy; 2026 Creeperflori. Alle Rechte vorbehalten.</span>
-            <span>Made with ❤️ by Community</span>
+            <p>&copy; 2026 Creeperflori. Alle Rechte vorbehalten.</p>
         </div>
     </footer>
 
     <script src="js/config.js"></script>
     <script src="js/app.js"></script>
-    
-    <script>
-        // Kleiner Start-Check: Wenn wir auf dieser Seite sind, 
-        // zeigen wir die Minecraft-Felder im Footer direkt an.
-        document.addEventListener("DOMContentLoaded", () => {
-            setTimeout(toggleSupportFields, 500);
-        });
-    </script>
 </body>
 </html>
