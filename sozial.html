@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Socials | Creeperflori</title>
+    <title>Social Media | Creeperflori</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 </head>
 <body>
     <canvas id="bgCanvas"></canvas>
@@ -27,18 +26,20 @@
             <span class="close-modal" onclick="closeLoginModal()">&times;</span>
             <h2 style="margin-bottom: 20px;">Community Login</h2>
             <form onsubmit="event.preventDefault(); handleAuth('login');">
-                <input type="email" id="auth-email" placeholder="E-Mail Adresse" required class="editor-input">
-                <input type="password" id="auth-pass" placeholder="Passwort" required class="editor-input" style="margin-bottom: 5px;">
-                <div style="text-align: right; margin-bottom: 15px;">
-                    <a href="#" onclick="resetPassword()" style="color: var(--primary); font-size: 0.85rem; text-decoration: none;">Passwort vergessen?</a>
-                </div>
-                <div class="legal-notice" style="margin-bottom: 15px; font-size: 0.85rem;">
-                    <input type="checkbox" id="legal-check">
-                    <label for="legal-check">Ich akzeptiere die <a href="datenschutz.html" style="color:var(--primary);">Datenschutzerklärung</a>.</label>
-                </div>
-                <button type="submit" class="save-btn btn-highlight" style="margin-bottom: 10px;">Einloggen</button>
-                <button type="button" onclick="handleAuth('register')" class="save-btn btn-outline">Registrieren</button>
+                <input type="email" id="auth-email" placeholder="E-Mail" required class="editor-input">
+                <input type="password" id="auth-pass" placeholder="Passwort" required class="editor-input">
+                <button type="submit" class="save-btn btn-highlight">Einloggen</button>
             </form>
+        </div>
+    </div>
+
+    <div id="datenschutz-modal" class="modal-overlay">
+        <div class="modal-content datenschutz-box">
+            <span class="close-modal" onclick="closeDatenschutzModal()">&times;</span>
+            <h2 style="color: var(--primary); margin-bottom: 15px;">Datenschutzerklärung</h2>
+            <div class="legal-scroll-area">
+                <p>Wir schützen deine Daten...</p>
+            </div>
         </div>
     </div>
 
@@ -49,7 +50,6 @@
         </header>
 
         <div class="social-wrapper">
-            
             <div class="social-list">
                 <a id="link-twitch" target="_blank" class="social-btn btn-twitch">🎥 Twitch</a>
                 <a id="link-yt" target="_blank" class="social-btn btn-youtube">📺 YouTube</a>
@@ -57,52 +57,23 @@
                 <a id="link-insta" target="_blank" class="social-btn btn-instagram">📸 Instagram</a>
             </div>
 
-            <h2 style="text-align: center; color: var(--primary); margin-top: 50px; margin-bottom: 20px; font-size: 2rem;">Partner & Freunde</h2>
+            <h2 style="text-align: center; color: var(--primary); margin-top: 40px; margin-bottom: 20px;">Partner & Freunde</h2>
             <div class="social-list">
                 <a id="link-discord" target="_blank" class="social-btn btn-discord">💬 DeppenCord (Partner)</a>
             </div>
-
         </div>
     </div>
 
     <footer class="support-footer">
         <div class="container">
             <div class="support-box">
-                <h2 style="text-align: center; margin-bottom: 10px;">💬 Support & Kontakt</h2>
-                <p style="text-align: center; color: #ccc; margin-bottom: 20px;">Hast du Fragen? Schreib uns direkt hier!</p>
-                
+                <h2>✉️ Support & Kontakt</h2>
                 <form onsubmit="sendSupport(event)">
                     <input type="text" id="sup-name" placeholder="Dein Name" required class="editor-input">
-                    <input type="text" id="sup-contact" class="guest-contact editor-input" placeholder="E-Mail oder Discord für Rückfragen" style="display:none; border-color: #ff9900;">
-
-                    <select id="sup-category" class="editor-input" onchange="toggleSupportFields()">
-                        <option value="allgemein">Allgemeine Frage</option>
-                        <option value="discord">Discord Support</option>
-                        <option value="minecraft">Fillypath (Minecraft)</option>
-                    </select>
-
-                    <div id="discord-fields" style="display: none; margin-bottom: 15px;">
-                        <input type="text" id="sup-discord-name" placeholder="Dein Discord Name" class="editor-input" style="border-color: #5865F2;">
-                    </div>
-
-                    <div id="mc-fields" style="display: none; margin-bottom: 15px;">
-                        <input type="text" id="sup-mc-name" placeholder="Minecraft Ingame Name" class="editor-input" style="border-color: #32CD32; margin-bottom: 10px;">
-                        <select id="sup-platform" class="editor-input" style="border-color: #32CD32; margin-bottom: 0;">
-                            <option value="PC / Java">PC / Java</option>
-                            <option value="Handy/Tablet">Handy / Tablet</option>
-                            <option value="Konsole">Konsole (Xbox/PS/Switch)</option>
-                            <option value="Laptop (Bedrock)">Laptop (Windows 10)</option>
-                        </select>
-                    </div>
-
-                    <textarea id="sup-msg" placeholder="Wie können wir dir helfen?" rows="4" required class="editor-input"></textarea>
-                    <button type="submit" class="save-btn btn-highlight">Nachricht Senden</button>
+                    <textarea id="sup-msg" placeholder="Deine Nachricht..." rows="3" required class="editor-input"></textarea>
+                    <button type="submit" class="save-btn btn-highlight">Senden</button>
                 </form>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <p><a href="impressum.html" style="color: #888;">Impressum</a> | <a href="datenschutz.html" style="color: #888;">Datenschutz</a></p>
-            <p>&copy; 2026 Creeperflori. Alle Rechte vorbehalten.</p>
         </div>
     </footer>
 
