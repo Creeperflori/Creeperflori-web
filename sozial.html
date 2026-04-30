@@ -8,6 +8,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 </head>
 <body>
     <canvas id="bgCanvas"></canvas>
@@ -21,14 +22,63 @@
         <a class="user-login-btn" onclick="openLoginModal()">Login</a>
     </nav>
 
-    <div id="login-modal" class="modal-overlay">... (Wie in index.html) ...</div>
-    <div id="datenschutz-modal" class="modal-overlay">... (Wie in index.html) ...</div>
+    <div id="login-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeLoginModal()">&times;</span>
+            <h2 style="margin-bottom: 20px;">Community Login</h2>
+            <form onsubmit="event.preventDefault(); handleAuth('login');">
+                <input type="email" id="auth-email" placeholder="E-Mail Adresse" required class="editor-input">
+                <input type="password" id="auth-pass" placeholder="Passwort" required class="editor-input" style="margin-bottom: 5px;">
+                <div style="text-align: right; margin-bottom: 15px;">
+                    <a href="#" onclick="resetPassword()" style="color: var(--primary); font-size: 0.85rem; text-decoration: none;">Passwort vergessen?</a>
+                </div>
+                <div class="legal-notice" style="margin-bottom: 15px; font-size: 0.85rem;">
+                    <input type="checkbox" id="legal-check">
+                    <label for="legal-check">Ich akzeptiere die <a href="#" onclick="openDatenschutzModal(); return false;" style="color:var(--primary);">Datenschutzerklärung</a>.</label>
+                </div>
+                <button type="submit" class="save-btn btn-highlight" style="margin-bottom: 10px;">Einloggen</button>
+                <button type="button" onclick="handleAuth('register')" class="save-btn btn-outline">Registrieren</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="datenschutz-modal" class="modal-overlay">
+        <div class="modal-content datenschutz-box">
+            <span class="close-modal" onclick="closeDatenschutzModal()">&times;</span>
+            <h2 style="color: var(--primary); margin-bottom: 15px;">Datenschutzerklärung</h2>
+            <div class="legal-scroll-area">
+                <p>Diese Datenschutzerklärung klärt dich über die Art, den Umfang und den Zweck der Verarbeitung von personenbezogenen Daten auf unserer Website auf. Sie entspricht den Anforderungen des revidierten Schweizer Datenschutzgesetzes (revDSG) sowie der Europäischen Datenschutz-Grundverordnung (DSGVO).</p>
+
+                <p style="margin-top: 15px; color: var(--primary);"><strong>1. Verantwortliche Stelle</strong></p>
+                <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:<br>
+                <strong>Creeperflori</strong><br>
+                <br>
+                E-Mail: creeper.flori44@gmail.com<br>
+                Discord: Creeperflori</p>
+
+                <p style="margin-top: 15px; color: var(--primary);"><strong>2. Welche Daten wir erfassen und Rechtsgrundlage</strong></p>
+                <p><strong>a) Hosting:</strong> Diese Website wird über "GitHub Pages" gehostet. Bei jedem Aufruf der Webseite erfasst das System automatisch Logfiles (z.B. IP-Adresse, Browsertyp). Dies ist technisch notwendig (Art. 31 Abs. 1 DSG / Art. 6 Abs. 1 lit. f DSGVO).</p>
+                <p><strong>b) Registrierung & Login:</strong> Wenn du dir einen Account erstellst, speichern wir E-Mail-Adresse und Passwort verschlüsselt, um dir Zugang zu gewähren (Art. 31 Abs. 1 DSG / Art. 6 Abs. 1 lit. a und b DSGVO).</p>
+                <p><strong>c) Support-Formular:</strong> Kontaktierst du uns, erfassen wir Name, E-Mail/Discord, Nachricht und optional Spieldaten zur Bearbeitung deines Anliegens (Art. 31 Abs. 1 DSG / Art. 6 Abs. 1 lit. b DSGVO).</p>
+
+                <p style="margin-top: 15px; color: var(--primary);"><strong>3. Weitergabe von Daten an Dritte (Google Firebase)</strong></p>
+                <p>Für unsere Datenbank und Logins nutzen wir Google Firebase (Google Ireland Limited / Google LLC, USA). Passwörter werden streng verschlüsselt gespeichert. Google stützt sich für Datenübermittlungen in die USA auf Standardvertragsklauseln (SCC) und das EU-US/Swiss-US Data Privacy Framework.</p>
+
+                <p style="margin-top: 15px; color: var(--primary);"><strong>4. Cookies & Lokaler Speicher</strong></p>
+                <p>Wir verwenden keine Werbe-Cookies. Das Login-System nutzt jedoch den lokalen Speicher deines Browsers (Local/Session Storage), um den Anmeldestatus zu halten. Dies ist technisch zwingend erforderlich.</p>
+
+                <p style="margin-top: 15px; color: var(--primary);"><strong>5. Dauer der Speicherung & Deine Rechte</strong></p>
+                <p>Wir speichern Daten nur so lange wie nötig. Du hast jederzeit das Recht auf Auskunft, Berichtigung und Löschung deines Accounts und deiner Daten. Schreibe uns dazu einfach über das Support-Formular.</p>
+            </div>
+        </div>
+    </div>
 
     <div class="container">
         <header class="chibi-header">
             <img src="img/Creeperflori.png" alt="Creeperflori" class="round-chibi">
             <h1>Meine Socials</h1>
         </header>
+
         <div class="social-wrapper">
             <div class="social-list">
                 <a id="link-twitch" target="_blank" class="social-btn btn-twitch">🎥 Twitch</a>
@@ -36,7 +86,8 @@
                 <a id="link-tt" target="_blank" class="social-btn btn-tiktok">📱 TikTok</a>
                 <a id="link-insta" target="_blank" class="social-btn btn-instagram">📸 Instagram</a>
             </div>
-            <h2 style="text-align:center; color:var(--primary); margin:40px 0 20px;">Partner & Freunde</h2>
+
+            <h2 style="text-align: center; color: var(--primary); margin-top: 50px; margin-bottom: 20px;">Partner & Freunde</h2>
             <div class="social-list">
                 <a id="link-discord" target="_blank" class="social-btn btn-discord">💬 DeppenCord (Partner)</a>
             </div>
@@ -50,14 +101,17 @@
                 <form onsubmit="sendSupport(event)">
                     <input type="text" id="sup-name" placeholder="Dein Name" required class="editor-input">
                     <input type="text" id="sup-contact" class="guest-contact editor-input" placeholder="E-Mail oder Discord für Rückfragen" style="display:none; border-color: #ff9900;">
+                    
                     <select id="sup-category" class="editor-input" onchange="toggleSupportFields()">
                         <option value="allgemein">Allgemeine Frage</option>
                         <option value="discord">Discord Support</option>
                         <option value="minecraft">Fillypath (Minecraft)</option>
                     </select>
+                    
                     <div id="discord-fields" style="display: none; margin-bottom: 15px;">
                         <input type="text" id="sup-discord-name" placeholder="Dein Discord Name" class="editor-input" style="border-color: #5865F2;">
                     </div>
+                    
                     <div id="mc-fields" style="display: none; margin-bottom: 15px;">
                         <input type="text" id="sup-mc-name" placeholder="Minecraft Ingame Name" class="editor-input" style="border-color: #32CD32; margin-bottom: 10px;">
                         <select id="sup-platform" class="editor-input" style="border-color: #32CD32;">
@@ -66,6 +120,7 @@
                             <option value="Konsole">Konsole</option>
                         </select>
                     </div>
+                    
                     <textarea id="sup-msg" placeholder="Wie können wir helfen?" rows="4" required class="editor-input"></textarea>
                     <button type="submit" class="save-btn btn-highlight">Senden</button>
                 </form>
