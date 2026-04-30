@@ -1,106 +1,224 @@
-/* BASIS VARIABLEN */
+/* ==========================================
+   BASIS VARIABLEN & RESET
+   ========================================== */
 :root {
     --primary: #32CD32;
+    --primary-dark: #228B22;
     --bg-dark: #0a0a0a;
     --card-bg: #151515;
     --text-color: #f0f0f0;
+    --discord-color: #5865F2;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-
-body { background: var(--bg-dark); color: var(--text-color); overflow-x: hidden; }
-
-/* RUNDE BILDER FIX */
-.round-chibi {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid var(--primary);
-    box-shadow: 0 0 20px rgba(50, 205, 50, 0.4);
-    margin-bottom: 15px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* HANDY LAYOUT FIX (WORTUMBRUCH) */
-h1, h2, p, a, label { overflow-wrap: break-word; hyphens: auto; }
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
 
-/* NAVIGATION */
+/* HANDY-FIX: Verhindert, dass lange Wörter das Layout sprengen */
+h1, h2, h3, h4, p, a, span, label {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+}
+
+#bgCanvas { position: fixed; top: 0; left: 0; z-index: -1; }
+
+/* ==========================================
+   NAVIGATION
+   ========================================== */
 nav {
-    background: rgba(0,0,0,0.9);
+    background: rgba(0, 0, 0, 0.95);
     padding: 15px;
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 15px;
     border-bottom: 2px solid var(--primary);
     position: sticky;
-    top: 0; z-index: 1000;
+    top: 0;
+    z-index: 1000;
+    flex-wrap: wrap;
 }
-nav a { color: white; text-decoration: none; font-weight: bold; font-size: 0.85rem; }
 
-/* SUPPORT BOX */
-.support-box {
-    background: #1a1a1a;
-    border: 2px solid var(--primary);
-    padding: 30px;
-    border-radius: 15px;
-    max-width: 600px;
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+nav a:hover { color: var(--primary); }
+
+.user-login-btn {
+    border: 1px solid var(--primary);
+    padding: 5px 15px;
+    border-radius: 5px;
+    color: var(--primary) !important;
+}
+
+/* ==========================================
+   LAYOUT & HEADER
+   ========================================== */
+.container {
+    max-width: 900px;
     margin: 0 auto;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    padding: 20px;
 }
-.support-box h2 { color: var(--primary); margin-bottom: 15px; text-align: center; }
 
-/* SOCIAL BUTTONS */
-.social-wrapper { max-width: 700px; margin: 0 auto; }
-.central-btn {
+.chibi-header { text-align: center; padding: 40px 0; }
+
+/* FIX: RUNDES BILD */
+.round-chibi { 
+    width: 150px; 
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--primary);
+    box-shadow: 0 0 20px rgba(50, 205, 50, 0.5);
+    margin-bottom: 15px; 
+}
+
+.chibi-header h1 { font-size: clamp(1.8rem, 8vw, 3rem); color: var(--primary); text-transform: uppercase; }
+
+/* ==========================================
+   CARDS (NEWS & PROJEKTE)
+   ========================================== */
+.project-card, .admin-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-left: 5px solid var(--primary);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    position: relative;
+}
+
+.card-badge {
+    position: absolute; top: 15px; right: 15px;
+    padding: 4px 10px; border-radius: 4px;
+    font-size: 0.7rem; font-weight: bold; color: black;
+}
+
+/* ==========================================
+   SOCIAL BUTTONS
+   ========================================== */
+.social-wrapper { max-width: 800px; margin: 0 auto; }
+
+/* FIX: DISCORD ZENTRIERT */
+.discord-central {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    background: var(--discord-color) !important;
+    padding: 30px !important;
     margin-bottom: 20px;
-    background: #5865F2 !important;
-    padding: 25px !important;
-}
-.btn-icon-large { width: 50px; margin-bottom: 10px; }
-
-.social-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 15px;
-}
-.social-btn {
-    background: #222;
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
+    border-radius: 12px;
     text-decoration: none;
     color: white;
     font-weight: bold;
-    border: 1px solid #333;
+    font-size: 1.3rem;
     transition: 0.3s;
+    box-shadow: 0 5px 20px rgba(88, 101, 242, 0.4);
 }
-.social-btn:hover { border-color: var(--primary); transform: translateY(-3px); }
+.discord-central:hover { transform: translateY(-5px); }
+.discord-central img { width: 60px; margin-bottom: 10px; }
 
-/* MODAL FIX (ZENTRIERT) */
+.social-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.social-btn {
+    display: block;
+    padding: 15px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-align: center;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    transition: all 0.3s ease;
+}
+
+.social-btn:hover { border-color: var(--primary); transform: translateY(-3px); }
+.btn-twitch { border-left: 5px solid #9146FF; }
+.btn-youtube { border-left: 5px solid #FF0000; }
+.btn-tiktok { border-left: 5px solid #000000; }
+.btn-instagram { border-left: 5px solid #E1306C; }
+
+/* ==========================================
+   MODAL (LOGIN) - ZENTRIERT
+   ========================================== */
 .modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.85);
-    z-index: 2000;
+    display: none; /* Flex wird durch JS gesetzt */
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85); z-index: 2000;
     align-items: center; justify-content: center;
 }
+
 .modal-content {
     background: var(--card-bg);
     padding: 30px;
     border-radius: 15px;
-    border: 2px solid var(--primary);
     width: 90%; max-width: 400px;
+    border: 2px solid var(--primary);
+    position: relative;
+    box-shadow: 0 0 30px rgba(50, 205, 50, 0.2);
 }
 
-/* INPUTS */
+.close-modal { position: absolute; top: 10px; right: 15px; font-size: 2rem; color: white; cursor: pointer; }
+
+/* ==========================================
+   FORMULARE & BUTTONS
+   ========================================== */
 .editor-input {
-    width: 100%; padding: 12px; margin-bottom: 15px;
-    background: #222; border: 1px solid #444; color: white; border-radius: 5px;
+    width: 100%; background: #222; border: 1px solid #444; color: white;
+    padding: 12px; margin-bottom: 15px; border-radius: 6px; font-size: 1rem;
 }
-.save-btn { width: 100%; padding: 12px; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; }
+.editor-input:focus { border-color: var(--primary); outline: none; }
+
+.save-btn { width: 100%; padding: 14px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
 .btn-highlight { background: var(--primary); color: black; }
-.btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
+.btn-highlight:hover { background: white; box-shadow: 0 0 15px var(--primary); }
+.btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+
+/* ==========================================
+   SUPPORT BOX (NEU) & FOOTER
+   ========================================== */
+.support-footer { background: #050505; padding: 50px 20px; border-top: 2px solid #111; margin-top: 80px; }
+
+.support-box {
+    background: #111;
+    border: 2px solid var(--primary);
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 700px;
+    margin: 0 auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.footer-bottom { text-align: center; margin-top: 40px; font-size: 0.8rem; color: #444; }
+
+/* MOBILE OPTIMIERUNG */
+@media (max-width: 600px) {
+    nav { gap: 10px; padding: 10px; }
+    nav a { font-size: 0.75rem; }
+    .round-chibi { width: 120px; height: 120px; }
+}
