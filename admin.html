@@ -8,6 +8,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 </head>
 <body>
     <canvas id="bgCanvas"></canvas>
@@ -51,7 +52,7 @@
                 <p style="margin-top: 15px; color: var(--primary);"><strong>1. Verantwortlicher</strong></p>
                 <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:<br>
                 <strong>Creeperflori</strong><br>
-                E-Mail: [DEINE E-MAIL ADRESSE EINTRAGEN]<br>
+                E-Mail: admin@deinedomain.com<br>
                 Discord: Creeperflori#XXXX</p>
 
                 <p style="margin-top: 15px; color: var(--primary);"><strong>2. Welche Daten wir erfassen und warum</strong></p>
@@ -81,15 +82,46 @@
                 <p style="margin-top: 15px; color: var(--primary);"><strong>6. Datensicherheit</strong></p>
                 <p>Wir schützen deine Daten durch SSL/TLS-Verschlüsselung (erkennbar am "https://" in der Adresszeile) und durch die hohen Sicherheitsstandards unserer Server-Anbieter (GitHub & Google Firebase).</p>
             </div>
+        </div>
+    </div>
 
     <div class="container">
         <header class="chibi-header">
             <img src="img/Creeperflori.png" alt="Creeperflori" class="round-chibi">
             <h1 style="color: #ff9900;">Admin Dashboard</h1>
-            <p style="color: #ccc;">Hier siehst du alle Support-Nachrichten im Detail.</p>
+            <p style="color: #ccc;">News posten & Support-Tickets verwalten.</p>
         </header>
 
-        <div id="admin-messages" style="margin-top: 30px;">
+        <div class="project-card" style="border-left-color: #00ccff; margin-bottom: 50px;">
+            <h2 style="margin-bottom: 15px; color: #00ccff;">📰 Neue News veröffentlichen</h2>
+            <form onsubmit="event.preventDefault(); uploadNewsWithImage();">
+                <input type="text" id="n-title" placeholder="Titel des Beitrags" required class="editor-input">
+                
+                <div style="display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
+                    <select id="n-category" class="editor-input" style="margin-bottom: 0; flex: 1; min-width: 200px;">
+                        <option value="general">Allgemeine News (Startseite)</option>
+                        <option value="fillypath">Fillypath Update</option>
+                    </select>
+                    <select id="n-type" class="editor-input" style="margin-bottom: 0; flex: 1; min-width: 200px;">
+                        <option value="news">Normale News</option>
+                        <option value="patchnotes">Patchnotes</option>
+                        <option value="changelog">Changelog</option>
+                    </select>
+                </div>
+
+                <textarea id="n-content" placeholder="Inhalt deiner News..." rows="6" required class="editor-input"></textarea>
+                
+                <label style="color: gray; font-size: 0.9rem; margin-bottom: 5px; display: block;">Optionales Bild anhängen:</label>
+                <input type="file" id="n-image" accept="image/*" class="editor-input" style="padding: 10px;">
+                
+                <button type="submit" id="post-btn" class="save-btn btn-highlight" style="background: #00ccff;">Beitrag jetzt online stellen</button>
+            </form>
+        </div>
+
+        <hr style="border-color: #333; margin-bottom: 40px;">
+
+        <h2 style="text-align: center; color: var(--primary); margin-bottom: 20px;">💬 Eingehende Support-Tickets</h2>
+        <div id="admin-messages">
             <p style="text-align:center; color:gray;">Prüfe Admin-Rechte und lade Nachrichten...</p>
         </div>
     </div>
