@@ -20,7 +20,7 @@ function applyLinks() {
     setLink('link-tt', CONFIG.links.tiktok);
     setLink('link-insta', CONFIG.links.instagram);
     setLink('link-discord', CONFIG.links.deppenCord);
-    setLink('link-partner-discord', CONFIG.links.deppenCord); // Falls du einen separaten Partnerlink hast, passe das in der config.js an
+    setLink('link-partner-discord', CONFIG.links.deppenCord); 
     setLink('text-ip', CONFIG.links.serverIP);
 }
 
@@ -50,7 +50,13 @@ auth.onAuthStateChanged(user => {
         });
 
         if(isAdmin && adminNavLink) adminNavLink.style.display = "inline-block";
-        if (path.includes('admin.html') && !isAdmin) window.location.replace("index.html");
+        
+        // Admin Routing
+        if (path.includes('admin.html')) {
+            if (isAdmin) renderAdminMessages();
+            else window.location.replace("index.html");
+        }
+
     } else {
         isAdmin = false;
         loginBtns.forEach(btn => {
@@ -169,12 +175,74 @@ window.sendSupport = function(e) {
     db.collection("messages").add(data).then(() => {
         alert("Deine Anfrage wurde erfolgreich gesendet!");
         e.target.reset();
-        window.toggleSupportFields(); // Versteckt die Extrafelder wieder
+        window.toggleSupportFields();
     });
 };
 
 // ==========================================
-// 7. HINTERGRUND ANIMATION
+// 7. ADMIN DASHBOARD TICKET SYSTEM
+// ==========================================
+function renderAdminMessages() {
+    const list = document.getElementById('admin-messages');
+    if(!list) return;
+
+    db.collection("messages").orderBy("timestamp", "desc").onSnapshot(snap => {
+        list.innerHTML = "";
+        let count = 0;
+        
+        snap.forEach(doc => {
+            count++;
+            const m = doc.data();
+            
+            const badgeColor = m.category === 'minecraft' ? '#32CD32' : (m.category === 'discord' ? '#5865F2' : '#ff9900');
+            const fontColor = m.category === 'allgemein' ? 'black' : 'white';
+            
+            let extraInfo = '';
+            if(m.category === 'minecraft') {
+                extraInfo = `<div style="background: rgba(50, 205, 50, 0.1); padding: 10px; border-radius: 5px; margin-top: 10px; border-left: 3px solid #32CD32;">
+                                <p style="margin: 0; font-size: 0.9rem;"><strong>MC-Name:</strong> ${m.mcName || '-'} <br> <strong>Plattform:</strong> ${m.platform || '-'}</p>
+                             </div>`;
+            } else if(m.category === 'discord') {
+                extraInfo = `<div style="background: rgba(88, 101, 242, 0.1); padding: 10px; border-radius: 5px; margin-top: 10px; border-left: 3px solid #5865F2;">
+                                <p style="margin: 0; font-size: 0.9rem;"><strong>Discord-Name:</strong> ${m.discordName || '-'}</p>
+                             </div>`;
+            }
+
+            const time = m.timestamp ? new Date(m.timestamp.toDate()).toLocaleString('de-DE') : 'Gerade eben';
+            
+            const replyLink = m.email && m.email.includes('@') 
+                ? `<a href="mailto:${m.email}" class="save-btn btn-highlight" style="text-decoration:none; display:inline-block; width:auto; padding:8px 20px;">Antworten</a>` 
+                : `<span style="color:#ff9900; font-size: 0.8rem;">(Keine Email / Nur Discord)</span>`;
+
+            list.innerHTML += `
+                <div class="project-card" style="border-left-color:${badgeColor}; margin-bottom: 30px;">
+                    <span class="card-badge" style="background:${badgeColor}; color:${fontColor};">${(m.category || 'allgemein').toUpperCase()}</span>
+                    
+                    <div style="margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px;">
+                        <h3 style="margin-bottom: 5px;">Von: ${m.name}</h3>
+                        <p style="font-size: 0.8rem; color: gray;">Gesendet am: ${time}</p>
+                        <p style="font-size: 0.9rem; color: #ccc;"><strong>Kontakt:</strong> ${m.email}</p>
+                    </div>
+
+                    ${extraInfo}
+                    
+                    <div style="background:#0a0a0a; padding:15px; border-radius:8px; margin:15px 0; border: 1px solid #222;">
+                        <p style="white-space: pre-wrap; margin: 0; font-style: italic;">"${m.message}"</p>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; align-items: center; margin-top: 20px;">
+                        ${replyLink}
+                        <button onclick="deleteDoc('messages', '${doc.id}')" style="color:#ff4444; background:transparent; border:1px solid #ff4444; padding:8px 20px; border-radius:5px; cursor:pointer; transition: 0.3s;">🗑️ Schließen / Löschen</button>
+                    </div>
+                </div>`;
+        });
+        
+        if(count === 0) list.innerHTML = "<p style='text-align:center; color:gray; font-size: 1.2rem; padding: 40px;'>Alles erledigt! Keine Support-Tickets offen. 🎉</p>";
+    });
+}
+
+// ==========================================
+// 8. HINTERGRUND ANIMATION
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     applyLinks();
