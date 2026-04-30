@@ -43,7 +43,41 @@
         </div>
     </div>
 
-    <footer class="support-footer">...</footer>
+    <footer class="support-footer">
+        <div class="container">
+            <div class="support-box">
+                <h2 style="text-align: center; margin-bottom: 10px;">🆘 Support & Kontakt</h2>
+                <form onsubmit="sendSupport(event)">
+                    <input type="text" id="sup-name" placeholder="Dein Name" required class="editor-input">
+                    <input type="text" id="sup-contact" class="guest-contact editor-input" placeholder="E-Mail oder Discord für Rückfragen" style="display:none; border-color: #ff9900;">
+                    <select id="sup-category" class="editor-input" onchange="toggleSupportFields()">
+                        <option value="allgemein">Allgemeine Frage</option>
+                        <option value="discord">Discord Support</option>
+                        <option value="minecraft">Fillypath (Minecraft)</option>
+                    </select>
+                    <div id="discord-fields" style="display: none; margin-bottom: 15px;">
+                        <input type="text" id="sup-discord-name" placeholder="Dein Discord Name" class="editor-input" style="border-color: #5865F2;">
+                    </div>
+                    <div id="mc-fields" style="display: none; margin-bottom: 15px;">
+                        <input type="text" id="sup-mc-name" placeholder="Minecraft Ingame Name" class="editor-input" style="border-color: #32CD32; margin-bottom: 10px;">
+                        <select id="sup-platform" class="editor-input" style="border-color: #32CD32;">
+                            <option value="PC / Java">PC / Java</option>
+                            <option value="Handy/Tablet">Handy / Tablet</option>
+                            <option value="Konsole">Konsole</option>
+                        </select>
+                    </div>
+                    <textarea id="sup-msg" placeholder="Wie können wir helfen?" rows="4" required class="editor-input"></textarea>
+                    <button type="submit" class="save-btn btn-highlight">Senden</button>
+                </form>
+                <p style="text-align:center; margin-top:15px; font-size:0.8rem;">
+                    <a href="#" onclick="openDatenschutzModal(); return false;" style="color:#888;">Datenschutz</a>
+                </p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Creeperflori. Alle Rechte vorbehalten.</p>
+        </div>
+    </footer>
 
     <script src="js/config.js"></script>
     <script src="js/app.js"></script>
