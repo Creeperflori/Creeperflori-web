@@ -25,20 +25,35 @@
     <div id="login-modal" class="modal-overlay">
         <div class="modal-content">
             <span class="close-modal" onclick="closeLoginModal()">&times;</span>
-            <h2>Community Login</h2>
+            <h2 style="margin-bottom: 20px;">Community Login</h2>
             <form onsubmit="event.preventDefault(); handleAuth('login');">
                 <input type="email" id="auth-email" placeholder="E-Mail" required class="editor-input">
                 <input type="password" id="auth-pass" placeholder="Passwort" required class="editor-input">
+                
                 <div style="text-align: right; margin-bottom: 15px;">
-                    <a href="#" onclick="resetPassword()" class="forgot-link">Passwort vergessen?</a>
+                    <a href="#" onclick="resetPassword()" style="color: var(--primary); font-size: 0.85rem; text-decoration: none;">Passwort vergessen?</a>
                 </div>
-                <div class="legal-notice">
+
+                <div class="legal-notice" style="margin-bottom: 15px; font-size: 0.85rem;">
                     <input type="checkbox" id="legal-check">
-                    <label for="legal-check">Ich akzeptiere die <a href="datenschutz.html">Datenschutzbestimmungen</a></label>
+                    <label for="legal-check">Ich akzeptiere die <a href="#" onclick="openDatenschutzModal(); return false;" style="color:var(--primary);">Datenschutzerklärung</a>.</label>
                 </div>
                 <button type="submit" class="save-btn btn-highlight">Einloggen</button>
                 <button type="button" onclick="handleAuth('register')" class="save-btn btn-outline" style="margin-top:10px;">Registrieren</button>
             </form>
+        </div>
+    </div>
+
+    <div id="datenschutz-modal" class="modal-overlay">
+        <div class="modal-content datenschutz-box">
+            <span class="close-modal" onclick="closeDatenschutzModal()">&times;</span>
+            <h2 style="color: var(--primary); margin-bottom: 15px;">Datenschutzerklärung</h2>
+            <div class="legal-scroll-area">
+                <p><strong>1. Verantwortlicher:</strong> Creeperflori (creeper.flori44@gmail.com).</p>
+                <p><strong>2. Daten:</strong> Wir speichern E-Mail und Namen via Google Firebase nur für den Login und Support.</p>
+                <p><strong>3. Hosting:</strong> Die Seite läuft über GitHub Pages.</p>
+                <p><strong>4. Support:</strong> Nachrichten im Formular werden in unserer Datenbank für die Bearbeitung gespeichert.</p>
+            </div>
         </div>
     </div>
 
@@ -55,19 +70,16 @@
     <footer class="support-footer">
         <div class="container">
             <div class="support-box">
-                <h2>🆘 Support & Kontakt</h2>
-                <p>Hast du Fragen? Schreib uns direkt hier!</p>
+                <h2>✉️ Support & Kontakt</h2>
                 <form onsubmit="sendSupport(event)">
                     <input type="text" id="sup-name" placeholder="Dein Name" required class="editor-input">
-                    <input type="text" id="sup-contact" class="guest-contact editor-input" placeholder="E-Mail / Kontakt für Rückfragen" style="display:none;">
-                    <select id="sup-category" class="editor-input" onchange="toggleSupportFields()">
-                        <option value="allgemein">Allgemeine Frage</option>
-                        <option value="discord">Discord Support</option>
-                        <option value="minecraft">Fillypath Support</option>
-                    </select>
-                    <textarea id="sup-msg" placeholder="Deine Nachricht..." rows="4" required class="editor-input"></textarea>
-                    <button type="submit" class="save-btn btn-highlight">Absenden</button>
+                    <input type="text" id="sup-contact" class="guest-contact editor-input" placeholder="E-Mail / Discord" style="display:none;">
+                    <textarea id="sup-msg" placeholder="Deine Nachricht..." rows="3" required class="editor-input"></textarea>
+                    <button type="submit" class="save-btn btn-highlight">Anfrage Senden</button>
                 </form>
+                <p style="margin-top:15px; font-size:0.8rem; text-align:center;">
+                    <a href="#" onclick="openDatenschutzModal(); return false;" style="color:#888;">Datenschutz</a>
+                </p>
             </div>
         </div>
     </footer>
