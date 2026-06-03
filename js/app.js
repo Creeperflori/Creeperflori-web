@@ -243,14 +243,14 @@ window.addEventListener("keydown", (event) => {
 function getFriendlyAuthMessage(error, fallback) {
     const code = error?.code || "";
     const messages = {
-        "auth/invalid-email": "Bitte gib eine gueltige E-Mail-Adresse ein.",
+        "auth/invalid-email": "Bitte gib eine gültige E-Mail-Adresse ein.",
         "auth/user-not-found": "Zu dieser E-Mail wurde kein Konto gefunden.",
         "auth/wrong-password": "Das Passwort ist nicht korrekt.",
         "auth/invalid-login-credentials": "E-Mail oder Passwort stimmen nicht.",
         "auth/email-already-in-use": "Zu dieser E-Mail gibt es bereits einen Account.",
-        "auth/weak-password": "Bitte waehle ein staerkeres Passwort mit mindestens 6 Zeichen.",
+        "auth/weak-password": "Bitte wähle ein stärkeres Passwort mit mindestens 6 Zeichen.",
         "auth/too-many-requests": "Zu viele Versuche. Bitte warte kurz und probiere es erneut.",
-        "auth/network-request-failed": "Netzwerkfehler. Bitte pruefe deine Verbindung und versuche es erneut."
+        "auth/network-request-failed": "Netzwerkfehler. Bitte prüfe deine Verbindung und versuche es erneut."
     };
     return messages[code] || fallback || "Etwas ist schiefgelaufen. Bitte versuche es noch einmal.";
 }
@@ -270,12 +270,12 @@ window.handleAuth = async function handleAuth(action) {
     if (action === "register") {
         const checkbox = document.getElementById("legal-check");
         if (checkbox && !checkbox.checked) {
-            renderStatus(statusBox, "Bitte akzeptiere die Datenschutzerklaerung, um ein Konto zu erstellen.", "warning");
+            renderStatus(statusBox, "Bitte akzeptiere die Datenschutzerklärung, um ein Konto zu erstellen.", "warning");
             return;
         }
     }
 
-    renderStatus(statusBox, action === "register" ? "Account wird erstellt..." : "Anmeldung wird geprueft...", "info");
+    renderStatus(statusBox, action === "register" ? "Account wird erstellt..." : "Anmeldung wird geprüft...", "info");
     setButtonLoading(submitButton, action !== "register", "Einloggen...", submitButton?.textContent);
     setButtonLoading(registerButton, action === "register", "Registriere...", registerButton?.textContent);
 
@@ -287,7 +287,7 @@ window.handleAuth = async function handleAuth(action) {
             window.setTimeout(() => closeLoginModal(), 700);
         } else {
             await auth.signInWithEmailAndPassword(email, password);
-            renderStatus(statusBox, "Erfolgreich eingeloggt. Willkommen zurueck.", "success");
+            renderStatus(statusBox, "Erfolgreich eingeloggt. Willkommen zurück.", "success");
             showGlobalStatus("Login erfolgreich.", "success");
             window.setTimeout(() => closeLoginModal(), 700);
         }
@@ -323,7 +323,7 @@ window.resetPassword = async function resetPassword() {
 
     try {
         await auth.sendPasswordResetEmail(email);
-        renderStatus(statusBox, "Die Reset-Mail wurde gesendet. Bitte pruefe dein Postfach.", "success");
+        renderStatus(statusBox, "Die Reset-Mail wurde gesendet. Bitte prüfe dein Postfach.", "success");
         showGlobalStatus("Passwort-Reset wurde versendet.", "success");
     } catch (error) {
         renderStatus(statusBox, getFriendlyAuthMessage(error, "Reset-Mail konnte nicht gesendet werden."), "error");
@@ -370,11 +370,11 @@ window.uploadNewsWithImage = async function uploadNewsWithImage() {
     const statusBox = getFormStatus("admin-news-form");
 
     if (!title || !content) {
-        renderStatus(statusBox, "Bitte fuelle Titel und Inhalt aus.", "warning");
+        renderStatus(statusBox, "Bitte fülle Titel und Inhalt aus.", "warning");
         return;
     }
 
-    setButtonLoading(button, true, "Veroeffentliche...");
+    setButtonLoading(button, true, "Veröffentliche...");
     renderStatus(statusBox, "Beitrag wird hochgeladen...", "info");
 
     try {
@@ -397,9 +397,9 @@ window.uploadNewsWithImage = async function uploadNewsWithImage() {
 
         document.getElementById("admin-news-form")?.reset();
         renderStatus(statusBox, "Deine News ist jetzt online.", "success");
-        showGlobalStatus("News erfolgreich veroeffentlicht.", "success");
+        showGlobalStatus("News erfolgreich veröffentlicht.", "success");
     } catch (error) {
-        renderStatus(statusBox, `Beim Veroeffentlichen ist ein Fehler aufgetreten: ${error.message}`, "error");
+        renderStatus(statusBox, `Beim Veröffentlichen ist ein Fehler aufgetreten: ${error.message}`, "error");
     } finally {
         setButtonLoading(button, false);
     }
@@ -439,7 +439,7 @@ function createEmptyState(title, text) {
 function renderNewsCard(data, id) {
     const typeMeta = TYPE_META[data.type] || TYPE_META.news;
     const deleteAction = isAdmin
-        ? `<div class="card-actions"><button class="btn btn-danger" onclick="deleteDoc('news', '${id}')">Beitrag loeschen</button></div>`
+        ? `<div class="card-actions"><button class="btn btn-danger" onclick="deleteDoc('news', '${id}')">Beitrag löschen</button></div>`
         : "";
     const image = data.image ? `<img class="card-image" src="${escapeHtml(data.image)}" alt="${escapeHtml(data.title)}">` : "";
 
@@ -484,17 +484,17 @@ function loadNews() {
 
         list.innerHTML = `<div class="news-stack">${cards.join("")}</div>`;
     }, () => {
-        list.innerHTML = createEmptyState("News konnten nicht geladen werden", "Bitte versuche es spaeter erneut.");
+        list.innerHTML = createEmptyState("News konnten nicht geladen werden", "Bitte versuche es später erneut.");
     });
 }
 
 window.deleteDoc = async function deleteDoc(collectionName, id) {
-    if (!window.confirm("Diesen Eintrag wirklich loeschen?")) return;
+    if (!window.confirm("Diesen Eintrag wirklich löschen?")) return;
     try {
         await db.collection(collectionName).doc(id).delete();
-        showGlobalStatus("Eintrag erfolgreich geloescht.", "success");
+        showGlobalStatus("Eintrag erfolgreich gelöscht.", "success");
     } catch (error) {
-        showGlobalStatus("Loeschen fehlgeschlagen. Bitte versuche es erneut.", "error");
+        showGlobalStatus("Löschen fehlgeschlagen. Bitte versuche es erneut.", "error");
     }
 };
 
@@ -531,7 +531,7 @@ window.sendSupport = async function sendSupport(event) {
     const button = form.querySelector("button[type='submit']");
 
     if (!user && !contact) {
-        renderStatus(statusBox, "Bitte gib eine Kontaktmoeglichkeit fuer Rueckfragen an.", "warning");
+        renderStatus(statusBox, "Bitte gib eine Kontaktmöglichkeit für Rückfragen an.", "warning");
         return;
     }
 
@@ -544,7 +544,7 @@ window.sendSupport = async function sendSupport(event) {
     };
 
     if (!payload.name || !payload.message) {
-        renderStatus(statusBox, "Bitte fuelle Name und Nachricht aus.", "warning");
+        renderStatus(statusBox, "Bitte fülle Name und Nachricht aus.", "warning");
         return;
     }
 
@@ -578,7 +578,7 @@ function renderTicketCard(message, id) {
     const sentAt = message.timestamp ? new Date(message.timestamp.toDate()).toLocaleString("de-DE") : "Gerade eben";
     const replyAction = message.email && message.email.includes("@")
         ? `<a class="btn btn-primary" href="mailto:${escapeHtml(message.email)}">Per Mail antworten</a>`
-        : `<span class="pill">Kontakt ueber Discord oder manuell</span>`;
+        : `<span class="pill">Kontakt über Discord oder manuell</span>`;
 
     const extra = message.category === "minecraft"
         ? `<div class="ticket-note"><strong>Minecraft</strong><p>IGN: ${escapeHtml(message.mcName || "-")}<br>Plattform: ${escapeHtml(message.platform || "-")}</p></div>`
@@ -604,7 +604,7 @@ function renderTicketCard(message, id) {
             ${extra}
             <div class="card-actions">
                 ${replyAction}
-                <button class="btn btn-danger" onclick="deleteDoc('messages', '${id}')">Ticket loeschen</button>
+                <button class="btn btn-danger" onclick="deleteDoc('messages', '${id}')">Ticket löschen</button>
             </div>
         </article>
     `;
@@ -623,7 +623,7 @@ function renderAdminMessages() {
             ? `<div class="ticket-grid">${cards.join("")}</div>`
             : createEmptyState("Keine offenen Support-Tickets", "Neue Anfragen erscheinen automatisch hier.");
     }, () => {
-        list.innerHTML = createEmptyState("Tickets konnten nicht geladen werden", "Bitte pruefe deine Verbindung und versuche es erneut.");
+        list.innerHTML = createEmptyState("Tickets konnten nicht geladen werden", "Bitte prüfe deine Verbindung und versuche es erneut.");
     });
 }
 
@@ -676,7 +676,7 @@ window.updateProfile = async function updateProfile(event) {
     }
 
     setButtonLoading(button, true, "Speichere...");
-    renderStatus(statusBox, "Profil wird gespeichert...", "info");
+        renderStatus(statusBox, "Profil wird gespeichert...", "info");
 
     try {
         await db.collection("users").doc(user.uid).set({ displayName }, { merge: true });
@@ -721,7 +721,7 @@ function updateAuthUi(user) {
             if (isAdmin) {
                 renderAdminMessages();
             } else {
-                showGlobalStatus("Dieser Bereich ist nur fuer Administratoren sichtbar.", "warning");
+        showGlobalStatus("Dieser Bereich ist nur für Administratoren sichtbar.", "warning");
                 window.location.replace("start.html");
             }
         }
@@ -803,7 +803,7 @@ window.copyServerIp = async function copyServerIp() {
         await navigator.clipboard.writeText(value);
         showGlobalStatus("Server-IP wurde in die Zwischenablage kopiert.", "success");
     } catch (error) {
-        showGlobalStatus("Kopieren nicht moeglich. Bitte markiere die IP manuell.", "warning");
+        showGlobalStatus("Kopieren nicht möglich. Bitte markiere die IP manuell.", "warning");
     }
 };
 
