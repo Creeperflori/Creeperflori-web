@@ -426,7 +426,11 @@ window.saveSectionSettings = async function saveSectionSettings(event) {
         renderStatus(statusBox, "Die Freischaltungen wurden gespeichert.", "success");
         showGlobalStatus("Bereiche erfolgreich aktualisiert.", "success");
     } catch (error) {
-        renderStatus(statusBox, `Speichern fehlgeschlagen: ${error.message}`, "error");
+        const isPermissionError = error?.code === "permission-denied" || /insufficient permissions/i.test(error?.message || "");
+        const message = isPermissionError
+            ? "Speichern fehlgeschlagen: Firestore blockiert den Zugriff auf site_config/main. Erlaube Admins das Schreiben in dieser Collection."
+            : `Speichern fehlgeschlagen: ${error.message}`;
+        renderStatus(statusBox, message, "error");
     } finally {
         setButtonLoading(button, false);
     }
