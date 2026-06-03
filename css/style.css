@@ -811,47 +811,129 @@ textarea.editor-input {
 }
 
 .social-btn {
+    position: relative;
+    overflow: hidden;
     display: flex;
     align-items: center;
     gap: 16px;
-    padding: 20px;
-    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    min-height: 138px;
+    padding: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+        var(--surface);
+    transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
 }
 
 .social-btn:hover {
-    transform: translateY(-2px);
-    border-color: var(--border-strong);
-    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 26px 50px rgba(0, 0, 0, 0.28);
+}
+
+.social-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0.08), transparent 40%);
+    opacity: 0.8;
+    pointer-events: none;
 }
 
 .social-icon {
+    position: relative;
+    z-index: 1;
     display: grid;
     place-items: center;
-    width: 48px;
-    height: 48px;
-    border-radius: 16px;
-    font-size: 1.4rem;
-    background: rgba(255, 255, 255, 0.07);
+    width: 62px;
+    height: 62px;
+    border-radius: 20px;
+    font-size: 1.55rem;
+    font-weight: 900;
+    color: white;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
 }
 
 .social-copy {
+    position: relative;
+    z-index: 1;
     display: grid;
     gap: 4px;
+    flex: 1;
 }
 
 .social-copy strong {
-    font-size: 1.05rem;
+    font-size: 1.18rem;
 }
 
 .social-copy span {
     font-size: 0.94rem;
+    max-width: 28ch;
 }
 
-.social-btn.twitch .social-icon { background: rgba(145, 70, 255, 0.18); }
-.social-btn.youtube .social-icon { background: rgba(255, 0, 0, 0.16); }
-.social-btn.tiktok .social-icon { background: rgba(255, 255, 255, 0.12); }
-.social-btn.instagram .social-icon { background: rgba(225, 48, 108, 0.16); }
-.social-btn.discord .social-icon { background: rgba(124, 140, 255, 0.18); }
+.social-tag {
+    position: relative;
+    z-index: 1;
+    align-self: start;
+    margin-left: auto;
+    padding: 7px 11px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.84);
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.social-btn.twitch {
+    background:
+        radial-gradient(circle at top right, rgba(145, 70, 255, 0.22), transparent 38%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+        var(--surface);
+}
+
+.social-btn.youtube {
+    background:
+        radial-gradient(circle at top right, rgba(255, 0, 0, 0.22), transparent 38%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+        var(--surface);
+}
+
+.social-btn.tiktok {
+    background:
+        radial-gradient(circle at top right, rgba(0, 255, 204, 0.16), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(255, 0, 102, 0.14), transparent 34%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+        var(--surface);
+}
+
+.social-btn.instagram {
+    background:
+        radial-gradient(circle at top right, rgba(225, 48, 108, 0.24), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(245, 133, 41, 0.15), transparent 32%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+        var(--surface);
+}
+
+.social-btn.discord {
+    background:
+        radial-gradient(circle at top right, rgba(124, 140, 255, 0.24), transparent 38%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+        var(--surface);
+}
+
+.social-btn.twitch .social-icon { background: linear-gradient(135deg, #9146ff, #6d28d9); }
+.social-btn.youtube .social-icon { background: linear-gradient(135deg, #ff3636, #c50000); }
+.social-btn.tiktok .social-icon { background: linear-gradient(135deg, #121212, #2d2d2d); }
+.social-btn.instagram .social-icon { background: linear-gradient(135deg, #e1306c, #f58529); }
+.social-btn.discord .social-icon { background: linear-gradient(135deg, #7c8cff, #5865f2); }
+
+.social-btn:hover .social-tag {
+    background: rgba(255, 255, 255, 0.14);
+}
 
 .profile-shell,
 .news-panel {
