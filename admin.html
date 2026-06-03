@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | Creeperflori</title>
+    <title>Admin | Creeperflori</title>
+    <meta name="description" content="Admin-Dashboard fuer News, Support-Tickets und Community-Verwaltung auf Creeperflori.">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -13,146 +14,203 @@
 <body>
     <canvas id="bgCanvas"></canvas>
 
-    <nav>
-        <a href="index.html">NEWS</a>
-        <a href="sozial.html">SOCIAL</a>
-        <a href="fillypath.html">FILLYPATH</a>
-        <a href="creepercave.html">CREEPERCAVE</a>
-        <a href="admin.html" id="admin-nav-link" style="display:none; color:#ff9900;">👑 ADMIN</a>
-        <a class="user-login-btn" onclick="openLoginModal()">Login</a>
-    </nav>
-
-    <div id="login-modal" class="modal-overlay">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeLoginModal()">&times;</span>
-            <h2 style="margin-bottom: 20px;">Community Login</h2>
-            <form onsubmit="event.preventDefault(); handleAuth('login');">
-                <input type="email" id="auth-email" placeholder="E-Mail Adresse" required class="editor-input">
-                <input type="password" id="auth-pass" placeholder="Passwort" required class="editor-input" style="margin-bottom: 5px;">
-                <div style="text-align: right; margin-bottom: 15px;">
-                    <a href="#" onclick="resetPassword()" style="color: var(--primary); font-size: 0.85rem; text-decoration: none;">Passwort vergessen?</a>
+    <div class="page-shell">
+        <header class="site-header">
+            <div class="nav-wrap">
+                <a class="brand-mark" href="start.html">
+                    <img class="brand-avatar" src="img/Creeperflori.png" alt="Creeperflori">
+                    <span class="brand-copy">
+                        <span class="brand-title">Creeperflori</span>
+                        <span class="brand-subtitle">Community Hub</span>
+                    </span>
+                </a>
+                <nav class="nav-links" aria-label="Hauptnavigation">
+                    <a class="nav-link" href="start.html">News</a>
+                    <a class="nav-link" href="sozial.html">Social</a>
+                    <a class="nav-link" href="fillypath.html">Fillypath</a>
+                    <a class="nav-link" href="creepercave.html">Creepercave</a>
+                    <a class="nav-link admin-link is-active" href="admin.html" id="admin-nav-link" style="display:none;">Admin</a>
+                </nav>
+                <div class="nav-actions">
+                    <button class="user-login-btn" type="button" onclick="openLoginModal()">Login</button>
                 </div>
-                <div class="legal-notice" style="margin-bottom: 15px; font-size: 0.85rem;">
-                    <input type="checkbox" id="legal-check">
-                    <label for="legal-check">Ich akzeptiere die <a href="#" onclick="openDatenschutzModal(); return false;" style="color:var(--primary);">Datenschutzerklärung</a>.</label>
-                </div>
-                <button type="submit" class="save-btn btn-highlight" style="margin-bottom: 10px;">Einloggen</button>
-                <button type="button" onclick="handleAuth('register')" class="save-btn btn-outline">Registrieren</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="datenschutz-modal" class="modal-overlay">
-        <div class="modal-content datenschutz-box">
-            <span class="close-modal" onclick="closeDatenschutzModal()">&times;</span>
-            <h2 style="color: var(--primary); margin-bottom: 15px;">Datenschutzerklärung</h2>
-            <div class="legal-scroll-area">
-                <p>Diese Datenschutzerklärung klärt dich über die Art, den Umfang und den Zweck der Verarbeitung von personenbezogenen Daten auf unserer Website auf. Sie entspricht den Anforderungen des revidierten Schweizer Datenschutzgesetzes (revDSG) sowie der Europäischen Datenschutz-Grundverordnung (DSGVO).</p>
-
-                <p style="margin-top: 15px; color: var(--primary);"><strong>1. Verantwortliche Stelle</strong></p>
-                <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:<br>
-                <strong>Creeperflori</strong><br>
-                <br>
-                E-Mail: creeper.flori44@gmail.com<br>
-                Discord: Creeperflori</p>
-
-                <p style="margin-top: 15px; color: var(--primary);"><strong>2. Welche Daten wir erfassen und Rechtsgrundlage</strong></p>
-                <p><strong>a) Hosting:</strong> Diese Website wird über "GitHub Pages" gehostet. Bei jedem Aufruf der Webseite erfasst das System automatisch Logfiles (z.B. IP-Adresse, Browsertyp). Dies ist technisch notwendig (Art. 31 Abs. 1 DSG / Art. 6 Abs. 1 lit. f DSGVO).</p>
-                <p><strong>b) Registrierung & Login:</strong> Wenn du dir einen Account erstellst, speichern wir E-Mail-Adresse und Passwort verschlüsselt, um dir Zugang zu gewähren (Art. 31 Abs. 1 DSG / Art. 6 Abs. 1 lit. a und b DSGVO).</p>
-                <p><strong>c) Support-Formular:</strong> Kontaktierst du uns, erfassen wir Name, E-Mail/Discord, Nachricht und optional Spieldaten zur Bearbeitung deines Anliegens (Art. 31 Abs. 1 DSG / Art. 6 Abs. 1 lit. b DSGVO).</p>
-
-                <p style="margin-top: 15px; color: var(--primary);"><strong>3. Weitergabe von Daten an Dritte (Google Firebase)</strong></p>
-                <p>Für unsere Datenbank und Logins nutzen wir Google Firebase (Google Ireland Limited / Google LLC, USA). Passwörter werden streng verschlüsselt gespeichert. Google stützt sich für Datenübermittlungen in die USA auf Standardvertragsklauseln (SCC) und das EU-US/Swiss-US Data Privacy Framework.</p>
-
-                <p style="margin-top: 15px; color: var(--primary);"><strong>4. Cookies & Lokaler Speicher</strong></p>
-                <p>Wir verwenden keine Werbe-Cookies. Das Login-System nutzt jedoch den lokalen Speicher deines Browsers (Local/Session Storage), um den Anmeldestatus zu halten. Dies ist technisch zwingend erforderlich.</p>
-
-                <p style="margin-top: 15px; color: var(--primary);"><strong>5. Dauer der Speicherung & Deine Rechte</strong></p>
-                <p>Wir speichern Daten nur so lange wie nötig. Du hast jederzeit das Recht auf Auskunft, Berichtigung und Löschung deines Accounts und deiner Daten. Schreibe uns dazu einfach über das Support-Formular.</p>
             </div>
-        </div>
-    </div>
-
-    <div class="container">
-        <header class="chibi-header">
-            <img src="img/Creeperflori.png" alt="Creeperflori" class="round-chibi">
-            <h1 style="color: #ff9900;">Admin Dashboard</h1>
-            <p style="color: #ccc;">News posten & Support-Tickets verwalten.</p>
         </header>
 
-        <div class="project-card" style="border-left-color: #00ccff; margin-bottom: 50px;">
-            <h2 style="margin-bottom: 15px; color: #00ccff;">📰 Neue News veröffentlichen</h2>
-            <form onsubmit="event.preventDefault(); uploadNewsWithImage();">
-                <input type="text" id="n-title" placeholder="Titel des Beitrags" required class="editor-input">
-                
-                <div style="display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
-                    <select id="n-category" class="editor-input" style="margin-bottom: 0; flex: 1; min-width: 200px;">
-                        <option value="general">Allgemeine News (Startseite)</option>
-                        <option value="fillypath">Fillypath Update</option>
-                    </select>
-                    <select id="n-type" class="editor-input" style="margin-bottom: 0; flex: 1; min-width: 200px;">
-                        <option value="news">Normale News</option>
-                        <option value="patchnotes">Patchnotes</option>
-                        <option value="changelog">Changelog</option>
-                    </select>
+        <main class="page-main">
+            <section class="hero">
+                <div class="hero-content">
+                    <span class="eyebrow">Admin Dashboard</span>
+                    <h1>Verwalte News und Support mit klaren Prioritaeten.</h1>
+                    <p>Das Dashboard trennt das Verfassen neuer Inhalte sauber von eingehenden Support-Tickets und reduziert unnoetige visuelle Unruhe.</p>
+                    <div class="hero-actions">
+                        <a class="btn btn-primary" href="#admin-news-form">News veroeffentlichen</a>
+                        <a class="btn btn-secondary" href="#admin-messages">Tickets ansehen</a>
+                    </div>
                 </div>
+                <aside class="hero-panel">
+                    <img class="hero-avatar" src="img/Creeperflori.png" alt="Creeperflori Profilbild">
+                    <div class="hero-card-list">
+                        <div class="hero-mini-card">
+                            <strong>Publishing</strong>
+                            <span>News, Changelogs und Patchnotes in einem Formular.</span>
+                        </div>
+                        <div class="hero-mini-card">
+                            <strong>Inbox</strong>
+                            <span>Support-Tickets je Kategorie visuell priorisiert.</span>
+                        </div>
+                        <div class="hero-mini-card">
+                            <strong>Firebase kompatibel</strong>
+                            <span>Bestehende Collections und Felder bleiben erhalten.</span>
+                        </div>
+                        <div class="hero-mini-card">
+                            <strong>Weniger Reibung</strong>
+                            <span>Statusmeldungen und Buttons zeigen klar, was gerade passiert.</span>
+                        </div>
+                    </div>
+                </aside>
+            </section>
 
-                <textarea id="n-content" placeholder="Inhalt deiner News..." rows="6" required class="editor-input"></textarea>
-                
-                <label style="color: gray; font-size: 0.9rem; margin-bottom: 5px; display: block;">Optionales Bild anhängen:</label>
-                <input type="file" id="n-image" accept="image/*" class="editor-input" style="padding: 10px;">
-                
-                <button type="submit" id="post-btn" class="save-btn btn-highlight" style="background: #00ccff;">Beitrag jetzt online stellen</button>
+            <section class="section">
+                <div class="news-panel">
+                    <div class="section-header">
+                        <div>
+                            <span class="eyebrow">Content Publishing</span>
+                            <h2>Neue News veroeffentlichen</h2>
+                        </div>
+                        <p>Ein sauberer Flow fuer Startseiten-News, Fillypath-Updates und Bild-Uploads.</p>
+                    </div>
+                    <form id="admin-news-form" class="form-block" onsubmit="event.preventDefault(); uploadNewsWithImage();">
+                        <div class="field-group">
+                            <label for="n-title">Titel</label>
+                            <input class="editor-input" type="text" id="n-title" placeholder="Titel des Beitrags" required>
+                        </div>
+                        <div class="form-grid two-col">
+                            <div class="field-group">
+                                <label for="n-category">Zielbereich</label>
+                                <select class="editor-input" id="n-category">
+                                    <option value="general">Allgemeine News (Startseite)</option>
+                                    <option value="fillypath">Fillypath Update</option>
+                                </select>
+                            </div>
+                            <div class="field-group">
+                                <label for="n-type">Beitragstyp</label>
+                                <select class="editor-input" id="n-type">
+                                    <option value="news">Normale News</option>
+                                    <option value="patchnotes">Patchnotes</option>
+                                    <option value="changelog">Changelog</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field-group">
+                            <label for="n-content">Inhalt</label>
+                            <textarea class="editor-input" id="n-content" rows="6" placeholder="Was ist neu, wichtig oder geaendert?" required></textarea>
+                        </div>
+                        <div class="field-group">
+                            <label for="n-image">Optionales Bild</label>
+                            <input class="editor-input" type="file" id="n-image" accept="image/*">
+                            <p class="helper-text">Bilder werden vor dem Upload komprimiert, damit sie schneller laden.</p>
+                        </div>
+                        <div class="status-box" data-status-for="admin-news-form"></div>
+                        <div class="button-row">
+                            <button class="save-btn btn-highlight" type="submit" id="post-btn">Beitrag jetzt veroeffentlichen</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-header">
+                    <div>
+                        <span class="eyebrow">Support Inbox</span>
+                        <h2 class="section-title">Eingehende Nachrichten</h2>
+                    </div>
+                    <p>Tickets werden automatisch nach Eingang geladen und nach Kategorie farblich unterschieden.</p>
+                </div>
+                <div id="admin-messages">
+                    <div class="empty-state">
+                        <h3>Lade Support-Tickets...</h3>
+                        <p>Die Inbox wird vorbereitet.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="support-footer">
+            <div class="page-footer-inner">
+                <div class="footer-bottom">
+                    <span>&copy; 2026 Creeperflori. Alle Rechte vorbehalten.</span>
+                    <span>Admin-Bereich fuer Content, Support und Community-Ablaufe.</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="login-modal" class="modal-overlay" aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <span class="eyebrow">Community Login</span>
+                    <h2>Einloggen oder direkt registrieren</h2>
+                    <p>Verwalte dein Profil, erhalte Zugriff auf Community-Funktionen und betrete den Admin-Bereich mit dem richtigen Konto.</p>
+                </div>
+                <button class="close-modal" type="button" onclick="closeLoginModal()" aria-label="Modal schliessen">&times;</button>
+            </div>
+            <form id="login-form" class="form-block" onsubmit="event.preventDefault(); handleAuth('login');">
+                <div class="field-group">
+                    <label for="auth-email">E-Mail-Adresse</label>
+                    <input class="editor-input" type="email" id="auth-email" placeholder="name@example.com" required autocomplete="email">
+                </div>
+                <div class="field-group">
+                    <label for="auth-pass">Passwort</label>
+                    <input class="editor-input" type="password" id="auth-pass" placeholder="Dein Passwort" required autocomplete="current-password">
+                </div>
+                <div class="checkbox-row">
+                    <input type="checkbox" id="legal-check">
+                    <label for="legal-check">Ich akzeptiere die <a class="link-inline" href="#" onclick="openDatenschutzModal(); return false;">Datenschutzerklaerung</a> fuer die Registrierung.</label>
+                </div>
+                <div class="status-box" data-status-for="login-form"></div>
+                <div class="button-pair">
+                    <button class="save-btn btn-highlight" type="submit">Einloggen</button>
+                    <button class="save-btn btn-outline" type="button" data-register-button onclick="handleAuth('register')">Registrieren</button>
+                </div>
+                <div class="inline-actions">
+                    <button class="save-btn btn-secondary" type="button" onclick="resetPassword()">Passwort zuruecksetzen</button>
+                </div>
             </form>
-        </div>
-
-        <hr style="border-color: #333; margin-bottom: 40px;">
-
-        <h2 style="text-align: center; color: var(--primary); margin-bottom: 20px;">💬 Eingehende Support-Tickets</h2>
-        <div id="admin-messages">
-            <p style="text-align:center; color:gray;">Prüfe Admin-Rechte und lade Nachrichten...</p>
         </div>
     </div>
 
-    <footer class="support-footer">
-        <div class="container">
-            <div class="support-box">
-                <h2 style="text-align: center; margin-bottom: 10px;">🆘 Support & Kontakt</h2>
-                <form onsubmit="sendSupport(event)">
-                    <input type="text" id="sup-name" placeholder="Dein Name" required class="editor-input">
-                    <input type="text" id="sup-contact" class="guest-contact editor-input" placeholder="E-Mail oder Discord für Rückfragen" style="display:none; border-color: #ff9900;">
-                    
-                    <select id="sup-category" class="editor-input" onchange="toggleSupportFields()">
-                        <option value="allgemein">Allgemeine Frage</option>
-                        <option value="discord">Discord Support</option>
-                        <option value="minecraft">Fillypath (Minecraft)</option>
-                    </select>
-                    
-                    <div id="discord-fields" style="display: none; margin-bottom: 15px;">
-                        <input type="text" id="sup-discord-name" placeholder="Dein Discord Name" class="editor-input" style="border-color: #5865F2;">
-                    </div>
-                    
-                    <div id="mc-fields" style="display: none; margin-bottom: 15px;">
-                        <input type="text" id="sup-mc-name" placeholder="Minecraft Ingame Name" class="editor-input" style="border-color: #32CD32; margin-bottom: 10px;">
-                        <select id="sup-platform" class="editor-input" style="border-color: #32CD32;">
-                            <option value="PC / Java">PC / Java</option>
-                            <option value="Handy/Tablet">Handy / Tablet</option>
-                            <option value="Konsole">Konsole</option>
-                        </select>
-                    </div>
-                    
-                    <textarea id="sup-msg" placeholder="Wie können wir helfen?" rows="4" required class="editor-input"></textarea>
-                    <button type="submit" class="save-btn btn-highlight">Senden</button>
-                </form>
-                <p style="text-align:center; margin-top:15px; font-size:0.8rem;">
-                    <a href="#" onclick="openDatenschutzModal(); return false;" style="color:#888;">Datenschutz</a>
-                </p>
+    <div id="datenschutz-modal" class="modal-overlay" aria-hidden="true">
+        <div class="modal-content datenschutz-box">
+            <div class="modal-header">
+                <div>
+                    <span class="eyebrow">Datenschutz</span>
+                    <h2>Datenschutzerklaerung</h2>
+                    <p>Die wichtigsten Informationen zur Verarbeitung von Login-, Support- und Hosting-Daten auf einen Blick.</p>
+                </div>
+                <button class="close-modal" type="button" onclick="closeDatenschutzModal()" aria-label="Datenschutz schliessen">&times;</button>
+            </div>
+            <div class="legal-scroll-area">
+                <h3>1. Verantwortliche Stelle</h3>
+                <p>Verantwortlich fuer die Datenverarbeitung auf dieser Website ist Creeperflori. Kontakt: creeper.flori44@gmail.com und Discord: Creeperflori.</p>
+                <h3>2. Hosting</h3>
+                <p>Die Website wird ueber GitHub Pages ausgeliefert. Beim Aufruf koennen technisch notwendige Server-Logdaten wie IP-Adresse, Browsertyp und Zugriffszeit verarbeitet werden.</p>
+                <h3>3. Registrierung und Login</h3>
+                <p>Fuer Community-Konten verwenden wir Google Firebase Authentication. Verarbeitet werden E-Mail-Adresse und Passwort, wobei das Passwort verschluesselt gespeichert wird.</p>
+                <h3>4. Support-Anfragen</h3>
+                <p>Nachrichten aus dem Support-Formular speichern wir in Firebase Firestore, damit wir Anliegen bearbeiten und beantworten koennen. Je nach Kategorie koennen zusaetzliche optionale Angaben wie Discord-Name oder Minecraft-Daten erfasst werden.</p>
+                <h3>5. Lokaler Speicher</h3>
+                <p>Das Login-System nutzt technischen lokalen Speicher im Browser, damit der Anmeldestatus erhalten bleibt. Es werden keine Werbe- oder Tracking-Cookies eingesetzt.</p>
+                <h3>6. Rechte</h3>
+                <p>Du kannst jederzeit Auskunft, Berichtigung oder Loeschung deiner Daten anfragen. Kontaktiere uns dafuer einfach ueber das Support-Formular oder per E-Mail.</p>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 Creeperflori. Alle Rechte vorbehalten.</p>
-        </div>
-    </footer>
+    </div>
+
+    <div class="site-status" aria-live="polite">
+        <div id="site-status-message" class="status-box"></div>
+    </div>
 
     <script src="js/config.js"></script>
     <script src="js/app.js"></script>

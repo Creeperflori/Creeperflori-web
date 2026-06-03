@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fillypath Minecraft | Creeperflori</title>
+    <title>Fillypath | Creeperflori</title>
+    <meta name="description" content="Alles rund um Fillypath: Server-Infos, Patchnotes und Support fuer das Minecraft-Projekt.">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -13,136 +14,235 @@
 <body>
     <canvas id="bgCanvas"></canvas>
 
-    <nav>
-        <a href="index.html">NEWS</a>
-        <a href="sozial.html">SOCIAL</a>
-        <a href="fillypath.html">FILLYPATH</a>
-        <a href="creepercave.html">CREEPERCAVE</a>
-        <a href="admin.html" id="admin-nav-link" style="display:none; color:#ff9900;">👑 ADMIN</a>
-        <a class="user-login-btn" onclick="openLoginModal()">Login</a>
-    </nav>
+    <div class="page-shell">
+        <header class="site-header">
+            <div class="nav-wrap">
+                <a class="brand-mark" href="start.html">
+                    <img class="brand-avatar" src="img/Creeperflori.png" alt="Creeperflori">
+                    <span class="brand-copy">
+                        <span class="brand-title">Creeperflori</span>
+                        <span class="brand-subtitle">Community Hub</span>
+                    </span>
+                </a>
+                <nav class="nav-links" aria-label="Hauptnavigation">
+                    <a class="nav-link" href="start.html">News</a>
+                    <a class="nav-link" href="sozial.html">Social</a>
+                    <a class="nav-link is-active" href="fillypath.html">Fillypath</a>
+                    <a class="nav-link" href="creepercave.html">Creepercave</a>
+                    <a class="nav-link admin-link" href="admin.html" id="admin-nav-link" style="display:none;">Admin</a>
+                </nav>
+                <div class="nav-actions">
+                    <button class="user-login-btn" type="button" onclick="openLoginModal()">Login</button>
+                </div>
+            </div>
+        </header>
 
-    <div id="login-modal" class="modal-overlay">
+        <main class="page-main">
+            <section class="hero">
+                <div class="hero-content">
+                    <span class="eyebrow">Minecraft Projekt</span>
+                    <h1>Fillypath ist der Treffpunkt fuer Abenteuer, Bauprojekte und Server-Updates.</h1>
+                    <p>Hier findest du die aktuelle Server-IP, wichtige Patchnotes und einen direkten Weg fuer Support bei Bugs, Bans oder Community-Fragen.</p>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary" type="button" onclick="copyServerIp()">Server-IP kopieren</button>
+                        <a class="btn btn-secondary" href="#fillypath-news-list">Patchnotes ansehen</a>
+                    </div>
+                </div>
+                <aside class="hero-panel">
+                    <img class="hero-avatar" src="img/Creeperflori.png" alt="Creeperflori Profilbild">
+                    <div class="hero-card-list">
+                        <div class="hero-mini-card">
+                            <strong id="text-ip">fillypath.de</strong>
+                            <span>Aktuelle Server-IP fuer den schnellen Einstieg.</span>
+                        </div>
+                        <div class="hero-mini-card">
+                            <strong>Survival+</strong>
+                            <span>Community-orientiertes Gameplay mit eigenem Projektcharakter.</span>
+                        </div>
+                        <div class="hero-mini-card">
+                            <strong>Patchnotes</strong>
+                            <span>Alle Aenderungen landen direkt unten im Feed.</span>
+                        </div>
+                        <div class="hero-mini-card">
+                            <strong>Support</strong>
+                            <span>Fehler, Fragen und Minecraft-Themen direkt melden.</span>
+                        </div>
+                    </div>
+                </aside>
+            </section>
+
+            <section class="section">
+                <div class="stats-grid">
+                    <article class="info-card">
+                        <h3>Schneller Einstieg</h3>
+                        <p>Kopiere die IP direkt aus dem Hero und komm ohne Umwege auf den Server.</p>
+                    </article>
+                    <article class="info-card">
+                        <h3>Mehr Klarheit</h3>
+                        <p>Fillypath-News sind jetzt visuell getrennt und nicht mehr zwischen allgemeinen Website-News versteckt.</p>
+                    </article>
+                    <article class="info-card">
+                        <h3>Besserer Support</h3>
+                        <p>Das Formular fragt Minecraft-spezifische Infos nur dann ab, wenn sie wirklich gebraucht werden.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-header">
+                    <div>
+                        <span class="eyebrow">Patchnotes</span>
+                        <h2 class="section-title">Server-Updates und Aenderungen</h2>
+                    </div>
+                    <p>Alle Fillypath-Eintraege werden automatisch aus der News-Sammlung geholt und hier separat angezeigt.</p>
+                </div>
+                <div id="fillypath-news-list" class="news-panel">
+                    <div class="empty-state">
+                        <h3>Lade Server-Updates...</h3>
+                        <p>Die neuesten Fillypath-News werden vorbereitet.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="support-footer">
+            <div class="page-footer-inner">
+                <section class="support-shell">
+                    <div class="support-shell-inner">
+                        <div class="support-copy">
+                            <span class="eyebrow">Fillypath Support</span>
+                            <h2>Bugs, Fragen oder Probleme direkt melden</h2>
+                            <p>Wenn etwas auf dem Server nicht klappt, landet deine Nachricht mit den richtigen Zusatzinfos sofort im Admin-Dashboard.</p>
+                            <div class="support-highlights">
+                                <span class="pill">Minecraft-Daten nur bei Bedarf</span>
+                                <span class="pill">Schneller Rueckkanal fuer technische Fragen</span>
+                                <span class="pill">Patchnotes und Support an einem Ort</span>
+                            </div>
+                        </div>
+                        <div>
+                            <form id="support-form" class="support-form" onsubmit="sendSupport(event)">
+                                <div class="form-grid two-col">
+                                    <div class="field-group">
+                                        <label for="sup-name">Dein Name</label>
+                                        <input class="editor-input" type="text" id="sup-name" placeholder="Wie sollen wir dich ansprechen?" required>
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="sup-contact">Kontakt fuer Rueckfragen</label>
+                                        <input class="editor-input guest-contact" type="text" id="sup-contact" placeholder="E-Mail oder Discord" style="display:none;">
+                                    </div>
+                                </div>
+                                <div class="field-group">
+                                    <label for="sup-category">Thema</label>
+                                    <select class="editor-input" id="sup-category" onchange="toggleSupportFields()">
+                                        <option value="allgemein">Allgemeine Frage</option>
+                                        <option value="discord">Discord Support</option>
+                                        <option value="minecraft" selected>Fillypath (Minecraft)</option>
+                                    </select>
+                                </div>
+                                <div id="discord-fields" class="field-group" style="display:none;">
+                                    <label for="sup-discord-name">Dein Discord-Name</label>
+                                    <input class="editor-input" type="text" id="sup-discord-name" placeholder="z. B. creeperflori">
+                                </div>
+                                <div id="mc-fields" class="form-grid two-col" style="display:grid;">
+                                    <div class="field-group">
+                                        <label for="sup-mc-name">Minecraft Ingame-Name</label>
+                                        <input class="editor-input" type="text" id="sup-mc-name" placeholder="Dein Ingame-Name">
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="sup-platform">Plattform</label>
+                                        <select class="editor-input" id="sup-platform">
+                                            <option value="PC / Java">PC / Java</option>
+                                            <option value="Handy / Tablet">Handy / Tablet</option>
+                                            <option value="Konsole">Konsole</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="field-group">
+                                    <label for="sup-msg">Nachricht</label>
+                                    <textarea class="editor-input" id="sup-msg" rows="4" placeholder="Was ist passiert oder wobei brauchst du Hilfe?" required></textarea>
+                                </div>
+                                <div class="status-box" data-status-for="support-form"></div>
+                                <div class="button-row compact">
+                                    <button class="save-btn btn-highlight" type="submit">Fillypath-Support senden</button>
+                                    <button class="save-btn btn-outline" type="button" onclick="openDatenschutzModal()">Datenschutz ansehen</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+                <div class="footer-bottom">
+                    <span>&copy; 2026 Creeperflori. Alle Rechte vorbehalten.</span>
+                    <span>Fillypath-Infos, Patchnotes und Support in einem Flow.</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="login-modal" class="modal-overlay" aria-hidden="true">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeLoginModal()">&times;</span>
-            <h2 style="margin-bottom: 20px;">Community Login</h2>
-            <form onsubmit="event.preventDefault(); handleAuth('login');">
-                <input type="email" id="auth-email" placeholder="E-Mail Adresse" required class="editor-input">
-                <input type="password" id="auth-pass" placeholder="Passwort" required class="editor-input" style="margin-bottom: 5px;">
-                <div style="text-align: right; margin-bottom: 15px;">
-                    <a href="#" onclick="resetPassword()" style="color: var(--primary); font-size: 0.85rem; text-decoration: none;">Passwort vergessen?</a>
+            <div class="modal-header">
+                <div>
+                    <span class="eyebrow">Community Login</span>
+                    <h2>Einloggen oder direkt registrieren</h2>
+                    <p>Verwalte dein Profil, erhalte Zugriff auf Community-Funktionen und betrete den Admin-Bereich mit dem richtigen Konto.</p>
                 </div>
-                <div class="legal-notice" style="margin-bottom: 15px; font-size: 0.85rem;">
+                <button class="close-modal" type="button" onclick="closeLoginModal()" aria-label="Modal schliessen">&times;</button>
+            </div>
+            <form id="login-form" class="form-block" onsubmit="event.preventDefault(); handleAuth('login');">
+                <div class="field-group">
+                    <label for="auth-email">E-Mail-Adresse</label>
+                    <input class="editor-input" type="email" id="auth-email" placeholder="name@example.com" required autocomplete="email">
+                </div>
+                <div class="field-group">
+                    <label for="auth-pass">Passwort</label>
+                    <input class="editor-input" type="password" id="auth-pass" placeholder="Dein Passwort" required autocomplete="current-password">
+                </div>
+                <div class="checkbox-row">
                     <input type="checkbox" id="legal-check">
-                    <label for="legal-check">Ich akzeptiere die <a href="#" onclick="openDatenschutzModal(); return false;" style="color:var(--primary);">Datenschutzerklärung</a>.</label>
+                    <label for="legal-check">Ich akzeptiere die <a class="link-inline" href="#" onclick="openDatenschutzModal(); return false;">Datenschutzerklaerung</a> fuer die Registrierung.</label>
                 </div>
-                <button type="submit" class="save-btn btn-highlight" style="margin-bottom: 10px;">Einloggen</button>
-                <button type="button" onclick="handleAuth('register')" class="save-btn btn-outline">Registrieren</button>
+                <div class="status-box" data-status-for="login-form"></div>
+                <div class="button-pair">
+                    <button class="save-btn btn-highlight" type="submit">Einloggen</button>
+                    <button class="save-btn btn-outline" type="button" data-register-button onclick="handleAuth('register')">Registrieren</button>
+                </div>
+                <div class="inline-actions">
+                    <button class="save-btn btn-secondary" type="button" onclick="resetPassword()">Passwort zuruecksetzen</button>
+                </div>
             </form>
         </div>
     </div>
 
-    <div id="datenschutz-modal" class="modal-overlay">
+    <div id="datenschutz-modal" class="modal-overlay" aria-hidden="true">
         <div class="modal-content datenschutz-box">
-            <span class="close-modal" onclick="closeDatenschutzModal()">&times;</span>
-            <h2 style="color: var(--primary); margin-bottom: 15px;">Datenschutzerklärung</h2>
+            <div class="modal-header">
+                <div>
+                    <span class="eyebrow">Datenschutz</span>
+                    <h2>Datenschutzerklaerung</h2>
+                    <p>Die wichtigsten Informationen zur Verarbeitung von Login-, Support- und Hosting-Daten auf einen Blick.</p>
+                </div>
+                <button class="close-modal" type="button" onclick="closeDatenschutzModal()" aria-label="Datenschutz schliessen">&times;</button>
+            </div>
             <div class="legal-scroll-area">
-                <p>Diese Datenschutzerklärung klärt dich über die Art, den Umfang und den Zweck der Verarbeitung von personenbezogenen Daten auf unserer Website auf. Sie entspricht den Anforderungen des revidierten Schweizer Datenschutzgesetzes (revDSG) sowie der Europäischen Datenschutz-Grundverordnung (DSGVO).</p>
-
-                <p style="margin-top: 15px; color: var(--primary);"><strong>1. Verantwortliche Stelle</strong></p>
-                <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:<br>
-                <strong>CReeperflori</strong><br>
-                <br>
-                E-Mail: creeper.flori44@gmail.com<br>
-                Discord: Creeperflori</p>
-
-                <p style="margin-top: 15px; color: var(--primary);"><strong>2. Welche Daten wir erfassen und Rechtsgrundlage</strong></p>
-                <p><strong>a) Hosting:</strong> Diese Website wird über "GitHub Pages" gehostet. Bei jedem Aufruf der Webseite erfasst das System automatisch Logfiles (z.B. IP-Adresse, Browsertyp). Dies ist technisch notwendig (Art. 31 Abs. 1 DSG / Art. 6 Abs. 1 lit. f DSGVO).</p>
-                <p><strong>b) Registrierung & Login:</strong> Wenn du dir einen Account erstellst, speichern wir E-Mail-Adresse und Passwort verschlüsselt, um dir Zugang zu gewähren (Art. 31 Abs. 1 DSG / Art. 6 Abs. 1 lit. a und b DSGVO).</p>
-                <p><strong>c) Support-Formular:</strong> Kontaktierst du uns, erfassen wir Name, E-Mail/Discord, Nachricht und optional Spieldaten zur Bearbeitung deines Anliegens (Art. 31 Abs. 1 DSG / Art. 6 Abs. 1 lit. b DSGVO).</p>
-
-                <p style="margin-top: 15px; color: var(--primary);"><strong>3. Weitergabe von Daten an Dritte (Google Firebase)</strong></p>
-                <p>Für unsere Datenbank und Logins nutzen wir Google Firebase (Google Ireland Limited / Google LLC, USA). Passwörter werden streng verschlüsselt gespeichert. Google stützt sich für Datenübermittlungen in die USA auf Standardvertragsklauseln (SCC) und das EU-US/Swiss-US Data Privacy Framework.</p>
-
-                <p style="margin-top: 15px; color: var(--primary);"><strong>4. Cookies & Lokaler Speicher</strong></p>
-                <p>Wir verwenden keine Werbe-Cookies. Das Login-System nutzt jedoch den lokalen Speicher deines Browsers (Local/Session Storage), um den Anmeldestatus zu halten. Dies ist technisch zwingend erforderlich.</p>
-
-                <p style="margin-top: 15px; color: var(--primary);"><strong>5. Dauer der Speicherung & Deine Rechte</strong></p>
-                <p>Wir speichern Daten nur so lange wie nötig. Du hast jederzeit das Recht auf Auskunft, Berichtigung und Löschung deines Accounts und deiner Daten. Schreibe uns dazu einfach über das Support-Formular.</p>
+                <h3>1. Verantwortliche Stelle</h3>
+                <p>Verantwortlich fuer die Datenverarbeitung auf dieser Website ist Creeperflori. Kontakt: creeper.flori44@gmail.com und Discord: Creeperflori.</p>
+                <h3>2. Hosting</h3>
+                <p>Die Website wird ueber GitHub Pages ausgeliefert. Beim Aufruf koennen technisch notwendige Server-Logdaten wie IP-Adresse, Browsertyp und Zugriffszeit verarbeitet werden.</p>
+                <h3>3. Registrierung und Login</h3>
+                <p>Fuer Community-Konten verwenden wir Google Firebase Authentication. Verarbeitet werden E-Mail-Adresse und Passwort, wobei das Passwort verschluesselt gespeichert wird.</p>
+                <h3>4. Support-Anfragen</h3>
+                <p>Nachrichten aus dem Support-Formular speichern wir in Firebase Firestore, damit wir Anliegen bearbeiten und beantworten koennen. Je nach Kategorie koennen zusaetzliche optionale Angaben wie Discord-Name oder Minecraft-Daten erfasst werden.</p>
+                <h3>5. Lokaler Speicher</h3>
+                <p>Das Login-System nutzt technischen lokalen Speicher im Browser, damit der Anmeldestatus erhalten bleibt. Es werden keine Werbe- oder Tracking-Cookies eingesetzt.</p>
+                <h3>6. Rechte</h3>
+                <p>Du kannst jederzeit Auskunft, Berichtigung oder Loeschung deiner Daten anfragen. Kontaktiere uns dafuer einfach ueber das Support-Formular oder per E-Mail.</p>
             </div>
         </div>
     </div>
 
-    <div class="container">
-        <header class="chibi-header">
-            <img src="img/Creeperflori.png" alt="Creeperflori" class="round-chibi" style="border-color: #32CD32; box-shadow: 0 0 20px rgba(50, 205, 50, 0.5);">
-            <h1 style="color: #32CD32;">Fillypath</h1>
-            <p style="color: #ccc;">Das Minecraft server Projekt</p>
-        </header>
-
-        <div class="project-card" style="text-align: center; max-width: 700px; margin: 0 auto; margin-bottom: 40px; border-left-color: #32CD32;">
-            <h2 style="margin-bottom: 20px; color: white;">Komm auf den Server! 🌍</h2>
-            <p style="margin-bottom: 20px; font-size: 1.1rem; color: #ccc;">
-                Erlebe mit uns ein einzigartiges Survival-Abenteuer. Baue epische Städte, handle mit anderen Spielern und erkunde die Welt von Fillypath.
-            </p>
-            
-            <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 8px; border: 1px dashed #32CD32; margin-bottom: 20px;">
-                <p style="font-size: 0.9rem; color: gray; margin-bottom: 5px;">Server IP-Adresse:</p>
-                <h3 id="text-ip" style="color: #32CD32; letter-spacing: 1px; user-select: all;">fillypath.de</h3>
-            </div>
-
-            <button onclick="navigator.clipboard.writeText(document.getElementById('text-ip').innerText); alert('IP kopiert!');" class="save-btn btn-highlight" style="display: inline-block; width: auto; padding: 12px 30px;">
-                IP KOPIEREN
-            </button>
-        </div>
-
-        <hr style="border-color: #333; margin: 40px 0;">
-
-        <h2 style="text-align: center; color: var(--primary); margin-bottom: 20px;">🛠️ Patchnotes & Updates</h2>
-        <div id="fillypath-news-list">
-            <p style="text-align:center; color:gray;">Lade Server-Updates...</p>
-        </div>
+    <div class="site-status" aria-live="polite">
+        <div id="site-status-message" class="status-box"></div>
     </div>
-
-    <footer class="support-footer">
-        <div class="container">
-            <div class="support-box">
-                <h2 style="text-align: center; margin-bottom: 10px;">🆘 Support & Kontakt</h2>
-                <form onsubmit="sendSupport(event)">
-                    <input type="text" id="sup-name" placeholder="Dein Name" required class="editor-input">
-                    <input type="text" id="sup-contact" class="guest-contact editor-input" placeholder="E-Mail oder Discord für Rückfragen" style="display:none; border-color: #ff9900;">
-                    
-                    <select id="sup-category" class="editor-input" onchange="toggleSupportFields()">
-                        <option value="allgemein">Allgemeine Frage</option>
-                        <option value="discord">Discord Support</option>
-                        <option value="minecraft" selected>Fillypath (Minecraft)</option>
-                    </select>
-                    
-                    <div id="discord-fields" style="display: none; margin-bottom: 15px;">
-                        <input type="text" id="sup-discord-name" placeholder="Dein Discord Name" class="editor-input" style="border-color: #5865F2;">
-                    </div>
-                    
-                    <div id="mc-fields" style="display: block; margin-bottom: 15px;">
-                        <input type="text" id="sup-mc-name" placeholder="Minecraft Ingame Name" class="editor-input" style="border-color: #32CD32; margin-bottom: 10px;">
-                        <select id="sup-platform" class="editor-input" style="border-color: #32CD32;">
-                            <option value="PC / Java">PC / Java</option>
-                            <option value="Handy/Tablet">Handy / Tablet</option>
-                            <option value="Konsole">Konsole</option>
-                        </select>
-                    </div>
-                    
-                    <textarea id="sup-msg" placeholder="Hast du einen Bug gefunden oder wurdest gebannt?" rows="4" required class="editor-input"></textarea>
-                    <button type="submit" class="save-btn btn-highlight">Senden</button>
-                </form>
-                <p style="text-align:center; margin-top:15px; font-size:0.8rem;">
-                    <a href="#" onclick="openDatenschutzModal(); return false;" style="color:#888;">Datenschutz</a>
-                </p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 Creeperflori. Alle Rechte vorbehalten.</p>
-        </div>
-    </footer>
 
     <script src="js/config.js"></script>
     <script src="js/app.js"></script>

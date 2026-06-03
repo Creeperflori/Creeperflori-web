@@ -4,157 +4,169 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Datenschutz | Creeperflori</title>
-    
+    <meta name="description" content="Datenschutzhinweise fuer Creeperflori, Firebase-Login, Support und Hosting ueber GitHub Pages.">
     <link rel="stylesheet" href="css/style.css">
-    
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 </head>
 <body>
-
     <canvas id="bgCanvas"></canvas>
 
-    <nav>
-        <a href="index.html">NEWS</a>
-        <a href="sozial.html">SOCIAL</a>
-        <a href="fillypath.html">FILLYPATH</a>
-        <a href="creepercave.html">CREEPERCAVE</a>
-        
-        <a href="admin.html" id="admin-nav-link" style="display:none; color:#ff9900; font-weight:bold; text-shadow: 0 0 10px rgba(255,153,0,0.5);">👑 ADMIN</a>
-        
-        <a class="user-login-btn" onclick="openLoginModal()">Login</a>
-    </nav>
+    <div class="page-shell">
+        <header class="site-header">
+            <div class="nav-wrap">
+                <a class="brand-mark" href="start.html">
+                    <img class="brand-avatar" src="img/Creeperflori.png" alt="Creeperflori">
+                    <span class="brand-copy">
+                        <span class="brand-title">Creeperflori</span>
+                        <span class="brand-subtitle">Community Hub</span>
+                    </span>
+                </a>
+                <nav class="nav-links" aria-label="Hauptnavigation">
+                    <a class="nav-link" href="start.html">News</a>
+                    <a class="nav-link" href="sozial.html">Social</a>
+                    <a class="nav-link" href="fillypath.html">Fillypath</a>
+                    <a class="nav-link" href="creepercave.html">Creepercave</a>
+                    <a class="nav-link admin-link" href="admin.html" id="admin-nav-link" style="display:none;">Admin</a>
+                </nav>
+                <div class="nav-actions">
+                    <button class="user-login-btn" type="button" onclick="openLoginModal()">Login</button>
+                </div>
+            </div>
+        </header>
 
-    <div id="login-modal" class="modal-overlay">
-        <div id="login-modal" class="modal-overlay">
+        <main class="page-main">
+            <section class="hero">
+                <div class="hero-content">
+                    <span class="eyebrow">Rechtliches</span>
+                    <h1>Datenschutz klar, sichtbar und ohne Umwege erklaert.</h1>
+                    <p>Diese Seite sammelt die wichtigsten Informationen zur Verarbeitung von Hosting-, Login- und Support-Daten auf Creeperflori in einer lesbaren Form.</p>
+                    <div class="hero-actions">
+                        <a class="btn btn-primary" href="#legal-copy">Zur Erklaerung</a>
+                        <button class="btn btn-secondary" type="button" onclick="openLoginModal()">Zum Login</button>
+                    </div>
+                </div>
+                <aside class="hero-panel">
+                    <img class="hero-avatar" src="img/Creeperflori.png" alt="Creeperflori Profilbild">
+                    <div class="hero-card-list">
+                        <div class="hero-mini-card">
+                            <strong>GitHub Pages</strong>
+                            <span>Hosting der statischen Website.</span>
+                        </div>
+                        <div class="hero-mini-card">
+                            <strong>Firebase Auth</strong>
+                            <span>Verwaltet Registrierung und Login.</span>
+                        </div>
+                        <div class="hero-mini-card">
+                            <strong>Firestore</strong>
+                            <span>Speichert News und Support-Anfragen.</span>
+                        </div>
+                        <div class="hero-mini-card">
+                            <strong>Deine Rechte</strong>
+                            <span>Auskunft, Berichtigung und Loeschung sind moeglich.</span>
+                        </div>
+                    </div>
+                </aside>
+            </section>
+
+            <section class="section" id="legal-copy">
+                <div class="surface-panel legal-copy">
+                    <h2>1. Verantwortliche Stelle</h2>
+                    <p>Verantwortlich fuer die Datenverarbeitung auf dieser Website ist Creeperflori. Kontakt: creeper.flori44@gmail.com und Discord: Creeperflori.</p>
+
+                    <h2>2. Hosting ueber GitHub Pages</h2>
+                    <p>Die Website wird ueber GitHub Pages ausgeliefert. Beim Besuch der Seite koennen technische Logdaten wie IP-Adresse, Browsertyp und Zeitpunkt des Zugriffs verarbeitet werden, um die Seite sicher und stabil bereitzustellen.</p>
+
+                    <h2>3. Registrierung und Login ueber Firebase Authentication</h2>
+                    <p>Wenn du ein Community-Konto erstellst oder dich einloggst, werden E-Mail-Adresse und Passwort ueber Google Firebase Authentication verarbeitet. Das Passwort wird dabei verschluesselt gespeichert. Die Verarbeitung dient der Bereitstellung des Community-Logins.</p>
+
+                    <h2>4. Support-Formular und Daten in Firestore</h2>
+                    <p>Support-Anfragen aus dem Footer-Formular speichern wir in Firebase Firestore. Dazu gehoeren Name, Nachricht, Kontaktmethode und je nach Kategorie optionale Zusatzinformationen wie Discord-Name oder Minecraft-Daten.</p>
+
+                    <h2>5. Lokaler Speicher im Browser</h2>
+                    <p>Damit dein Login-Status erhalten bleibt, nutzt Firebase technischen lokalen Speicher des Browsers. Es werden keine Werbe- oder Tracking-Cookies fuer Marketingzwecke eingesetzt.</p>
+
+                    <h2>6. Deine Rechte</h2>
+                    <ul>
+                        <li>Du kannst jederzeit Auskunft ueber gespeicherte Daten anfragen.</li>
+                        <li>Du kannst Berichtigung oder Loeschung deines Kontos und deiner Support-Daten verlangen.</li>
+                        <li>Du kannst eine erteilte Einwilligung fuer die Zukunft widerrufen.</li>
+                    </ul>
+                    <p>Wenn du eines dieser Rechte ausueben moechtest, nutze bitte das Support-Formular oder melde dich per E-Mail.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="login-modal" class="modal-overlay" aria-hidden="true">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeLoginModal()">&times;</span>
-            <h2 style="margin-bottom: 20px; color: white;">Community Login</h2>
-            <form onsubmit="event.preventDefault(); handleAuth('login');">
-                <input type="email" id="auth-email" placeholder="E-Mail Adresse" required autocomplete="email">
-                
-                <input type="password" id="auth-pass" placeholder="Passwort" required autocomplete="current-password" style="margin-bottom: 5px;">
-                
-                <div style="text-align: right; margin-bottom: 15px;">
-                    <a href="#" onclick="resetPassword()" style="color: var(--primary); font-size: 0.85rem; text-decoration: none;">Passwort vergessen?</a>
+            <div class="modal-header">
+                <div>
+                    <span class="eyebrow">Community Login</span>
+                    <h2>Einloggen oder direkt registrieren</h2>
+                    <p>Verwalte dein Profil, erhalte Zugriff auf Community-Funktionen und betrete den Admin-Bereich mit dem richtigen Konto.</p>
                 </div>
-
-                <div class="legal-notice">
+                <button class="close-modal" type="button" onclick="closeLoginModal()" aria-label="Modal schliessen">&times;</button>
+            </div>
+            <form id="login-form" class="form-block" onsubmit="event.preventDefault(); handleAuth('login');">
+                <div class="field-group">
+                    <label for="auth-email">E-Mail-Adresse</label>
+                    <input class="editor-input" type="email" id="auth-email" placeholder="name@example.com" required autocomplete="email">
+                </div>
+                <div class="field-group">
+                    <label for="auth-pass">Passwort</label>
+                    <input class="editor-input" type="password" id="auth-pass" placeholder="Dein Passwort" required autocomplete="current-password">
+                </div>
+                <div class="checkbox-row">
                     <input type="checkbox" id="legal-check">
-                    <label for="legal-check">Ich akzeptiere die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a>.</label>
+                    <label for="legal-check">Ich akzeptiere die <a class="link-inline" href="#" onclick="openDatenschutzModal(); return false;">Datenschutzerklaerung</a> fuer die Registrierung.</label>
                 </div>
-                <button type="submit" class="save-btn">Einloggen</button>
-                <button type="button" onclick="handleAuth('register')" class="save-btn btn-outline">Registrieren</button>
+                <div class="status-box" data-status-for="login-form"></div>
+                <div class="button-pair">
+                    <button class="save-btn btn-highlight" type="submit">Einloggen</button>
+                    <button class="save-btn btn-outline" type="button" data-register-button onclick="handleAuth('register')">Registrieren</button>
+                </div>
+                <div class="inline-actions">
+                    <button class="save-btn btn-secondary" type="button" onclick="resetPassword()">Passwort zuruecksetzen</button>
+                </div>
             </form>
         </div>
     </div>
 
-
-    <div class="container">
-        <header class="chibi-header">
-            <h1 style="color: var(--primary);">Datenschutzerklärung</h1>
-        </header>
-
-        <div class="project-card" style="border-left-color: #555;">
-            
-            <h2 style="margin-bottom: 15px;">1. Verantwortlicher für die Datenverarbeitung</h2>
-            <p style="color: #ccc; margin-bottom: 25px;">
-                Verantwortlicher im Sinne der Datenschutz-Grundverordnung (DSGVO) und des Schweizer Datenschutzgesetzes (DSG) ist:<br><br>
-                <strong>Creeperflori</strong><br>
-                E-Mail: creeper.flori44@gmail.com<br>
-            </p>
-
-            <h2 style="margin-bottom: 15px;">2. Hosting der Website</h2>
-            <h3 style="margin-bottom: 10px; color: white; font-size: 1.1rem;">GitHub Pages</h3>
-            <p style="color: #ccc; margin-bottom: 25px;">
-                Diese Website wird bei GitHub Pages gehostet (Anbieter: GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA). Wenn du unsere Website besuchst, erfasst GitHub standardmäßig Server-Logfiles (z. B. IP-Adresse, Browsertyp, Uhrzeit). Dies ist technisch notwendig, um die Website sicher und zuverlässig bereitzustellen (berechtigtes Interesse gem. Art. 6 Abs. 1 lit. f DSGVO / DSG).
-            </p>
-
-            <h2 style="margin-bottom: 15px;">3. Registrierung & Login (Google Firebase)</h2>
-            <p style="color: #ccc; margin-bottom: 25px;">
-                Für die Registrierung und Anmeldung in unserem Community-Bereich nutzen wir <strong>Firebase Authentication</strong> (bereitgestellt von Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland).<br><br>
-                Wenn du dir ein Konto erstellst, verarbeiten wir deine <strong>E-Mail-Adresse und dein Passwort</strong>. Das Passwort wird dabei stark verschlüsselt gespeichert, sodass wir keinen Zugriff auf das Klartext-Passwort haben. Die Verarbeitung erfolgt auf Grundlage deiner Einwilligung (Art. 6 Abs. 1 lit. a DSGVO / DSG) sowie zur Erfüllung des Nutzungsvertrags (Bereitstellung des Logins). Firebase speichert diese Daten auf Servern von Google, teilweise auch in den USA. Standardvertragsklauseln sichern hierbei das Datenschutzniveau ab.
-            </p>
-
-            <h2 style="margin-bottom: 15px;">4. Support-Formular (Firebase Firestore)</h2>
-            <p style="color: #ccc; margin-bottom: 25px;">
-                Wenn du uns über das Formular im Footer eine Nachricht sendest, speichern wir die von dir angegebenen Daten (Name, Inhalt der Nachricht sowie den Zeitpunkt) in unserer Datenbank, um deine Anfrage bearbeiten zu können. Hierfür nutzen wir <strong>Firebase Cloud Firestore</strong>. Diese Daten geben wir nicht ohne deine Einwilligung weiter und löschen sie, sobald der Zweck der Speicherung entfällt.
-            </p>
-
-            <h2 style="margin-bottom: 15px;">5. Cookies und lokaler Speicher</h2>
-            <p style="color: #ccc; margin-bottom: 25px;">
-                Um dich nach dem Login auf der Seite eingeloggt zu halten, nutzt Firebase den sogenannten <strong>Local Storage / IndexedDB</strong> deines Browsers. Dabei handelt es sich um technisch zwingend notwendige Daten (Token), ohne die der Community-Bereich nicht funktionieren würde. Wir verwenden keine Tracking- oder Werbe-Cookies.
-            </p>
-
-            <h2 style="margin-bottom: 15px;">6. Deine Rechte (DSGVO & DSG)</h2>
-            <p style="color: #ccc; margin-bottom: 10px;">Du hast jederzeit das Recht auf:</p>
-            <ul style="color: #ccc; margin-bottom: 25px; margin-left: 20px; line-height: 1.8;">
-                <li><strong>Auskunft:</strong> Du kannst eine Kopie deiner gespeicherten Daten anfordern.</li>
-                <li><strong>Löschung:</strong> Du kannst die Löschung deines Kontos und deiner Nachrichten verlangen (sende uns dazu einfach eine Nachricht oder E-Mail).</li>
-                <li><strong>Widerruf:</strong> Du kannst eine erteilte Einwilligung jederzeit für die Zukunft widerrufen.</li>
-            </ul>
-            <p style="color: #ccc; margin-bottom: 10px;">
-                Wenn du eines dieser Rechte ausüben möchtest, kontaktiere uns einfach unter der oben angegebenen E-Mail-Adresse.
-            </p>
-
+    <div id="datenschutz-modal" class="modal-overlay" aria-hidden="true">
+        <div class="modal-content datenschutz-box">
+            <div class="modal-header">
+                <div>
+                    <span class="eyebrow">Datenschutz</span>
+                    <h2>Datenschutzerklaerung</h2>
+                    <p>Die wichtigsten Informationen zur Verarbeitung von Login-, Support- und Hosting-Daten auf einen Blick.</p>
+                </div>
+                <button class="close-modal" type="button" onclick="closeDatenschutzModal()" aria-label="Datenschutz schliessen">&times;</button>
+            </div>
+            <div class="legal-scroll-area">
+                <h3>1. Verantwortliche Stelle</h3>
+                <p>Verantwortlich fuer die Datenverarbeitung auf dieser Website ist Creeperflori. Kontakt: creeper.flori44@gmail.com und Discord: Creeperflori.</p>
+                <h3>2. Hosting</h3>
+                <p>Die Website wird ueber GitHub Pages ausgeliefert. Beim Aufruf koennen technisch notwendige Server-Logdaten wie IP-Adresse, Browsertyp und Zugriffszeit verarbeitet werden.</p>
+                <h3>3. Registrierung und Login</h3>
+                <p>Fuer Community-Konten verwenden wir Google Firebase Authentication. Verarbeitet werden E-Mail-Adresse und Passwort, wobei das Passwort verschluesselt gespeichert wird.</p>
+                <h3>4. Support-Anfragen</h3>
+                <p>Nachrichten aus dem Support-Formular speichern wir in Firebase Firestore, damit wir Anliegen bearbeiten und beantworten koennen. Je nach Kategorie koennen zusaetzliche optionale Angaben wie Discord-Name oder Minecraft-Daten erfasst werden.</p>
+                <h3>5. Lokaler Speicher</h3>
+                <p>Das Login-System nutzt technischen lokalen Speicher im Browser, damit der Anmeldestatus erhalten bleibt. Es werden keine Werbe- oder Tracking-Cookies eingesetzt.</p>
+                <h3>6. Rechte</h3>
+                <p>Du kannst jederzeit Auskunft, Berichtigung oder Loeschung deiner Daten anfragen. Kontaktiere uns dafuer einfach ueber das Support-Formular oder per E-Mail.</p>
+            </div>
         </div>
     </div>
 
-    <footer class="support-footer">
-        <footer class="support-footer">
-        <div class="footer-content">
-            <div class="footer-branding">
-                <h3>💬 Creeperflori Support</h3>
-                <p>Hast du Fragen oder Probleme? Schreib mir hier direkt eine Nachricht!</p>
-                <div class="footer-links">
-                    <a href="impressum.html">Impressum</a> 
-                    <a href="datenschutz.html">Datenschutz</a>
-                </div>
-            </div>
-
-            <div class="footer-form-box">
-                <form onsubmit="sendSupport(event)">
-                    <input type="text" id="sup-name" placeholder="Dein Name" required class="editor-input">
-                    
-                    <input type="text" id="sup-contact" class="guest-contact editor-input" placeholder="E-Mail / Discord für Rückfragen" style="display:none; border-color: #ff9900;">
-
-                    <select id="sup-category" class="editor-input" onchange="toggleSupportFields()">
-                        <option value="allgemein">Allgemeine Frage</option>
-                        <option value="discord">Discord Support</option>
-                        <option value="minecraft">Fillypath (Minecraft)</option>
-                    </select>
-
-                    <div id="discord-fields" style="display: none; margin-bottom: 15px;">
-                        <input type="text" id="sup-discord-name" placeholder="Dein Discord Name" class="editor-input" style="border-color: #5865F2;">
-                    </div>
-
-                    <div id="mc-fields" style="display: none; margin-bottom: 15px;">
-                        <input type="text" id="sup-mc-name" placeholder="Minecraft Ingame Name" class="editor-input" style="border-color: #32CD32;">
-                        <select id="sup-platform" class="editor-input" style="border-color: #32CD32;">
-                            <option value="PC / Java">PC / Java</option>
-                            <option value="Handy/Tablet">Handy / Tablet</option>
-                            <option value="Konsole">Konsole (Xbox/PS/Switch)</option>
-                            <option value="Laptop (Bedrock)">Laptop (Windows 10)</option>
-                        </select>
-                    </div>
-
-                    <textarea id="sup-msg" placeholder="Wie kann ich dir helfen?" rows="3" required class="editor-input"></textarea>
-                    
-                    <button type="submit" class="save-btn btn-highlight">Nachricht Senden</button>
-                </form>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <span>&copy; 2026 Creeperflori. Alle Rechte vorbehalten.</span>
-            <span>Made with ❤️ for Community</span>
-        </div>
-    </footer>
-
+    <div class="site-status" aria-live="polite">
+        <div id="site-status-message" class="status-box"></div>
+    </div>
 
     <script src="js/config.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
-
