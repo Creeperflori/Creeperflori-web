@@ -41,31 +41,31 @@
             <section class="hero">
                 <div class="hero-content">
                     <span class="eyebrow">Admin Dashboard</span>
-                    <h1>Verwalte News und Support mit klaren Prioritaeten.</h1>
-                    <p>Das Dashboard trennt das Verfassen neuer Inhalte sauber von eingehenden Support-Tickets und reduziert unnoetige visuelle Unruhe.</p>
+                    <h1>Hier schaltest du Inhalte frei und haeltst die Seite aktuell.</h1>
+                    <p>News, Support und sichtbare Bereiche der Website liegen jetzt an einem Ort, damit du spaeter nicht in den Code musst.</p>
                     <div class="hero-actions">
-                        <a class="btn btn-primary" href="#admin-news-form">News veroeffentlichen</a>
-                        <a class="btn btn-secondary" href="#admin-messages">Tickets ansehen</a>
+                        <a class="btn btn-primary" href="#admin-sections-form">Bereiche freischalten</a>
+                        <a class="btn btn-secondary" href="#admin-news-form">News veroeffentlichen</a>
                     </div>
                 </div>
                 <aside class="hero-panel">
                     <img class="hero-avatar" src="img/Creeperflori.png" alt="Creeperflori Profilbild">
                     <div class="hero-card-list">
                         <div class="hero-mini-card">
-                            <strong>Publishing</strong>
-                            <span>News, Changelogs und Patchnotes in einem Formular.</span>
+                            <strong>Schalter</strong>
+                            <span>Discord, Fillypath, Partnerbereich und Support ein- oder ausblenden.</span>
                         </div>
                         <div class="hero-mini-card">
-                            <strong>Inbox</strong>
-                            <span>Support-Tickets je Kategorie visuell priorisiert.</span>
+                            <strong>News</strong>
+                            <span>Neue Meldungen fuer Startseite oder Fillypath direkt posten.</span>
                         </div>
                         <div class="hero-mini-card">
-                            <strong>Firebase kompatibel</strong>
-                            <span>Bestehende Collections und Felder bleiben erhalten.</span>
+                            <strong>Tickets</strong>
+                            <span>Support-Nachrichten bleiben getrennt und schnell lesbar.</span>
                         </div>
                         <div class="hero-mini-card">
-                            <strong>Weniger Reibung</strong>
-                            <span>Statusmeldungen und Buttons zeigen klar, was gerade passiert.</span>
+                            <strong>Ohne Umweg</strong>
+                            <span>Wenn etwas spaeter live gehen soll, reicht ein Haken im Admin.</span>
                         </div>
                     </div>
                 </aside>
@@ -75,10 +75,70 @@
                 <div class="news-panel">
                     <div class="section-header">
                         <div>
-                            <span class="eyebrow">Content Publishing</span>
+                            <span class="eyebrow">Bereiche freischalten</span>
+                            <h2>Was auf der Website sichtbar sein soll</h2>
+                        </div>
+                        <p>Wenn etwas noch nicht fertig ist, kannst du es hier ausblenden, ohne die Seite umbauen zu muessen.</p>
+                    </div>
+                    <form id="admin-sections-form" class="form-block" onsubmit="saveSectionSettings(event)">
+                        <div class="settings-list">
+                            <label class="settings-item">
+                                <span>
+                                    <strong>Fillypath anzeigen</strong>
+                                    <span>Steuert Minecraft-Bereich, Server-Hinweise und Fillypath-Support.</span>
+                                </span>
+                                <span class="settings-switch">
+                                    <input type="checkbox" data-settings-input="fillypathEnabled" checked>
+                                    <span>Aktiv</span>
+                                </span>
+                            </label>
+                            <label class="settings-item">
+                                <span>
+                                    <strong>Creepercave anzeigen</strong>
+                                    <span>Schaltet den eigenen Discord-Bereich und Discord-Support frei.</span>
+                                </span>
+                                <span class="settings-switch">
+                                    <input type="checkbox" data-settings-input="creepercaveEnabled" checked>
+                                    <span>Aktiv</span>
+                                </span>
+                            </label>
+                            <label class="settings-item">
+                                <span>
+                                    <strong>Partner-Discord anzeigen</strong>
+                                    <span>Zeigt den Partnerblock auf der Social-Seite an.</span>
+                                </span>
+                                <span class="settings-switch">
+                                    <input type="checkbox" data-settings-input="partnerDiscordEnabled" checked>
+                                    <span>Aktiv</span>
+                                </span>
+                            </label>
+                            <label class="settings-item">
+                                <span>
+                                    <strong>Support-Formulare anzeigen</strong>
+                                    <span>Blendet die Kontaktformulare auf allen Seiten ein oder aus.</span>
+                                </span>
+                                <span class="settings-switch">
+                                    <input type="checkbox" data-settings-input="supportEnabled" checked>
+                                    <span>Aktiv</span>
+                                </span>
+                            </label>
+                        </div>
+                        <div class="status-box" data-status-for="admin-sections-form"></div>
+                        <div class="button-row">
+                            <button class="save-btn btn-highlight" type="submit">Freischaltungen speichern</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="news-panel">
+                    <div class="section-header">
+                        <div>
+                            <span class="eyebrow">News</span>
                             <h2>Neue News veroeffentlichen</h2>
                         </div>
-                        <p>Ein sauberer Flow fuer Startseiten-News, Fillypath-Updates und Bild-Uploads.</p>
+                        <p>Fuer kurze Updates, Changelogs oder Fillypath-Neuigkeiten.</p>
                     </div>
                     <form id="admin-news-form" class="form-block" onsubmit="event.preventDefault(); uploadNewsWithImage();">
                         <div class="field-group">
@@ -104,16 +164,16 @@
                         </div>
                         <div class="field-group">
                             <label for="n-content">Inhalt</label>
-                            <textarea class="editor-input" id="n-content" rows="6" placeholder="Was ist neu, wichtig oder geaendert?" required></textarea>
+                            <textarea class="editor-input" id="n-content" rows="6" placeholder="Kurz und normal schreiben reicht hier voellig." required></textarea>
                         </div>
                         <div class="field-group">
                             <label for="n-image">Optionales Bild</label>
                             <input class="editor-input" type="file" id="n-image" accept="image/*">
-                            <p class="helper-text">Bilder werden vor dem Upload komprimiert, damit sie schneller laden.</p>
+                            <p class="helper-text">Das Bild wird vor dem Upload automatisch kleiner gemacht.</p>
                         </div>
                         <div class="status-box" data-status-for="admin-news-form"></div>
                         <div class="button-row">
-                            <button class="save-btn btn-highlight" type="submit" id="post-btn">Beitrag jetzt veroeffentlichen</button>
+                            <button class="save-btn btn-highlight" type="submit" id="post-btn">Beitrag veroeffentlichen</button>
                         </div>
                     </form>
                 </div>
@@ -125,7 +185,7 @@
                         <span class="eyebrow">Support Inbox</span>
                         <h2 class="section-title">Eingehende Nachrichten</h2>
                     </div>
-                    <p>Tickets werden automatisch nach Eingang geladen und nach Kategorie farblich unterschieden.</p>
+                    <p>Hier landen alle Nachrichten, die ueber die Formulare abgeschickt wurden.</p>
                 </div>
                 <div id="admin-messages">
                     <div class="empty-state">

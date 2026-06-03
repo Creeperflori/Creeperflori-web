@@ -41,8 +41,8 @@
             <section class="hero">
                 <div class="hero-content">
                     <span class="eyebrow">Creator Links</span>
-                    <h1>Folge Creeperflori dort, wo die Community lebt.</h1>
-                    <p>Streams, Videos, Shorts und schnelle Updates: Hier findest du alle wichtigen Kanaele und Partner-Links in einem sauberen Ueberblick.</p>
+                    <h1>Hier findest du die normalen Wege nach draussen.</h1>
+                    <p>Twitch, YouTube, TikTok und Instagram sind hier gesammelt, damit du nicht jedes Mal suchen musst.</p>
                     <div class="hero-actions">
                         <a class="btn btn-primary" href="#social-links">Zu den Plattformen</a>
                         <a class="btn btn-secondary" href="creepercave.html">Zum Discord</a>
@@ -53,19 +53,19 @@
                     <div class="hero-card-list">
                         <div class="hero-mini-card">
                             <strong>Live</strong>
-                            <span>Twitch fuer Streams und spontane Sessions.</span>
+                            <span>Twitch fuer Streams und spontane Runden.</span>
                         </div>
                         <div class="hero-mini-card">
                             <strong>Content</strong>
-                            <span>YouTube und TikTok fuer Highlights und Clips.</span>
+                            <span>YouTube und TikTok fuer Videos, Clips und kurze Updates.</span>
                         </div>
                         <div class="hero-mini-card">
-                            <strong>Behind the Scenes</strong>
-                            <span>Instagram fuer Creator-Einblicke und Updates.</span>
+                            <strong>Instagram</strong>
+                            <span>Fuer Bilder, Storys und kleinere Einblicke.</span>
                         </div>
                         <div class="hero-mini-card">
                             <strong>Partner</strong>
-                            <span>Direkter Weg zu befreundeten Communities.</span>
+                            <span>Wenn freigeschaltet, findest du hier auch befreundete Communities.</span>
                         </div>
                     </div>
                 </aside>
@@ -77,7 +77,7 @@
                         <span class="eyebrow">Social Hub</span>
                         <h2 class="section-title">Direkte Wege zu allen Kanaelen</h2>
                     </div>
-                    <p>Alle Buttons werden zentral aus der Konfiguration befuellt und bleiben damit leicht pflegbar.</p>
+                    <p>Die Links werden zentral gepflegt und koennen spaeter leicht angepasst werden.</p>
                 </div>
                 <div class="social-grid">
                     <a id="link-twitch" class="social-btn twitch" href="#" target="_blank" rel="noreferrer">
@@ -117,16 +117,20 @@
                         <span class="eyebrow">Partner & Freunde</span>
                         <h2 class="section-title">Communities, die mit dazugehoeren</h2>
                     </div>
-                    <p>Starke Verbindungen machen eine Creator-Community lebendig. Hier geht es direkt zu Partner-Servern.</p>
+                    <p>Wenn Partnerbereiche aktiv sind, tauchen sie hier auf.</p>
                 </div>
-                <div class="social-grid">
+                <div class="social-grid" data-feature="partnerDiscordEnabled" data-display="grid">
                     <a id="link-discord" class="social-btn discord" href="#" target="_blank" rel="noreferrer">
                         <span class="social-icon">D</span>
                         <span class="social-copy">
                             <strong>DeppenCord</strong>
-                            <span>Partner-Community fuer Austausch, Humor und gemeinsame Aktionen.</span>
+                            <span>Partner-Community fuer Austausch und gemeinsame Aktionen.</span>
                         </span>
                     </a>
+                </div>
+                <div class="notice-card" data-feature-disabled="partnerDiscordEnabled" style="display:none;">
+                    <strong>Partnerbereich ist noch nicht offen</strong>
+                    <p>Hier erscheinen spaeter freigeschaltete Partner oder weitere Community-Links.</p>
                 </div>
             </section>
         </main>
@@ -137,8 +141,8 @@
                     <div class="support-shell-inner">
                         <div class="support-copy">
                             <span class="eyebrow">Support & Kontakt</span>
-                            <h2>Du suchst den richtigen Weg fuer deine Frage?</h2>
-                            <p>Schreib direkt ueber das Formular. Egal ob Creator-Frage, Discord-Thema oder allgemeines Feedback: Wir sehen es im Admin-Bereich.</p>
+                            <h2>Frage, Hinweis oder Problem?</h2>
+                            <p>Dann schreib kurz ueber das Formular. Es landet direkt im Admin-Bereich.</p>
                             <div class="support-highlights">
                                 <span class="pill">Direkter Kontakt ohne extra Plattformwechsel</span>
                                 <span class="pill">Community- und Creator-Themen sauber getrennt</span>
@@ -193,6 +197,10 @@
                                     <button class="save-btn btn-outline" type="button" onclick="openDatenschutzModal()">Datenschutz ansehen</button>
                                 </div>
                             </form>
+                            <div class="notice-card" data-support-disabled style="display:none;">
+                                <strong>Support ist gerade nicht offen</strong>
+                                <p>Das Formular wurde im Admin voruebergehend ausgeblendet.</p>
+                            </div>
                         </div>
                     </div>
                 </section>

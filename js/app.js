@@ -6,6 +6,16 @@ const storage = firebase.storage();
 
 let isAdmin = false;
 let globalStatusTimer = null;
+let siteSettings = null;
+
+const DEFAULT_SITE_SETTINGS = {
+    sections: {
+        fillypathEnabled: true,
+        creepercaveEnabled: true,
+        partnerDiscordEnabled: true,
+        supportEnabled: true
+    }
+};
 
 const TYPE_META = {
     news: { label: "News", color: "#7ee787" },
@@ -18,6 +28,99 @@ const CATEGORY_META = {
     discord: { label: "Discord", color: "#7c8cff" },
     minecraft: { label: "Fillypath", color: "#7ee787" }
 };
+
+function normalizeSiteSettings(data = {}) {
+    return {
+        sections: {
+            ...DEFAULT_SITE_SETTINGS.sections,
+            ...(data.sections || {})
+        }
+    };
+}
+
+function getSettingsDoc() {
+    return db.collection("site_config").doc("main");
+}
+
+function isSectionEnabled(key) {
+    const sections = siteSettings?.sections || DEFAULT_SITE_SETTINGS.sections;
+    return sections[key] !== false;
+}
+
+function toggleElementDisplay(element, shouldShow, displayValue = "") {
+    if (!element) return;
+    element.style.display = shouldShow ? displayValue : "none";
+}
+
+function applySiteSettingsToPage() {
+    const featureElements = document.querySelectorAll("[data-feature]");
+    featureElements.forEach((element) => {
+        const featureKey = element.getAttribute("data-feature");
+        const enabled = isSectionEnabled(featureKey);
+        const displayValue = element.getAttribute("data-display") || "";
+        toggleElementDisplay(element, enabled, displayValue);
+    });
+
+    const disabledInfoElements = document.querySelectorAll("[data-feature-disabled]");
+    disabledInfoElements.forEach((element) => {
+        const featureKey = element.getAttribute("data-feature-disabled");
+        const enabled = isSectionEnabled(featureKey);
+        const displayValue = element.getAttribute("data-display") || "";
+        toggleElementDisplay(element, !enabled, displayValue);
+    });
+
+    const supportForms = document.querySelectorAll("#support-form");
+    supportForms.forEach((form) => {
+        const enabled = isSectionEnabled("supportEnabled");
+        toggleElementDisplay(form, enabled);
+    });
+
+    document.querySelectorAll("[data-support-disabled]").forEach((element) => {
+        toggleElementDisplay(element, !isSectionEnabled("supportEnabled"));
+    });
+
+    const fillypathCategory = document.querySelector('#sup-category option[value="minecraft"]');
+    if (fillypathCategory) {
+        fillypathCategory.disabled = !isSectionEnabled("fillypathEnabled");
+        fillypathCategory.hidden = !isSectionEnabled("fillypathEnabled");
+    }
+
+    const discordCategory = document.querySelector('#sup-category option[value="discord"]');
+    if (discordCategory) {
+        discordCategory.disabled = !isSectionEnabled("creepercaveEnabled");
+        discordCategory.hidden = !isSectionEnabled("creepercaveEnabled");
+    }
+
+    const categorySelect = document.getElementById("sup-category");
+    if (categorySelect) {
+        if (categorySelect.value === "minecraft" && !isSectionEnabled("fillypathEnabled")) {
+            categorySelect.value = "allgemein";
+        }
+        if (categorySelect.value === "discord" && !isSectionEnabled("creepercaveEnabled")) {
+            categorySelect.value = "allgemein";
+        }
+    }
+
+    const featureInputs = document.querySelectorAll("[data-settings-input]");
+    featureInputs.forEach((input) => {
+        const key = input.getAttribute("data-settings-input");
+        input.checked = isSectionEnabled(key);
+    });
+
+    if (document.getElementById("support-form")) {
+        window.toggleSupportFields();
+    }
+}
+
+function watchSiteSettings() {
+    getSettingsDoc().onSnapshot((doc) => {
+        siteSettings = normalizeSiteSettings(doc.exists ? doc.data() : {});
+        applySiteSettingsToPage();
+    }, () => {
+        siteSettings = normalizeSiteSettings({});
+        applySiteSettingsToPage();
+    });
+}
 
 function applyLinks() {
     const setHref = (id, url) => {
@@ -37,6 +140,7 @@ function applyLinks() {
     setHref("link-discord", CONFIG.links.deppenCord);
     setHref("link-partner-discord", CONFIG.links.deppenCord);
     setHref("link-server-discord", CONFIG.links.serverDiscord);
+    setHref("link-creepercave", CONFIG.links.creeperCave || CONFIG.links.deppenCord);
 
     const serverIp = document.getElementById("text-ip");
     if (serverIp) {
@@ -301,6 +405,33 @@ window.uploadNewsWithImage = async function uploadNewsWithImage() {
     }
 };
 
+window.saveSectionSettings = async function saveSectionSettings(event) {
+    event.preventDefault();
+    const statusBox = getFormStatus("admin-sections-form");
+    const button = event.target.querySelector("button[type='submit']");
+    const nextSettings = {
+        sections: {
+            fillypathEnabled: Boolean(document.querySelector('[data-settings-input="fillypathEnabled"]')?.checked),
+            creepercaveEnabled: Boolean(document.querySelector('[data-settings-input="creepercaveEnabled"]')?.checked),
+            partnerDiscordEnabled: Boolean(document.querySelector('[data-settings-input="partnerDiscordEnabled"]')?.checked),
+            supportEnabled: Boolean(document.querySelector('[data-settings-input="supportEnabled"]')?.checked)
+        }
+    };
+
+    setButtonLoading(button, true, "Speichere...");
+    renderStatus(statusBox, "Sichtbarkeit wird gespeichert...", "info");
+
+    try {
+        await getSettingsDoc().set(nextSettings, { merge: true });
+        renderStatus(statusBox, "Die Freischaltungen wurden gespeichert.", "success");
+        showGlobalStatus("Bereiche erfolgreich aktualisiert.", "success");
+    } catch (error) {
+        renderStatus(statusBox, `Speichern fehlgeschlagen: ${error.message}`, "error");
+    } finally {
+        setButtonLoading(button, false);
+    }
+};
+
 function createEmptyState(title, text) {
     return `<div class="empty-state"><h3>${escapeHtml(title)}</h3><p>${escapeHtml(text)}</p></div>`;
 }
@@ -388,6 +519,10 @@ window.toggleSupportFields = function toggleSupportFields() {
 
 window.sendSupport = async function sendSupport(event) {
     event.preventDefault();
+    if (!isSectionEnabled("supportEnabled")) {
+        showGlobalStatus("Support ist gerade nicht freigeschaltet.", "warning");
+        return;
+    }
     const form = event.target;
     const user = auth.currentUser;
     const category = document.getElementById("sup-category")?.value || "allgemein";
@@ -675,6 +810,8 @@ window.copyServerIp = async function copyServerIp() {
 document.addEventListener("DOMContentLoaded", () => {
     applyLinks();
     initBackground();
+    siteSettings = normalizeSiteSettings({});
+    watchSiteSettings();
     window.toggleSupportFields();
 });
 

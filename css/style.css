@@ -858,6 +858,57 @@ textarea.editor-input {
     padding: 28px;
 }
 
+.settings-list {
+    display: grid;
+    gap: 14px;
+}
+
+.settings-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+}
+
+.settings-item strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.settings-item span {
+    color: var(--text-soft);
+    font-size: 0.92rem;
+}
+
+.settings-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+}
+
+.settings-switch input {
+    width: 18px;
+    height: 18px;
+}
+
+.notice-card {
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(255, 189, 92, 0.08);
+    border: 1px solid rgba(255, 189, 92, 0.24);
+    color: #ffe9bf;
+}
+
+.notice-card strong {
+    display: block;
+    margin-bottom: 6px;
+}
+
 .profile-shell {
     display: grid;
     gap: 22px;

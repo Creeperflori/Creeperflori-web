@@ -41,11 +41,15 @@
             <section class="hero">
                 <div class="hero-content">
                     <span class="eyebrow">Discord Community</span>
-                    <h1>Creepercave ist der Ort fuer Chats, Games und gemeinsame Events.</h1>
-                    <p>Der Server bringt Community, Streams und spontane Aktionen zusammen. Du bekommst Benachrichtigungen, findest Mitspieler und bleibst immer in der Schleife.</p>
-                    <div class="hero-actions">
-                        <a id="link-discord" class="btn btn-discord" href="#" target="_blank" rel="noreferrer">Discord beitreten</a>
-                        <a class="btn btn-secondary" href="#discord-benefits">Vorteile ansehen</a>
+                    <h1>Wenn der Discord offen ist, findest du ihn hier.</h1>
+                    <p>Der Bereich ist fuer den Community-Server gedacht: joinen, kurz lesen, sehen was dort los ist.</p>
+                    <div class="hero-actions" data-feature="creepercaveEnabled" data-display="flex">
+                        <a id="link-creepercave" class="btn btn-discord" href="#" target="_blank" rel="noreferrer">Discord beitreten</a>
+                        <a class="btn btn-secondary" href="#discord-benefits">Kurz ansehen</a>
+                    </div>
+                    <div class="notice-card" data-feature-disabled="creepercaveEnabled" style="display:none;">
+                        <strong>Discord ist noch nicht freigeschaltet</strong>
+                        <p>Der Bereich bleibt vorbereitet. Sobald du ihn im Admin aktivierst, ist der Invite hier sichtbar.</p>
                     </div>
                 </div>
                 <aside class="hero-panel">
@@ -53,19 +57,19 @@
                     <div class="hero-card-list">
                         <div class="hero-mini-card">
                             <strong>Voice-Channels</strong>
-                            <span>Sprachkanaele fuer Games, Streams und spontane Sessions.</span>
+                            <span>Sprachkanaele fuer Games und spontane Sessions.</span>
                         </div>
                         <div class="hero-mini-card">
                             <strong>Events</strong>
-                            <span>Ankuendigungen und gemeinsame Aktionen direkt im Server.</span>
+                            <span>Hinweise und gemeinsame Aktionen direkt im Server.</span>
                         </div>
                         <div class="hero-mini-card">
                             <strong>Benachrichtigungen</strong>
-                            <span>Keine Streams, Releases oder Community-News verpassen.</span>
+                            <span>Streams oder kleinere News nicht verpassen.</span>
                         </div>
                         <div class="hero-mini-card">
                             <strong>Mitspieler</strong>
-                            <span>Finde Leute fuer Minecraft, Community-Abende und mehr.</span>
+                            <span>Finde Leute fuer Minecraft oder eine lockere Runde.</span>
                         </div>
                     </div>
                 </aside>
@@ -77,7 +81,7 @@
                         <span class="eyebrow">Warum Creepercave?</span>
                         <h2 class="section-title">Mehr als nur ein Einladungslink</h2>
                     </div>
-                    <p>Die Seite erklaert jetzt klarer, warum sich der Beitritt lohnt statt nur einen einzelnen Button zu zeigen.</p>
+                    <p>Falls der Discord offen ist, siehst du hier kurz, was dich dort erwartet.</p>
                 </div>
                 <div class="feature-grid">
                     <article class="feature-card">
@@ -102,8 +106,8 @@
                     <div class="support-shell-inner">
                         <div class="support-copy">
                             <span class="eyebrow">Support & Kontakt</span>
-                            <h2>Discord-Fragen oder Community-Probleme?</h2>
-                            <p>Wenn auf dem Server etwas unklar ist oder du Unterstuetzung brauchst, kannst du hier direkt schreiben, ohne erst jemanden suchen zu muessen.</p>
+                            <h2>Fragen zum Discord oder zur Community?</h2>
+                            <p>Wenn auf dem Server etwas unklar ist, kannst du hier direkt schreiben.</p>
                             <div class="support-highlights">
                                 <span class="pill">Discord-spezifische Rueckfragen moeglich</span>
                                 <span class="pill">Sichtbare Statusmeldungen statt harter Popups</span>
@@ -158,6 +162,10 @@
                                     <button class="save-btn btn-outline" type="button" onclick="openDatenschutzModal()">Datenschutz ansehen</button>
                                 </div>
                             </form>
+                            <div class="notice-card" data-support-disabled style="display:none;">
+                                <strong>Support ist gerade nicht offen</strong>
+                                <p>Das Formular wurde im Admin voruebergehend ausgeschaltet.</p>
+                            </div>
                         </div>
                     </div>
                 </section>

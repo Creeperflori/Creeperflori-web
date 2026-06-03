@@ -41,31 +41,35 @@
             <section class="hero">
                 <div class="hero-content">
                     <span class="eyebrow">Minecraft Projekt</span>
-                    <h1>Fillypath ist der Treffpunkt fuer Abenteuer, Bauprojekte und Server-Updates.</h1>
-                    <p>Hier findest du die aktuelle Server-IP, wichtige Patchnotes und einen direkten Weg fuer Support bei Bugs, Bans oder Community-Fragen.</p>
-                    <div class="hero-actions">
+                    <h1>Alles Wichtige zu Fillypath ist hier gesammelt.</h1>
+                    <p>Wenn der Bereich freigeschaltet ist, findest du hier Server-IP, Patchnotes und einen direkten Weg fuer Rueckfragen.</p>
+                    <div class="hero-actions" data-feature="fillypathEnabled" data-display="flex">
                         <button class="btn btn-primary" type="button" onclick="copyServerIp()">Server-IP kopieren</button>
                         <a class="btn btn-secondary" href="#fillypath-news-list">Patchnotes ansehen</a>
+                    </div>
+                    <div class="notice-card" data-feature-disabled="fillypathEnabled" style="display:none;">
+                        <strong>Fillypath ist noch nicht freigeschaltet</strong>
+                        <p>Der Bereich ist vorbereitet, aber aktuell noch nicht offen. Wenn es losgeht, werden Serverdaten und Updates hier sichtbar.</p>
                     </div>
                 </div>
                 <aside class="hero-panel">
                     <img class="hero-avatar" src="img/Creeperflori.png" alt="Creeperflori Profilbild">
                     <div class="hero-card-list">
-                        <div class="hero-mini-card">
+                        <div class="hero-mini-card" data-feature="fillypathEnabled">
                             <strong id="text-ip">fillypath.de</strong>
-                            <span>Aktuelle Server-IP fuer den schnellen Einstieg.</span>
+                            <span>Hier steht die Server-IP, sobald der Bereich offen ist.</span>
                         </div>
                         <div class="hero-mini-card">
-                            <strong>Survival+</strong>
-                            <span>Community-orientiertes Gameplay mit eigenem Projektcharakter.</span>
+                            <strong>Projektbereich</strong>
+                            <span>Gedacht fuer Server-Infos, kleine Updates und Hinweise.</span>
                         </div>
                         <div class="hero-mini-card">
                             <strong>Patchnotes</strong>
-                            <span>Alle Aenderungen landen direkt unten im Feed.</span>
+                            <span>Aenderungen landen direkt unten im Feed.</span>
                         </div>
                         <div class="hero-mini-card">
                             <strong>Support</strong>
-                            <span>Fehler, Fragen und Minecraft-Themen direkt melden.</span>
+                            <span>Fragen oder Probleme kannst du direkt melden.</span>
                         </div>
                     </div>
                 </aside>
@@ -75,7 +79,7 @@
                 <div class="stats-grid">
                     <article class="info-card">
                         <h3>Schneller Einstieg</h3>
-                        <p>Kopiere die IP direkt aus dem Hero und komm ohne Umwege auf den Server.</p>
+                        <p>Wenn Fillypath offen ist, kommst du ueber die IP ohne Umwege auf den Server.</p>
                     </article>
                     <article class="info-card">
                         <h3>Mehr Klarheit</h3>
@@ -94,7 +98,7 @@
                         <span class="eyebrow">Patchnotes</span>
                         <h2 class="section-title">Server-Updates und Aenderungen</h2>
                     </div>
-                    <p>Alle Fillypath-Eintraege werden automatisch aus der News-Sammlung geholt und hier separat angezeigt.</p>
+                    <p>Wenn es Neuigkeiten zum Server gibt, stehen sie gesammelt hier.</p>
                 </div>
                 <div id="fillypath-news-list" class="news-panel">
                     <div class="empty-state">
@@ -111,8 +115,8 @@
                     <div class="support-shell-inner">
                         <div class="support-copy">
                             <span class="eyebrow">Fillypath Support</span>
-                            <h2>Bugs, Fragen oder Probleme direkt melden</h2>
-                            <p>Wenn etwas auf dem Server nicht klappt, landet deine Nachricht mit den richtigen Zusatzinfos sofort im Admin-Dashboard.</p>
+                            <h2>Fragen zu Fillypath?</h2>
+                            <p>Wenn etwas auf dem Server nicht klappt, kannst du hier direkt schreiben.</p>
                             <div class="support-highlights">
                                 <span class="pill">Minecraft-Daten nur bei Bedarf</span>
                                 <span class="pill">Schneller Rueckkanal fuer technische Fragen</span>
@@ -167,6 +171,10 @@
                                     <button class="save-btn btn-outline" type="button" onclick="openDatenschutzModal()">Datenschutz ansehen</button>
                                 </div>
                             </form>
+                            <div class="notice-card" data-support-disabled style="display:none;">
+                                <strong>Support ist gerade nicht offen</strong>
+                                <p>Das Formular ist im Moment nicht freigeschaltet.</p>
+                            </div>
                         </div>
                     </div>
                 </section>
