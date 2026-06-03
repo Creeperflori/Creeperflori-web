@@ -815,7 +815,8 @@ textarea.editor-input {
     overflow: hidden;
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 18px;
+    justify-content: space-between;
     min-height: 138px;
     padding: 22px;
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -864,6 +865,14 @@ textarea.editor-input {
     flex: 1;
 }
 
+.social-main {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-width: 0;
+    flex: 1;
+}
+
 .social-copy strong {
     font-size: 1.18rem;
 }
@@ -876,8 +885,6 @@ textarea.editor-input {
 .social-tag {
     position: relative;
     z-index: 1;
-    align-self: start;
-    margin-left: auto;
     padding: 7px 11px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.08);
@@ -886,6 +893,31 @@ textarea.editor-input {
     font-weight: 800;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+}
+
+.social-cta {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 14px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    color: white;
+    font-size: 0.86rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: transform 0.22s ease, background 0.22s ease, border-color 0.22s ease;
+}
+
+.social-cta::after {
+    content: ">";
+    font-size: 1rem;
+    opacity: 0.85;
 }
 
 .social-btn.twitch {
@@ -933,6 +965,37 @@ textarea.editor-input {
 
 .social-btn:hover .social-tag {
     background: rgba(255, 255, 255, 0.14);
+}
+
+.social-btn:hover .social-cta {
+    transform: translateX(2px);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+.social-btn.twitch .social-cta {
+    background: rgba(145, 70, 255, 0.18);
+    border-color: rgba(145, 70, 255, 0.34);
+}
+
+.social-btn.youtube .social-cta {
+    background: rgba(255, 0, 0, 0.18);
+    border-color: rgba(255, 0, 0, 0.34);
+}
+
+.social-btn.tiktok .social-cta {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.14);
+}
+
+.social-btn.instagram .social-cta {
+    background: rgba(225, 48, 108, 0.18);
+    border-color: rgba(225, 48, 108, 0.34);
+}
+
+.social-btn.discord .social-cta {
+    background: rgba(124, 140, 255, 0.18);
+    border-color: rgba(124, 140, 255, 0.34);
 }
 
 .profile-shell,
@@ -1142,5 +1205,23 @@ textarea.editor-input {
         right: 12px;
         left: 12px;
         width: auto;
+    }
+
+    .social-btn,
+    .social-main {
+        align-items: flex-start;
+    }
+
+    .social-btn {
+        flex-direction: column;
+    }
+
+    .social-copy span {
+        max-width: none;
+    }
+
+    .social-tag,
+    .social-cta {
+        align-self: flex-start;
     }
 }
