@@ -29,6 +29,8 @@ const CATEGORY_META = {
     minecraft: { label: "Fillypath", color: "#7ee787" }
 };
 
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 function normalizeSiteSettings(data = {}) {
     return {
         sections: {
@@ -440,12 +442,24 @@ function createEmptyState(title, text) {
     return `<div class="empty-state"><h3>${escapeHtml(title)}</h3><p>${escapeHtml(text)}</p></div>`;
 }
 
+function formatTimestamp(timestamp) {
+    if (!timestamp || typeof timestamp.toDate !== "function") return "Gerade eben";
+    return new Intl.DateTimeFormat("de-DE", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+    }).format(timestamp.toDate());
+}
+
 function renderNewsCard(data, id) {
     const typeMeta = TYPE_META[data.type] || TYPE_META.news;
     const deleteAction = isAdmin
         ? `<div class="card-actions"><button class="btn btn-danger" onclick="deleteDoc('news', '${id}')">Beitrag löschen</button></div>`
         : "";
     const image = data.image ? `<img class="card-image" src="${escapeHtml(data.image)}" alt="${escapeHtml(data.title)}">` : "";
+    const date = formatTimestamp(data.timestamp);
 
     return `
         <article class="project-card" style="--accent:${typeMeta.color}">
@@ -453,6 +467,9 @@ function renderNewsCard(data, id) {
                 <div>
                     <span class="card-badge" style="background:${typeMeta.color}; color:#06110d;">${escapeHtml(typeMeta.label)}</span>
                     <h3>${escapeHtml(data.title)}</h3>
+                    <div class="news-meta">
+                        <span class="news-date">${escapeHtml(date)}</span>
+                    </div>
                 </div>
             </div>
             <p>${escapeHtml(data.content).replace(/\n/g, "<br>")}</p>
@@ -757,6 +774,10 @@ function updateAuthUi(user) {
 function initBackground() {
     const canvas = document.getElementById("bgCanvas");
     if (!canvas) return;
+    if (prefersReducedMotion) {
+        canvas.remove();
+        return;
+    }
     const context = canvas.getContext("2d");
     const particles = [];
 
@@ -767,7 +788,8 @@ function initBackground() {
 
     function buildParticles() {
         particles.length = 0;
-        for (let index = 0; index < 48; index += 1) {
+        const particleCount = window.innerWidth < 720 ? 28 : 48;
+        for (let index = 0; index < particleCount; index += 1) {
             particles.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
