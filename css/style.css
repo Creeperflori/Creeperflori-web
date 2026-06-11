@@ -1018,7 +1018,7 @@ textarea.editor-input {
 }
 
 .support-highlights {
-    display: grid;
+    display: none;
     gap: 14px;
     margin-top: 24px;
 }
