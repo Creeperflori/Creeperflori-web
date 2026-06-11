@@ -316,7 +316,7 @@ window.logoutUser = async function logoutUser() {
 window.resetPassword = async function resetPassword() {
     const emailField = document.getElementById("auth-email");
     const email = emailField?.value.trim() || auth.currentUser?.email || "";
-    const statusBox = getFormStatus("login-form") || getFormStatus("profile-actions");
+    const statusBox = getFormStatus("login-form") || getFormStatus("profile-form");
 
     if (!email) {
         renderStatus(statusBox, "Bitte gib zuerst eine E-Mail-Adresse ein.", "warning");
@@ -655,17 +655,21 @@ function initProfilePage(user) {
     const emailCard = document.getElementById("profile-email-card");
     const roleCard = document.getElementById("profile-role-card");
 
-    if (!user || !emailEl || !roleEl || !nameField) return;
+    if (!user || !nameField) return;
 
-    emailEl.textContent = user.email;
+    if (emailEl) emailEl.textContent = user.email;
     if (emailCard) emailCard.textContent = user.email;
     if ((user.email || "").trim().toLowerCase() === (CONFIG.adminEmail || "").trim().toLowerCase()) {
-        roleEl.textContent = "Administrator";
-        roleEl.style.color = "#ffbd5c";
+        if (roleEl) {
+            roleEl.textContent = "Administrator";
+            roleEl.style.color = "#ffbd5c";
+        }
         if (roleCard) roleCard.textContent = "Administrator";
     } else {
-        roleEl.textContent = "Community-Mitglied";
-        roleEl.style.color = "#7ee787";
+        if (roleEl) {
+            roleEl.textContent = "Community-Mitglied";
+            roleEl.style.color = "#7ee787";
+        }
         if (roleCard) roleCard.textContent = "Community-Mitglied";
     }
 

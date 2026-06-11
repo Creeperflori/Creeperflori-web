@@ -38,7 +38,7 @@
         </header>
 
         <main class="page-main">
-            <section class="hero">
+            <section class="hero hero-simple">
                 <div class="hero-content">
                     <span class="eyebrow">Mein Profil</span>
                     <h1>Verwalte deinen Auftritt in der Community ohne Umwege.</h1>
@@ -48,30 +48,6 @@
                         <button class="btn btn-secondary" type="button" onclick="logoutUser()">Ausloggen</button>
                     </div>
                 </div>
-                <aside class="hero-panel action-panel">
-                    <div class="panel-title-row">
-                        <img class="panel-avatar" src="img/Creeperflori.png" alt="Creeperflori Profilbild">
-                        <div>
-                            <span class="eyebrow">Account</span>
-                            <h2>Aktuelle Sitzung</h2>
-                        </div>
-                    </div>
-                    <dl class="detail-list">
-                        <div>
-                            <dt>E-Mail</dt>
-                            <dd id="profile-email">Lade E-Mail...</dd>
-                        </div>
-                        <div>
-                            <dt>Rolle</dt>
-                            <dd id="profile-role">Lade Rolle...</dd>
-                        </div>
-                    </dl>
-                    <div class="quick-actions">
-                        <a class="btn btn-primary" href="#profile-form">Namen bearbeiten</a>
-                        <button class="btn btn-outline" type="button" onclick="resetPassword()">Passwort resetten</button>
-                        <button class="btn btn-danger" type="button" onclick="logoutUser()">Ausloggen</button>
-                    </div>
-                </aside>
             </section>
 
             <section class="section">
@@ -79,9 +55,9 @@
                     <div class="section-header">
                         <div>
                             <span class="eyebrow">Account</span>
-                            <h2>Profil bearbeiten</h2>
+                            <h2>Profil und Sicherheit</h2>
                         </div>
-                        <p>Kleine Änderung, große Wirkung: Ein klarer Anzeigename sorgt für Wiedererkennung in der Community.</p>
+                        <p>Alle wichtigen Kontodaten und Aktionen stehen hier zusammen.</p>
                     </div>
                     <dl class="detail-list detail-list-inline">
                         <div>
@@ -91,6 +67,10 @@
                         <div>
                             <dt>Rolle</dt>
                             <dd id="profile-role-card">Community-Mitglied oder Administrator.</dd>
+                        </div>
+                        <div>
+                            <dt>Passwort</dt>
+                            <dd><button class="inline-action-link" type="button" onclick="resetPassword()">Reset-Mail senden</button></dd>
                         </div>
                     </dl>
                     <form id="profile-form" class="form-block" onsubmit="updateProfile(event)">
@@ -102,26 +82,9 @@
                         <div class="status-box" data-status-for="profile-form"></div>
                         <div class="button-row">
                             <button class="save-btn btn-highlight" type="submit">Profil speichern</button>
-                            <button class="save-btn btn-outline" type="button" onclick="resetPassword()">Passwort zurücksetzen</button>
+                            <button class="save-btn btn-danger" type="button" onclick="logoutUser()">Ausloggen</button>
                         </div>
                     </form>
-                </div>
-            </section>
-
-            <section class="section">
-                <div class="profile-shell dashboard-panel">
-                    <div class="section-header">
-                        <div>
-                            <span class="eyebrow">Sicherheit</span>
-                            <h2>Account-Aktionen</h2>
-                        </div>
-                        <p>Die wichtigsten Aktionen sind sichtbar, ohne dass du nach Buttons suchen musst.</p>
-                    </div>
-                    <div class="status-box" data-status-for="profile-actions"></div>
-                    <div class="button-row">
-                        <button class="save-btn btn-secondary" type="button" onclick="resetPassword()">Reset-Mail senden</button>
-                        <button class="save-btn btn-danger" type="button" onclick="logoutUser()">Aus diesem Gerät ausloggen</button>
-                    </div>
                 </div>
             </section>
         </main>
