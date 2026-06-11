@@ -527,6 +527,7 @@ li {
 
 .section {
     margin-top: clamp(36px, 6vw, 64px);
+    scroll-margin-top: 110px;
 }
 
 .section-header {

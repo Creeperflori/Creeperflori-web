@@ -837,6 +837,15 @@ window.copyServerIp = async function copyServerIp() {
     }
 };
 
+window.scrollToSection = function scrollToSection(id) {
+    const target = document.getElementById(id);
+    if (!target) return;
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (window.location.hash !== `#${id}`) {
+        window.history.replaceState(null, "", `#${id}`);
+    }
+};
+
 document.addEventListener("DOMContentLoaded", () => {
     applyLinks();
     initBackground();
