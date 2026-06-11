@@ -48,48 +48,51 @@
                         <button class="btn btn-secondary" type="button" onclick="logoutUser()">Ausloggen</button>
                     </div>
                 </div>
-                <aside class="hero-panel">
-                    <img class="hero-avatar" src="img/Creeperflori.png" alt="Creeperflori Profilbild">
-                    <div class="hero-card-list">
-                        <div class="hero-mini-card">
-                            <strong id="profile-role">Lade Rolle...</strong>
-                            <span>Deine aktuelle Berechtigungsstufe im System.</span>
+                <aside class="hero-panel action-panel">
+                    <div class="panel-title-row">
+                        <img class="panel-avatar" src="img/Creeperflori.png" alt="Creeperflori Profilbild">
+                        <div>
+                            <span class="eyebrow">Account</span>
+                            <h2>Aktuelle Sitzung</h2>
                         </div>
-                        <div class="hero-mini-card">
-                            <strong id="profile-email">Lade E-Mail...</strong>
-                            <span>Das Konto, mit dem du gerade eingeloggt bist.</span>
+                    </div>
+                    <dl class="detail-list">
+                        <div>
+                            <dt>E-Mail</dt>
+                            <dd id="profile-email">Lade E-Mail...</dd>
                         </div>
-                        <div class="hero-mini-card">
-                            <strong>Anzeige-Name</strong>
-                            <span>Steuert, wie du in Community-Bereichen angezeigt wirst.</span>
+                        <div>
+                            <dt>Rolle</dt>
+                            <dd id="profile-role">Lade Rolle...</dd>
                         </div>
-                        <div class="hero-mini-card">
-                            <strong>Sicherheit</strong>
-                            <span>Reset-Mail und Logout sind direkt erreichbar.</span>
-                        </div>
+                    </dl>
+                    <div class="quick-actions">
+                        <a class="btn btn-primary" href="#profile-form">Namen bearbeiten</a>
+                        <button class="btn btn-outline" type="button" onclick="resetPassword()">Passwort resetten</button>
+                        <button class="btn btn-danger" type="button" onclick="logoutUser()">Ausloggen</button>
                     </div>
                 </aside>
             </section>
 
             <section class="section">
-                <div class="profile-shell">
+                <div class="profile-shell dashboard-panel">
                     <div class="section-header">
                         <div>
                             <span class="eyebrow">Account</span>
-                            <h2>Deine Profilinformationen</h2>
+                            <h2>Profil bearbeiten</h2>
                         </div>
                         <p>Kleine Änderung, große Wirkung: Ein klarer Anzeigename sorgt für Wiedererkennung in der Community.</p>
                     </div>
-                    <div class="profile-meta">
-                        <div class="profile-card">
-                            <span class="meta-text">E-Mail</span>
-                            <strong id="profile-email-card">Wird automatisch aus deinem Konto geladen.</strong>
+                    <dl class="detail-list detail-list-inline">
+                        <div>
+                            <dt>E-Mail</dt>
+                            <dd id="profile-email-card">Wird automatisch aus deinem Konto geladen.</dd>
                         </div>
-                        <div class="profile-card">
-                            <span class="meta-text">Rolle</span>
-                            <strong id="profile-role-card">Community-Mitglied oder Administrator.</strong>
+                        <div>
+                            <dt>Rolle</dt>
+                            <dd id="profile-role-card">Community-Mitglied oder Administrator.</dd>
                         </div>
-                    </div>
+                    </dl>
                     <form id="profile-form" class="form-block" onsubmit="updateProfile(event)">
                         <div class="field-group">
                             <label for="profile-name">Anzeigename</label>
@@ -106,11 +109,11 @@
             </section>
 
             <section class="section">
-                <div class="profile-shell">
+                <div class="profile-shell dashboard-panel">
                     <div class="section-header">
                         <div>
                             <span class="eyebrow">Sicherheit</span>
-                            <h2>Login, Reset und Session</h2>
+                            <h2>Account-Aktionen</h2>
                         </div>
                         <p>Die wichtigsten Aktionen sind sichtbar, ohne dass du nach Buttons suchen musst.</p>
                     </div>

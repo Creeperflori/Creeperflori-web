@@ -326,14 +326,102 @@ li {
     box-shadow: var(--shadow-soft);
 }
 
+.hero-panel:not(.action-panel) .hero-card-list {
+    display: none;
+}
+
+.hero-panel:not(.action-panel) {
+    place-items: center;
+    justify-self: center;
+    width: min(100%, 360px);
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+}
+
 .hero-avatar {
-    width: min(100%, 220px);
+    width: min(100%, 260px);
     aspect-ratio: 1 / 1;
     justify-self: center;
     border-radius: 28px;
     object-fit: cover;
     border: 2px solid var(--border-strong);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.26);
+}
+
+.action-panel {
+    align-content: stretch;
+}
+
+.panel-title-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.panel-title-row h2 {
+    margin-top: 10px;
+    font-size: clamp(1.35rem, 2vw, 1.8rem);
+    line-height: 1.2;
+}
+
+.panel-avatar {
+    width: 76px;
+    height: 76px;
+    flex: 0 0 auto;
+    border-radius: 20px;
+    object-fit: cover;
+    border: 1px solid var(--border-strong);
+    box-shadow: var(--shadow-soft);
+}
+
+.quick-actions {
+    display: grid;
+    gap: 12px;
+}
+
+.quick-actions .btn,
+.quick-actions .save-btn {
+    width: 100%;
+}
+
+.detail-list {
+    display: grid;
+    gap: 14px;
+}
+
+.detail-list > div {
+    min-width: 0;
+    padding: 16px 18px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.detail-list dt {
+    color: var(--text-soft);
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.detail-list dd {
+    min-width: 0;
+    margin-top: 7px;
+    color: var(--text);
+    font-size: 1rem;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.detail-list-inline {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.legacy-hero-cards {
+    display: none;
 }
 
 .hero-card-list,
@@ -479,6 +567,13 @@ li {
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow);
+}
+
+.dashboard-panel {
+    border-radius: var(--radius-lg);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.015)),
+        var(--surface);
 }
 
 .project-card,
@@ -1146,11 +1241,12 @@ textarea.editor-input {
 
 .settings-list {
     display: grid;
-    gap: 16px;
+    gap: 12px;
 }
 
 .settings-item {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     justify-content: space-between;
     gap: 20px;
@@ -1168,6 +1264,7 @@ textarea.editor-input {
 .settings-item span {
     color: var(--text-soft);
     font-size: 0.92rem;
+    line-height: 1.55;
 }
 
 .settings-switch {
@@ -1175,6 +1272,11 @@ textarea.editor-input {
     align-items: center;
     gap: 10px;
     white-space: nowrap;
+    justify-self: end;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
 }
 
 .settings-switch input {
@@ -1217,6 +1319,8 @@ textarea.editor-input {
     display: block;
     margin-top: 8px;
     font-size: 1.05rem;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .ticket-grid {
@@ -1322,6 +1426,7 @@ textarea.editor-input {
     }
 
     .hero-card-list,
+    .detail-list-inline,
     .form-grid.two-col,
     .form-split,
     .profile-meta {
