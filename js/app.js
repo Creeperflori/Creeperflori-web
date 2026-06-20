@@ -150,6 +150,27 @@ function applyLinks() {
     }
 }
 
+function applyEmbeds() {
+    const setEmbed = (frameId, fallbackId, url) => {
+        const frame = document.getElementById(frameId);
+        const fallback = document.getElementById(fallbackId);
+        if (!frame || !fallback) return;
+
+        if (url) {
+            frame.src = url;
+            frame.style.display = "block";
+            fallback.style.display = "none";
+            return;
+        }
+
+        frame.removeAttribute("src");
+        frame.style.display = "none";
+        fallback.style.display = "grid";
+    };
+
+    setEmbed("embed-creepercave-widget", "embed-creepercave-fallback", CONFIG.embeds?.creeperCaveWidget || "");
+}
+
 function escapeHtml(value) {
     return String(value ?? "")
         .replace(/&/g, "&amp;")
@@ -848,6 +869,7 @@ window.scrollToSection = function scrollToSection(id) {
 
 document.addEventListener("DOMContentLoaded", () => {
     applyLinks();
+    applyEmbeds();
     initBackground();
     siteSettings = normalizeSiteSettings({});
     watchSiteSettings();

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Creepercave | Creeperflori</title>
-    <meta name="description" content="Der offizielle Community-Discord von Creeperflori mit Voice-Channels, Events und Benachrichtigungen.">
+    <meta name="description" content="Der Community-Discord von Creeperflori mit Vorschau, Invite und direktem Support.">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -38,59 +38,78 @@
         </header>
 
         <main class="page-main">
-            <section class="hero">
+            <section class="hero is-compact">
                 <div class="hero-content">
                     <span class="eyebrow">Discord Community</span>
-                    <h1>Wenn der Discord offen ist, findest du ihn hier.</h1>
-                    <p>Der Bereich ist für den Community-Server gedacht: beitreten, kurz lesen, sehen was dort los ist.</p>
+                    <h1>Discord nicht nur verlinken, sondern direkt sichtbar machen.</h1>
+                    <p>Wenn Creepercave freigeschaltet ist, siehst du hier den direkten Einstieg in die Community mit Invite, Vorschau und einem klaren Überblick über den Server.</p>
                     <div class="hero-actions" data-feature="creepercaveEnabled" data-display="flex">
                         <a id="link-creepercave" class="btn btn-discord" href="#" target="_blank" rel="noreferrer">Discord beitreten</a>
-                        <a class="btn btn-secondary" href="#discord-benefits" onclick="scrollToSection('discord-benefits'); return false;">Kurz ansehen</a>
+                        <a class="btn btn-secondary" href="#discord-preview">Vorschau ansehen</a>
                     </div>
                     <div class="notice-card" data-feature-disabled="creepercaveEnabled" style="display:none;">
                         <strong>Discord ist noch nicht freigeschaltet</strong>
-                        <p>Der Bereich bleibt vorbereitet. Sobald du ihn im Admin aktivierst, ist der Invite hier sichtbar.</p>
+                        <p>Der Bereich bleibt vorbereitet. Sobald du ihn im Admin aktivierst, werden Invite und Vorschau sichtbar.</p>
                     </div>
                 </div>
-                <aside class="hero-panel">
-                    <img class="hero-avatar" src="img/Creeperflori.png" alt="Creeperflori Profilbild">
-                    <div class="hero-card-list">
-                        <div class="hero-mini-card">
-                            <strong>Voice-Channels</strong>
-                            <span>Sprachkanäle für Games und spontane Sessions.</span>
-                        </div>
-                        <div class="hero-mini-card">
-                            <strong>Events</strong>
-                            <span>Hinweise und gemeinsame Aktionen direkt im Server.</span>
-                        </div>
-                        <div class="hero-mini-card">
-                            <strong>Benachrichtigungen</strong>
-                            <span>Streams oder kleinere News nicht verpassen.</span>
-                        </div>
-                        <div class="hero-mini-card">
-                            <strong>Mitspieler</strong>
-                            <span>Finde Leute für Minecraft oder eine lockere Runde.</span>
-                        </div>
-                    </div>
+                <aside class="hero-panel is-clean">
+                    <ul class="hero-list">
+                        <li>
+                            <strong>Direkter Einstieg</strong>
+                            Invite-Link, Vorschau und Infos liegen auf derselben Seite.
+                        </li>
+                        <li>
+                            <strong>Community im Blick</strong>
+                            Voice, Events und Hinweise werden klarer erklärt statt nur kurz erwähnt.
+                        </li>
+                        <li>
+                            <strong>Support ohne Umweg</strong>
+                            Fragen zum Discord können direkt unter der Vorschau gesendet werden.
+                        </li>
+                    </ul>
                 </aside>
             </section>
 
-            <section class="section" id="discord-benefits">
+            <section class="section" id="discord-preview">
                 <div class="section-header">
-                    <div>
-                        <span class="eyebrow">Benefits</span>
-                        <h2 class="section-title">Was du im Discord bekommst</h2>
+                    <div class="section-copy">
+                        <span class="eyebrow">Vorschau</span>
+                        <h2 class="section-title">Discord direkt auf der Website</h2>
                     </div>
-                    <p>Kurz und direkt: Die wichtigsten Vorteile, ohne extra Kartenchaos.</p>
+                    <p>Wenn du ein Widget hinterlegst, erscheint es hier als eingebettete Vorschau. Ohne Widget bleibt eine saubere Fallback-Fläche sichtbar.</p>
+                </div>
+                <div class="discord-layout">
+                    <article class="surface-card">
+                        <h3>Was dich dort erwartet</h3>
+                        <p>Der Bereich ist für Community-Talk, gemeinsame Sessions, Creator-Hinweise und spontane Aktionen gedacht.</p>
+                        <div class="support-highlights">
+                            <span class="pill">Voice-Channels für Games</span>
+                            <span class="pill">News und Hinweise</span>
+                            <span class="pill">Direkter Community-Kontakt</span>
+                        </div>
+                        <div class="hero-actions" data-feature="creepercaveEnabled" data-display="flex">
+                            <a id="link-server-discord" class="btn btn-secondary" href="#" target="_blank" rel="noreferrer">Server-Discord öffnen</a>
+                        </div>
+                    </article>
+                    <article class="embed-card" data-feature="creepercaveEnabled" data-display="block">
+                        <h3>Integrierte Discord-Vorschau</h3>
+                        <p class="soft-note">Trage in der Konfiguration eine Widget-URL ein, dann wird hier automatisch die Vorschau geladen.</p>
+                        <iframe id="embed-creepercave-widget" class="discord-preview-frame" title="Discord Vorschau" loading="lazy" style="display:none;"></iframe>
+                        <div id="embed-creepercave-fallback" class="embed-fallback">
+                            <div>
+                                <strong>Noch keine Vorschau eingetragen</strong>
+                                <p>Hinterlege eine Discord-Widget-URL in `CONFIG.embeds.creeperCaveWidget`, damit hier eine echte Vorschau erscheint.</p>
+                            </div>
+                        </div>
+                    </article>
                 </div>
                 <ul class="benefit-list">
-                    <li><strong>Temporäre Voice-Channels</strong><span>Erstelle eigene Voice-Räume für Games, Talk oder spontane Runden, ohne dass alles dauerhaft vollsteht.</span></li>
-                    <li><strong>News ab der ersten Sekunde</strong><span>Updates, Stream-Hinweise und Community-Infos landen sofort im Discord, sobald etwas wichtig ist.</span></li>
-                    <li><strong>Individuelle Rollen</strong><span>Rollen zeigen, wofür du dich interessierst, und helfen dabei, passende Bereiche schneller zu finden.</span></li>
-                    <li><strong>Und weiteres</strong><span>Community-Aktionen, Mitspieler-Suche, Support und kleine Extras können direkt im Server dazukommen.</span></li>
+                    <li><strong>Temporäre Voice-Channels</strong><span>Erstelle eigene Räume für Games, Talk oder spontane Runden, ohne dass der Server unübersichtlich wird.</span></li>
+                    <li><strong>Schnelle Community-News</strong><span>Wichtige Hinweise, Streams und Aktionen können direkt im Discord ankommen.</span></li>
+                    <li><strong>Mehr Nähe</strong><span>Feedback, Mitspieler-Suche und kleine Absprachen laufen dort direkter als über reine Social-Posts.</span></li>
+                    <li><strong>Flexibel erweiterbar</strong><span>Weitere Rollen, Bereiche oder Events lassen sich später ergänzen, ohne die Website umzubauen.</span></li>
                 </ul>
             </section>
-
         </main>
 
         <footer class="support-footer">
@@ -98,13 +117,13 @@
                 <section class="support-shell">
                     <div class="support-shell-inner">
                         <div class="support-copy">
-                            <span class="eyebrow">Support & Kontakt</span>
-                            <h2>Fragen zum Discord oder zur Community?</h2>
-                            <p>Wenn auf dem Server etwas unklar ist, kannst du hier direkt schreiben.</p>
+                            <span class="eyebrow">Discord Support</span>
+                            <h2>Fragen zum Server oder zur Community?</h2>
+                            <p>Wenn auf dem Discord etwas unklar ist, kannst du hier direkt schreiben. So landet die Nachricht sofort beim Admin-Team.</p>
                             <div class="support-highlights">
-                                <span class="pill">Discord-spezifische Rückfragen möglich</span>
-                                <span class="pill">Sichtbare Statusmeldungen statt harter Popups</span>
-                                <span class="pill">Admins sehen die Anfrage direkt im Dashboard</span>
+                                <span class="pill">Discord-spezifische Rückfragen</span>
+                                <span class="pill">Sichtbare Statusmeldungen</span>
+                                <span class="pill">Antwort über Mail oder Discord</span>
                             </div>
                         </div>
                         <div>
@@ -164,7 +183,7 @@
                 </section>
                 <div class="footer-bottom">
                     <span>&copy; 2026 Creeperflori. Alle Rechte vorbehalten.</span>
-                    <span>Creepercave verbindet Community, Creator und Events.</span>
+                    <span>Discord, Vorschau und Community-Support auf einer Seite.</span>
                 </div>
             </div>
         </footer>

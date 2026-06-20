@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Socials | Creeperflori</title>
-    <meta name="description" content="Alle wichtigen Creator-Links von Creeperflori: Twitch, YouTube, TikTok, Instagram und Partner-Discords.">
+    <meta name="description" content="Alle wichtigen Creator-Links von Creeperflori: Twitch, YouTube, TikTok, Instagram und Community-Discords.">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -38,46 +38,86 @@
         </header>
 
         <main class="page-main">
-            <section class="hero">
+            <section class="hero is-compact">
                 <div class="hero-content">
                     <span class="eyebrow">Creator Links</span>
-                    <h1>Hier findest du die wichtigsten Wege nach draußen.</h1>
-                    <p>Twitch, YouTube, TikTok und Instagram sind hier gesammelt, damit du nicht jedes Mal suchen musst.</p>
+                    <h1>Deine wichtigsten Medien sollen sofort sichtbar sein.</h1>
+                    <p>Darum stehen Twitch, YouTube, TikTok und Instagram hier nicht nur als Links, sondern als klar erkennbare Hauptbereiche mit direktem Zugriff.</p>
                     <div class="hero-actions">
                         <a class="btn btn-primary" href="#social-links">Zu den Plattformen</a>
-                        <a class="btn btn-secondary" href="creepercave.html">Zum Discord</a>
+                        <a class="btn btn-secondary" href="creepercave.html" data-feature="creepercaveEnabled" data-display="inline-flex">Zum Discord</a>
                     </div>
                 </div>
-                <aside class="hero-panel">
-                    <img class="hero-avatar" src="img/Creeperflori.png" alt="Creeperflori Profilbild">
-                    <div class="hero-card-list">
-                        <div class="hero-mini-card">
-                            <strong>Live</strong>
-                            <span>Twitch für Streams und spontane Runden.</span>
-                        </div>
-                        <div class="hero-mini-card">
-                            <strong>Content</strong>
-                            <span>YouTube und TikTok für Videos, Clips und kurze Updates.</span>
-                        </div>
-                        <div class="hero-mini-card">
-                            <strong>Instagram</strong>
-                            <span>Für Bilder, Storys und kleinere Einblicke.</span>
-                        </div>
-                        <div class="hero-mini-card">
-                            <strong>Partner</strong>
-                            <span>Wenn freigeschaltet, findest du hier auch befreundete Communities.</span>
-                        </div>
-                    </div>
+                <aside class="hero-panel is-clean">
+                    <ul class="hero-list">
+                        <li>
+                            <strong>Twitch & YouTube</strong>
+                            Für Streams, längere Videos, Highlights und Recaps.
+                        </li>
+                        <li>
+                            <strong>TikTok & Instagram</strong>
+                            Für kurze Clips, Storys, Posts und schnelle Einblicke.
+                        </li>
+                        <li data-feature="partnerDiscordEnabled" data-display="list-item">
+                            <strong>Partner & Community</strong>
+                            Weitere Links oder Partner-Discords können später dazukommen.
+                        </li>
+                    </ul>
                 </aside>
+            </section>
+
+            <section class="section">
+                <div class="media-spotlight">
+                    <article class="media-banner twitch-banner">
+                        <span class="eyebrow">Live</span>
+                        <h3>Twitch für Streams und spontane Runden</h3>
+                        <p>Wenn etwas live passiert, ist Twitch der schnellste Weg in die laufende Community-Action.</p>
+                        <div class="pill-row">
+                            <span class="pill">Livestreams</span>
+                            <span class="pill">Chat</span>
+                            <span class="pill">Spontan</span>
+                        </div>
+                    </article>
+                    <article class="media-banner youtube-banner">
+                        <span class="eyebrow">Video</span>
+                        <h3>YouTube für Highlights und längere Formate</h3>
+                        <p>Hier passen Videos, Rückblicke und alles hin, was mehr Raum als ein kurzer Clip braucht.</p>
+                        <div class="pill-row">
+                            <span class="pill">Highlights</span>
+                            <span class="pill">Recaps</span>
+                            <span class="pill">Längere Videos</span>
+                        </div>
+                    </article>
+                    <article class="media-banner tiktok-banner">
+                        <span class="eyebrow">Clips</span>
+                        <h3>TikTok für kurze schnelle Updates</h3>
+                        <p>Kurze Ausschnitte, Trends und kleine Creator-Momente sind dort sofort sichtbar.</p>
+                        <div class="pill-row">
+                            <span class="pill">Kurzform</span>
+                            <span class="pill">Trends</span>
+                            <span class="pill">Schnell</span>
+                        </div>
+                    </article>
+                    <article class="media-banner instagram-banner">
+                        <span class="eyebrow">Storys</span>
+                        <h3>Instagram für Einblicke neben dem normalen Feed</h3>
+                        <p>Gut für Storys, Bilder und alles, was etwas persönlicher oder spontaner wirken soll.</p>
+                        <div class="pill-row">
+                            <span class="pill">Storys</span>
+                            <span class="pill">Posts</span>
+                            <span class="pill">Einblicke</span>
+                        </div>
+                    </article>
+                </div>
             </section>
 
             <section class="section" id="social-links">
                 <div class="section-header">
-                    <div>
-                        <span class="eyebrow">Social Hub</span>
-                        <h2 class="section-title">Direkte Wege zu allen Kanälen</h2>
+                    <div class="section-copy">
+                        <span class="eyebrow">Direkte Links</span>
+                        <h2 class="section-title">Alles Wichtige schnell erreichbar</h2>
                     </div>
-                    <p>Die Links werden zentral gepflegt und können später leicht angepasst werden.</p>
+                    <p>Die Plattformen sind groß, klar erkennbar und direkt verlinkt.</p>
                 </div>
                 <div class="social-grid social-grid-platforms">
                     <a id="link-yt" class="social-btn youtube" href="#" target="_blank" rel="noreferrer">
@@ -129,28 +169,31 @@
 
             <section class="section">
                 <div class="section-header">
-                    <div>
-                        <span class="eyebrow">Partner & Freunde</span>
-                        <h2 class="section-title">Communities, die mit dazugehören</h2>
+                    <div class="section-copy">
+                        <span class="eyebrow">Community</span>
+                        <h2 class="section-title">Weitere Wege in die Community</h2>
                     </div>
-                    <p>Wenn Partnerbereiche aktiv sind, tauchen sie hier auf.</p>
+                    <p>Discord und Partnerbereiche bleiben sichtbar, ohne die Socials zu überladen.</p>
                 </div>
-                <div class="social-grid" data-feature="partnerDiscordEnabled" data-display="grid">
-                    <a id="link-discord" class="social-btn discord" href="#" target="_blank" rel="noreferrer">
-                        <span class="social-main">
-                            <span class="social-icon">D</span>
-                            <span class="social-copy">
-                                <strong>DeppenCord</strong>
-                                <span>Partner-Community für Austausch und gemeinsame Aktionen.</span>
-                            </span>
-                        </span>
-                        <span class="social-tag">Partner</span>
-                        <span class="social-cta">Beitreten</span>
-                    </a>
-                </div>
-                <div class="notice-card" data-feature-disabled="partnerDiscordEnabled" style="display:none;">
-                    <strong>Partnerbereich ist noch nicht offen</strong>
-                    <p>Hier erscheinen später freigeschaltete Partner oder weitere Community-Links.</p>
+                <div class="summary-grid">
+                    <article class="surface-card" data-feature="creepercaveEnabled" data-display="block">
+                        <h3>Creepercave</h3>
+                        <p>Der eigene Community-Discord bleibt als direkter Einstieg sichtbar und ist nicht zwischen Social-Links versteckt.</p>
+                        <div class="hero-actions">
+                            <a class="btn btn-discord" href="creepercave.html">Discord ansehen</a>
+                        </div>
+                    </article>
+                    <article class="surface-card" data-feature="partnerDiscordEnabled" data-display="block">
+                        <h3>Partnerbereich</h3>
+                        <p>Wenn Partner freigeschaltet sind, tauchen sie hier gesammelt und gut erkennbar auf.</p>
+                        <div class="hero-actions">
+                            <a id="link-discord" class="btn btn-secondary" href="#" target="_blank" rel="noreferrer">Partner öffnen</a>
+                        </div>
+                    </article>
+                    <article class="surface-card">
+                        <h3>Immer aktuell</h3>
+                        <p>Alle Social-Links werden zentral gepflegt, damit du später nicht mehrere Stellen von Hand ändern musst.</p>
+                    </article>
                 </div>
             </section>
         </main>
@@ -161,12 +204,12 @@
                     <div class="support-shell-inner">
                         <div class="support-copy">
                             <span class="eyebrow">Support & Kontakt</span>
-                            <h2>Frage, Hinweis oder Problem?</h2>
-                            <p>Dann schreib kurz über das Formular. Es landet direkt im Admin-Bereich.</p>
+                            <h2>Fehlt ein Link oder stimmt etwas nicht?</h2>
+                            <p>Dann schreib kurz über das Formular. So landet dein Hinweis direkt im Admin-Bereich und geht nicht unter.</p>
                             <div class="support-highlights">
-                                <span class="pill">Direkter Kontakt ohne extra Plattformwechsel</span>
-                                <span class="pill">Community- und Creator-Themen sauber getrennt</span>
-                                <span class="pill">Datenschutz immer direkt einsehbar</span>
+                                <span class="pill">Direkter Kontakt ohne Plattformwechsel</span>
+                                <span class="pill">Saubere Trennung nach Thema</span>
+                                <span class="pill">Datenschutz immer einsehbar</span>
                             </div>
                         </div>
                         <div>
@@ -226,7 +269,7 @@
                 </section>
                 <div class="footer-bottom">
                     <span>&copy; 2026 Creeperflori. Alle Rechte vorbehalten.</span>
-                    <span>Socials gebündelt für schnelle Wege in die Community.</span>
+                    <span>Socials klar sichtbar und schnell erreichbar.</span>
                 </div>
             </div>
         </footer>

@@ -38,50 +38,62 @@
         </header>
 
         <main class="page-main">
-            <section class="hero">
+            <section class="hero is-compact">
                 <div class="hero-content">
                     <span class="eyebrow">Minecraft-Projekt</span>
-                    <h1>Alles Wichtige zu Fillypath ist hier gesammelt.</h1>
-                    <p>Wenn der Bereich freigeschaltet ist, findest du hier Server-IP, Patchnotes und einen direkten Weg für Rückfragen.</p>
+                    <h1>Fillypath bleibt als eigener Bereich klar steuerbar.</h1>
+                    <p>Wenn der Bereich freigeschaltet ist, findest du hier Server-IP, Patchnotes und Support, ohne dass diese Infos zwischen allgemeinen News untergehen.</p>
                     <div class="hero-actions" data-feature="fillypathEnabled" data-display="flex">
                         <button class="btn btn-primary" type="button" onclick="copyServerIp()">Server-IP kopieren</button>
                         <a class="btn btn-secondary" href="#fillypath-news-list">Patchnotes ansehen</a>
                     </div>
                     <div class="notice-card" data-feature-disabled="fillypathEnabled" style="display:none;">
                         <strong>Fillypath ist noch nicht freigeschaltet</strong>
-                        <p>Der Bereich ist vorbereitet, aber aktuell noch nicht offen. Wenn es losgeht, werden Serverdaten und Updates hier sichtbar.</p>
+                        <p>Der Bereich bleibt vorbereitet und kann im Admin jederzeit sichtbar gemacht werden.</p>
                     </div>
                 </div>
-                <aside class="hero-panel">
-                    <img class="hero-avatar" src="img/Creeperflori.png" alt="Creeperflori Profilbild">
-                    <div class="hero-card-list">
-                        <div class="hero-mini-card" data-feature="fillypathEnabled">
+                <aside class="hero-panel is-clean">
+                    <ul class="hero-list">
+                        <li data-feature="fillypathEnabled" data-display="list-item">
                             <strong id="text-ip">fillypath.de</strong>
-                            <span>Hier steht die Server-IP, sobald der Bereich offen ist.</span>
-                        </div>
-                        <div class="hero-mini-card">
-                            <strong>Projektbereich</strong>
-                            <span>Gedacht für Server-Infos, kleine Updates und Hinweise.</span>
-                        </div>
-                        <div class="hero-mini-card">
-                            <strong>Patchnotes</strong>
-                            <span>Änderungen landen direkt unten im Feed.</span>
-                        </div>
-                        <div class="hero-mini-card">
-                            <strong>Support</strong>
-                            <span>Fragen oder Probleme kannst du direkt melden.</span>
-                        </div>
-                    </div>
+                            Hier steht die Server-IP, sobald der Bereich aktiv ist.
+                        </li>
+                        <li>
+                            <strong>Eigener Feed</strong>
+                            Patchnotes und Server-Änderungen bleiben getrennt von normalen Website-News.
+                        </li>
+                        <li>
+                            <strong>Direkter Support</strong>
+                            Fragen zum Server können direkt hier gestellt werden.
+                        </li>
+                    </ul>
                 </aside>
             </section>
 
             <section class="section">
+                <div class="summary-grid">
+                    <article class="surface-card">
+                        <h3>Klare Server-Infos</h3>
+                        <p>Die wichtigsten Infos sind schnell erreichbar und nicht hinter mehreren Menüs versteckt.</p>
+                    </article>
+                    <article class="surface-card">
+                        <h3>Saubere Patchnotes</h3>
+                        <p>Änderungen, Changelogs und kleine Hinweise landen gesammelt in einem eigenen Bereich.</p>
+                    </article>
+                    <article class="surface-card">
+                        <h3>Gezielter Support</h3>
+                        <p>Das Formular fragt Minecraft-spezifische Infos nur dann ab, wenn sie für die Anfrage wirklich helfen.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section">
                 <div class="section-header">
-                    <div>
+                    <div class="section-copy">
                         <span class="eyebrow">Patchnotes</span>
                         <h2 class="section-title">Server-Updates und Änderungen</h2>
                     </div>
-                    <p>Wenn es Neuigkeiten zum Server gibt, stehen sie gesammelt hier.</p>
+                    <p>Wenn es Neuigkeiten zu Fillypath gibt, erscheinen sie gesammelt genau hier.</p>
                 </div>
                 <div id="fillypath-news-list" class="news-panel">
                     <div class="empty-state">
@@ -99,10 +111,10 @@
                         <div class="support-copy">
                             <span class="eyebrow">Fillypath Support</span>
                             <h2>Fragen zu Fillypath?</h2>
-                            <p>Wenn etwas auf dem Server nicht klappt, kannst du hier direkt schreiben.</p>
+                            <p>Wenn auf dem Server etwas nicht klappt, kannst du hier direkt schreiben. So bleibt die Anfrage sofort im richtigen Bereich.</p>
                             <div class="support-highlights">
                                 <span class="pill">Minecraft-Daten nur bei Bedarf</span>
-                                <span class="pill">Schneller Rückkanal für technische Fragen</span>
+                                <span class="pill">Schneller Rückkanal</span>
                                 <span class="pill">Patchnotes und Support an einem Ort</span>
                             </div>
                         </div>
@@ -163,7 +175,7 @@
                 </section>
                 <div class="footer-bottom">
                     <span>&copy; 2026 Creeperflori. Alle Rechte vorbehalten.</span>
-                    <span>Fillypath-Infos, Patchnotes und Support an einem Ort.</span>
+                    <span>Fillypath-Infos, Patchnotes und Support übersichtlich getrennt.</span>
                 </div>
             </div>
         </footer>

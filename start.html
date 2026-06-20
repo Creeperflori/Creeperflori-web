@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Start | Creeperflori</title>
-    <meta name="description" content="Die Community-Website von Creeperflori mit News, Socials, Fillypath-Updates und Support.">
+    <meta name="description" content="Die Community-Website von Creeperflori mit News, Socials, Discord und Fillypath-Updates.">
     <meta property="og:title" content="Creeperflori">
-    <meta property="og:description" content="News, Community, Creator-Links und Support an einem Ort.">
+    <meta property="og:description" content="News, Socials, Discord und Community-Infos an einem Ort.">
     <meta property="og:type" content="website">
     <meta property="og:image" content="img/Creeperflori.png">
     <link rel="stylesheet" href="css/style.css">
@@ -42,46 +42,64 @@
         </header>
 
         <main class="page-main">
-            <section class="hero">
+            <section class="hero is-compact">
                 <div class="hero-content">
-                    <span class="eyebrow">Neu hier?</span>
-                    <h1>Alles rund um Creeperflori an einem Ort.</h1>
-                    <p>Hier sind die aktuellen News, die wichtigsten Links und ein Kontaktweg, wenn mal etwas nicht klappt.</p>
+                    <span class="eyebrow">Startseite</span>
+                    <h1>Alles Wichtige rund um Creeperflori auf einen Blick.</h1>
+                    <p>Hier findest du aktuelle News, die schnellsten Wege zu den Socials und einen klaren Einstieg in Discord und Fillypath, ohne lange suchen zu müssen.</p>
                     <div class="hero-actions">
-                        <a class="btn btn-primary" href="#news">Aktuelle News ansehen</a>
-                        <a class="btn btn-secondary" href="sozial.html">Zu den Socials</a>
+                        <a class="btn btn-primary" href="#news">News ansehen</a>
+                        <a class="btn btn-secondary" href="sozial.html">Socials öffnen</a>
+                    </div>
+                    <div class="quick-links">
+                        <span class="pill">Schneller Einstieg</span>
+                        <span class="pill">Klare Navigation</span>
+                        <span class="pill">Direkter Support</span>
                     </div>
                 </div>
-                <aside class="hero-panel">
+                <aside class="hero-panel is-clean">
                     <img class="hero-avatar" src="img/Creeperflori.png" alt="Creeperflori Profilbild">
-                    <div class="hero-card-list">
-                        <div class="hero-mini-card">
-                            <strong>Alles gesammelt</strong>
-                            <span>News, Links und Kontakt sind an einer Stelle.</span>
-                        </div>
-                        <div class="hero-mini-card">
-                            <strong>Neue Meldungen</strong>
-                            <span>Wenn etwas gepostet wird, steht es direkt hier.</span>
-                        </div>
-                        <div class="hero-mini-card">
-                            <strong>Community</strong>
-                            <span>Zu Socials, Discord und Projekten kommst du ohne Suchen.</span>
-                        </div>
-                        <div class="hero-mini-card">
-                            <strong>Support</strong>
-                            <span>Bei Fragen kannst du direkt schreiben.</span>
-                        </div>
-                    </div>
+                    <ul class="hero-list">
+                        <li>
+                            <strong>Aktuelle News</strong>
+                            Neue Meldungen landen direkt hier auf der Startseite.
+                        </li>
+                        <li>
+                            <strong>Socials im Fokus</strong>
+                            Twitch, YouTube, TikTok und Instagram sind mit einem Klick erreichbar.
+                        </li>
+                        <li data-feature="creepercaveEnabled" data-display="list-item">
+                            <strong>Discord & Community</strong>
+                            Wenn der Discord offen ist, kommst du von hier schnell weiter.
+                        </li>
+                    </ul>
                 </aside>
+            </section>
+
+            <section class="section">
+                <div class="summary-grid">
+                    <article class="surface-card">
+                        <h3>Für neue Besucher</h3>
+                        <p>Die wichtigsten Bereiche sind direkt sichtbar, damit man nicht erst durch mehrere Seiten klicken muss.</p>
+                    </article>
+                    <article class="surface-card">
+                        <h3>Für die Community</h3>
+                        <p>Support, News und Creator-Links bleiben an einem festen Ort und wirken nicht durcheinander.</p>
+                    </article>
+                    <article class="surface-card" data-feature="fillypathEnabled" data-display="block">
+                        <h3>Für Fillypath</h3>
+                        <p>Server-Infos und Patchnotes bleiben getrennt von allgemeinen Updates und sind schneller auffindbar.</p>
+                    </article>
+                </div>
             </section>
 
             <section class="section" id="news">
                 <div class="section-header">
-                    <div>
+                    <div class="section-copy">
                         <span class="eyebrow">Neuigkeiten</span>
-                        <h2 class="section-title">Frische Updates aus der Community</h2>
+                        <h2 class="section-title">Aktuelle Updates aus deiner Community</h2>
                     </div>
-                    <p>Hier landen normale News, Änderungen und kleine Hinweise.</p>
+                    <p>Hier landen normale News, Änderungen und wichtige Hinweise.</p>
                 </div>
                 <div id="news-list" class="news-panel">
                     <div class="empty-state">
@@ -98,12 +116,12 @@
                     <div class="support-shell-inner">
                         <div class="support-copy">
                             <span class="eyebrow">Support & Kontakt</span>
-                            <h2>Wenn du etwas brauchst, schreib hier kurz rein</h2>
-                            <p>Ob allgemeine Frage, Discord-Thema oder Fillypath-Support: Deine Nachricht landet direkt im Admin-Bereich.</p>
+                            <h2>Kurze Frage oder direkt ein Problem?</h2>
+                            <p>Schreib einfach kurz, worum es geht. Die Nachricht landet direkt im Admin-Bereich und kann dort sauber beantwortet werden.</p>
                             <div class="support-highlights">
                                 <span class="pill">Antwort per Mail oder Discord möglich</span>
-                                <span class="pill">Datenschutz direkt auf der Seite einsehbar</span>
-                                <span class="pill">Kategorie-spezifische Angaben für schnellere Hilfe</span>
+                                <span class="pill">Datenschutz direkt einsehbar</span>
+                                <span class="pill">Passende Felder je nach Thema</span>
                             </div>
                         </div>
                         <div>
@@ -163,7 +181,7 @@
                 </section>
                 <div class="footer-bottom">
                     <span>&copy; 2026 Creeperflori. Alle Rechte vorbehalten.</span>
-                    <span>Gebaut für Creator, Community und schnelle Updates.</span>
+                    <span>News, Socials und Community übersichtlich an einem Ort.</span>
                 </div>
             </div>
         </footer>
