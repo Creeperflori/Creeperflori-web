@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Socials | Creeperflori</title>
-    <meta name="description" content="Alle wichtigen Creator-Links von Creeperflori: Twitch, YouTube, TikTok, Instagram und Community-Discords.">
+    <meta name="description" content="Alle wichtigen Social-Media-Links von Creeperflori an einem Ort.">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -21,14 +21,14 @@
                     <img class="brand-avatar" src="img/Creeperflori.png" alt="Creeperflori">
                     <span class="brand-copy">
                         <span class="brand-title">Creeperflori</span>
-                        <span class="brand-subtitle">Community Hub</span>
+                        <span class="brand-subtitle">Info Page</span>
                     </span>
                 </a>
                 <nav class="nav-links" aria-label="Hauptnavigation">
-                    <a class="nav-link" href="start.html">News</a>
-                    <a class="nav-link is-active" href="sozial.html">Social</a>
+                    <a class="nav-link" href="start.html">Start</a>
+                    <a class="nav-link is-active" href="sozial.html">Socials</a>
                     <a class="nav-link" href="fillypath.html" data-feature="fillypathEnabled" data-display="inline-flex">Fillypath</a>
-                    <a class="nav-link" href="creepercave.html" data-feature="creepercaveEnabled" data-display="inline-flex">Creepercave</a>
+                    <a class="nav-link" href="creepercave.html" data-feature="creepercaveEnabled" data-display="inline-flex">Discord</a>
                     <a class="nav-link admin-link" href="admin.html" id="admin-nav-link" style="display:none;">Admin</a>
                 </nav>
                 <div class="nav-actions">
@@ -40,106 +40,61 @@
         <main class="page-main">
             <section class="hero is-compact">
                 <div class="hero-content">
-                    <span class="eyebrow">Creator Links</span>
-                    <h1>Deine wichtigsten Medien sollen sofort sichtbar sein.</h1>
-                    <p>Darum stehen Twitch, YouTube, TikTok und Instagram hier nicht nur als Links, sondern als klar erkennbare Hauptbereiche mit direktem Zugriff.</p>
+                    <span class="eyebrow">Social Media</span>
+                    <h1>Alle Plattformen klar sichtbar auf einer Seite.</h1>
+                    <p>Wenn du Streams, Videos, kurze Clips oder Bilder sehen willst, findest du hier sofort die passenden Links zu allen wichtigen Plattformen.</p>
                     <div class="hero-actions">
-                        <a class="btn btn-primary" href="#social-links">Zu den Plattformen</a>
+                        <a class="btn btn-primary" href="#social-links">Zu den Links</a>
                         <a class="btn btn-secondary" href="creepercave.html" data-feature="creepercaveEnabled" data-display="inline-flex">Zum Discord</a>
                     </div>
                 </div>
                 <aside class="hero-panel is-clean">
                     <ul class="hero-list">
                         <li>
-                            <strong>Twitch & YouTube</strong>
-                            Für Streams, längere Videos, Highlights und Recaps.
+                            <strong>Twitch</strong>
+                            Für Livestreams, spontane Runden und direkte Community-Momente.
                         </li>
                         <li>
-                            <strong>TikTok & Instagram</strong>
-                            Für kurze Clips, Storys, Posts und schnelle Einblicke.
+                            <strong>YouTube</strong>
+                            Für längere Videos, Highlights und Rückblicke.
                         </li>
-                        <li data-feature="partnerDiscordEnabled" data-display="list-item">
-                            <strong>Partner & Community</strong>
-                            Weitere Links oder Partner-Discords können später dazukommen.
+                        <li>
+                            <strong>TikTok und Instagram</strong>
+                            Für kurze Clips, Storys, Posts und schnelle Updates.
                         </li>
                     </ul>
                 </aside>
-            </section>
-
-            <section class="section">
-                <div class="media-spotlight">
-                    <article class="media-banner twitch-banner">
-                        <span class="eyebrow">Live</span>
-                        <h3>Twitch für Streams und spontane Runden</h3>
-                        <p>Wenn etwas live passiert, ist Twitch der schnellste Weg in die laufende Community-Action.</p>
-                        <div class="pill-row">
-                            <span class="pill">Livestreams</span>
-                            <span class="pill">Chat</span>
-                            <span class="pill">Spontan</span>
-                        </div>
-                    </article>
-                    <article class="media-banner youtube-banner">
-                        <span class="eyebrow">Video</span>
-                        <h3>YouTube für Highlights und längere Formate</h3>
-                        <p>Hier passen Videos, Rückblicke und alles hin, was mehr Raum als ein kurzer Clip braucht.</p>
-                        <div class="pill-row">
-                            <span class="pill">Highlights</span>
-                            <span class="pill">Recaps</span>
-                            <span class="pill">Längere Videos</span>
-                        </div>
-                    </article>
-                    <article class="media-banner tiktok-banner">
-                        <span class="eyebrow">Clips</span>
-                        <h3>TikTok für kurze schnelle Updates</h3>
-                        <p>Kurze Ausschnitte, Trends und kleine Creator-Momente sind dort sofort sichtbar.</p>
-                        <div class="pill-row">
-                            <span class="pill">Kurzform</span>
-                            <span class="pill">Trends</span>
-                            <span class="pill">Schnell</span>
-                        </div>
-                    </article>
-                    <article class="media-banner instagram-banner">
-                        <span class="eyebrow">Storys</span>
-                        <h3>Instagram für Einblicke neben dem normalen Feed</h3>
-                        <p>Gut für Storys, Bilder und alles, was etwas persönlicher oder spontaner wirken soll.</p>
-                        <div class="pill-row">
-                            <span class="pill">Storys</span>
-                            <span class="pill">Posts</span>
-                            <span class="pill">Einblicke</span>
-                        </div>
-                    </article>
-                </div>
             </section>
 
             <section class="section" id="social-links">
                 <div class="section-header">
                     <div class="section-copy">
                         <span class="eyebrow">Direkte Links</span>
-                        <h2 class="section-title">Alles Wichtige schnell erreichbar</h2>
+                        <h2 class="section-title">Schnell zur richtigen Plattform</h2>
                     </div>
-                    <p>Die Plattformen sind groß, klar erkennbar und direkt verlinkt.</p>
+                    <p>Die wichtigsten Medien sind hier groß und direkt sichtbar.</p>
                 </div>
                 <div class="social-grid social-grid-platforms">
-                    <a id="link-yt" class="social-btn youtube" href="#" target="_blank" rel="noreferrer">
-                        <span class="social-main">
-                            <span class="social-icon">Y</span>
-                            <span class="social-copy">
-                                <strong>YouTube</strong>
-                                <span>Videos, Highlights, Recaps und längere Formate.</span>
-                            </span>
-                        </span>
-                        <span class="social-tag">Video</span>
-                        <span class="social-cta">Öffnen</span>
-                    </a>
                     <a id="link-twitch" class="social-btn twitch" href="#" target="_blank" rel="noreferrer">
                         <span class="social-main">
                             <span class="social-icon">T</span>
                             <span class="social-copy">
                                 <strong>Twitch</strong>
-                                <span>Livestreams, spontane Runden und Community-Momente.</span>
+                                <span>Streams, spontane Runden und Live-Community.</span>
                             </span>
                         </span>
                         <span class="social-tag">Live</span>
+                        <span class="social-cta">Öffnen</span>
+                    </a>
+                    <a id="link-yt" class="social-btn youtube" href="#" target="_blank" rel="noreferrer">
+                        <span class="social-main">
+                            <span class="social-icon">Y</span>
+                            <span class="social-copy">
+                                <strong>YouTube</strong>
+                                <span>Videos, Highlights und längere Inhalte.</span>
+                            </span>
+                        </span>
+                        <span class="social-tag">Video</span>
                         <span class="social-cta">Öffnen</span>
                     </a>
                     <a id="link-tt" class="social-btn tiktok" href="#" target="_blank" rel="noreferrer">
@@ -158,7 +113,7 @@
                             <span class="social-icon">I</span>
                             <span class="social-copy">
                                 <strong>Instagram</strong>
-                                <span>Storys, Posts und persönlichere Einblicke.</span>
+                                <span>Storys, Posts und Einblicke neben dem normalen Feed.</span>
                             </span>
                         </span>
                         <span class="social-tag">Storys</span>
@@ -168,31 +123,24 @@
             </section>
 
             <section class="section">
-                <div class="section-header">
-                    <div class="section-copy">
-                        <span class="eyebrow">Community</span>
-                        <h2 class="section-title">Weitere Wege in die Community</h2>
-                    </div>
-                    <p>Discord und Partnerbereiche bleiben sichtbar, ohne die Socials zu überladen.</p>
-                </div>
                 <div class="summary-grid">
+                    <article class="surface-card">
+                        <h3>Alles gesammelt</h3>
+                        <p>Du musst nicht auf mehreren Seiten suchen, sondern findest alle wichtigen Plattformen hier gesammelt.</p>
+                    </article>
                     <article class="surface-card" data-feature="creepercaveEnabled" data-display="block">
-                        <h3>Creepercave</h3>
-                        <p>Der eigene Community-Discord bleibt als direkter Einstieg sichtbar und ist nicht zwischen Social-Links versteckt.</p>
+                        <h3>Discord</h3>
+                        <p>Zusätzlich gibt es einen eigenen Bereich für den Community-Discord mit Vorschau und Support.</p>
                         <div class="hero-actions">
                             <a class="btn btn-discord" href="creepercave.html">Discord ansehen</a>
                         </div>
                     </article>
                     <article class="surface-card" data-feature="partnerDiscordEnabled" data-display="block">
-                        <h3>Partnerbereich</h3>
-                        <p>Wenn Partner freigeschaltet sind, tauchen sie hier gesammelt und gut erkennbar auf.</p>
+                        <h3>Partner</h3>
+                        <p>Wenn Partnerbereiche aktiv sind, werden sie hier zusätzlich sichtbar.</p>
                         <div class="hero-actions">
                             <a id="link-discord" class="btn btn-secondary" href="#" target="_blank" rel="noreferrer">Partner öffnen</a>
                         </div>
-                    </article>
-                    <article class="surface-card">
-                        <h3>Immer aktuell</h3>
-                        <p>Alle Social-Links werden zentral gepflegt, damit du später nicht mehrere Stellen von Hand ändern musst.</p>
                     </article>
                 </div>
             </section>
@@ -203,13 +151,13 @@
                 <section class="support-shell">
                     <div class="support-shell-inner">
                         <div class="support-copy">
-                            <span class="eyebrow">Support & Kontakt</span>
+                            <span class="eyebrow">Support</span>
                             <h2>Fehlt ein Link oder stimmt etwas nicht?</h2>
-                            <p>Dann schreib kurz über das Formular. So landet dein Hinweis direkt im Admin-Bereich und geht nicht unter.</p>
+                            <p>Dann schreib kurz über das Formular. So landet dein Hinweis direkt im Admin-Bereich.</p>
                             <div class="support-highlights">
-                                <span class="pill">Direkter Kontakt ohne Plattformwechsel</span>
-                                <span class="pill">Saubere Trennung nach Thema</span>
-                                <span class="pill">Datenschutz immer einsehbar</span>
+                                <span class="pill">Direkter Kontakt</span>
+                                <span class="pill">Klare Themen-Auswahl</span>
+                                <span class="pill">Datenschutz direkt einsehbar</span>
                             </div>
                         </div>
                         <div>
@@ -269,7 +217,7 @@
                 </section>
                 <div class="footer-bottom">
                     <span>&copy; 2026 Creeperflori. Alle Rechte vorbehalten.</span>
-                    <span>Socials klar sichtbar und schnell erreichbar.</span>
+                    <span>Alle wichtigen Creator-Plattformen auf einer klaren Seite.</span>
                 </div>
             </div>
         </footer>
