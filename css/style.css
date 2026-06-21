@@ -304,6 +304,10 @@ li {
     font-size: 1.1rem;
     color: var(--text-muted);
     max-width: var(--copy-width);
+    padding: 10px 14px 10px 0;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.045), transparent 82%);
+    border-left: 2px solid rgba(255, 255, 255, 0.08);
+    padding-left: 16px;
 }
 
 .hero-content h1 {
@@ -537,6 +541,8 @@ li {
     color: var(--text-soft);
     max-width: var(--copy-width);
     font-size: 1.02rem;
+    padding-left: 14px;
+    border-left: 2px solid rgba(255, 255, 255, 0.07);
 }
 
 .section-title {
@@ -584,6 +590,18 @@ li {
 .legal-copy li {
     margin-top: 12px;
     max-width: var(--copy-width);
+}
+
+.feature-card p,
+.info-card p,
+.project-card p,
+.admin-card p,
+.social-btn span,
+.surface-card p,
+.embed-card p,
+.media-banner p {
+    padding-left: 12px;
+    border-left: 2px solid rgba(255, 255, 255, 0.06);
 }
 
 .surface-panel {
@@ -1452,8 +1470,9 @@ textarea.editor-input {
 
 .hero-list li {
     list-style: none;
-    padding: 0 0 12px;
+    padding: 8px 0 12px 12px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: 2px solid rgba(255, 255, 255, 0.06);
     color: var(--text-muted);
 }
 
@@ -1477,8 +1496,10 @@ textarea.editor-input {
 
 .summary-grid > *,
 .discord-layout > * {
-    padding-top: 12px;
+    padding-top: 14px;
+    padding-left: 10px;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.03), transparent 72%);
 }
 
 .summary-grid {
@@ -1497,7 +1518,7 @@ textarea.editor-input {
 .surface-card,
 .embed-card,
 .media-banner {
-    padding: 8px 0;
+    padding: 10px 0;
     border-radius: 0;
     border: 0;
     background: transparent;
