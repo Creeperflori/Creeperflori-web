@@ -653,7 +653,7 @@ function renderTicketCard(message, id) {
 }
 
 function renderAdminMessages() {
-    const list = document.getElementById("admin-messages");
+    const list = document.getElementById("admin-messages-list") || document.getElementById("admin-messages");
     if (!list) return;
 
     list.innerHTML = createEmptyState("Lade Tickets...", "Die Support-Anfragen werden vorbereitet.");
@@ -666,6 +666,138 @@ function renderAdminMessages() {
             : createEmptyState("Keine offenen Support-Tickets", "Neue Anfragen erscheinen automatisch hier.");
     }, () => {
         list.innerHTML = createEmptyState("Tickets konnten nicht geladen werden", "Bitte prüfe deine Verbindung und versuche es erneut.");
+    });
+}
+
+function setAdminStat(id, value) {
+    const element = document.getElementById(id);
+    if (element) element.textContent = String(value);
+}
+
+function renderAdminFeatureStatus(settings) {
+    const target = document.getElementById("admin-feature-status");
+    if (!target) return;
+
+    const items = [
+        {
+            key: "fillypathEnabled",
+            title: "Fillypath",
+            text: "Minecraft-Bereich, Patchnotes und serverbezogener Support.",
+            enabled: Boolean(settings.fillypathEnabled)
+        },
+        {
+            key: "creepercaveEnabled",
+            title: "Discord / Creepercave",
+            text: "Discord-Seite, Invite und Discord-Support.",
+            enabled: Boolean(settings.creepercaveEnabled)
+        },
+        {
+            key: "partnerDiscordEnabled",
+            title: "Partnerbereich",
+            text: "Zusätzlicher Partner-Link auf der Social-Seite.",
+            enabled: Boolean(settings.partnerDiscordEnabled)
+        },
+        {
+            key: "supportEnabled",
+            title: "Support-Formulare",
+            text: "Kontaktformulare auf den öffentlichen Seiten.",
+            enabled: Boolean(settings.supportEnabled)
+        }
+    ];
+
+    target.innerHTML = items.map((item) => `
+        <article class="admin-feature-item">
+            <div class="admin-feature-top">
+                <strong>${escapeHtml(item.title)}</strong>
+                <span class="admin-state-pill ${item.enabled ? "is-on" : "is-off"}">${item.enabled ? "Aktiv" : "Aus"}</span>
+            </div>
+            <p>${escapeHtml(item.text)}</p>
+        </article>
+    `).join("");
+}
+
+function renderAdminActivity(newsDocs, ticketDocs) {
+    const target = document.getElementById("admin-activity-feed");
+    if (!target) return;
+
+    const newsItems = newsDocs.slice(0, 3).map((doc) => {
+        const data = doc.data();
+        return {
+            title: data.title || "Neue News",
+            text: data.content || "",
+            meta: `News · ${formatTimestamp(data.timestamp)}`,
+            type: "news"
+        };
+    });
+
+    const ticketItems = ticketDocs.slice(0, 3).map((doc) => {
+        const data = doc.data();
+        const categoryMeta = CATEGORY_META[data.category] || CATEGORY_META.allgemein;
+        return {
+            title: data.name || "Neue Anfrage",
+            text: data.message || "",
+            meta: `${categoryMeta.label} · ${formatTimestamp(data.timestamp)}`,
+            type: "ticket"
+        };
+    });
+
+    const items = [...newsItems, ...ticketItems].sort((a, b) => {
+        const aDate = a.meta;
+        const bDate = b.meta;
+        return String(bDate).localeCompare(String(aDate));
+    }).slice(0, 5);
+
+    if (!items.length) {
+        target.innerHTML = createEmptyState("Noch keine Aktivitäten", "Sobald News veröffentlicht oder Nachrichten gesendet werden, erscheinen sie hier.");
+        return;
+    }
+
+    target.innerHTML = items.map((item) => `
+        <article class="admin-activity-item">
+            <div class="admin-activity-top">
+                <strong>${escapeHtml(item.title)}</strong>
+                <span class="pill">${item.type === "news" ? "News" : "Ticket"}</span>
+            </div>
+            <p>${escapeHtml(item.text).slice(0, 160)}${item.text && item.text.length > 160 ? "..." : ""}</p>
+            <span class="admin-activity-meta">${escapeHtml(item.meta)}</span>
+        </article>
+    `).join("");
+}
+
+function initAdminDashboard() {
+    if (!document.getElementById("admin-overview")) return;
+
+    let latestNewsDocs = [];
+    let latestTicketDocs = [];
+
+    getSettingsDocRef().onSnapshot((doc) => {
+        const settings = { ...defaultSiteSettings, ...(doc.exists ? doc.data() : {}) };
+        renderAdminFeatureStatus(settings);
+    }, () => {
+        const target = document.getElementById("admin-feature-status");
+        if (target) target.innerHTML = createEmptyState("Freischaltungen konnten nicht geladen werden", "Bitte später noch einmal versuchen.");
+    });
+
+    db.collection("news").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+        latestNewsDocs = snapshot.docs;
+        const generalCount = snapshot.docs.filter((doc) => (doc.data().category || "general") === "general").length;
+        const fillypathCount = snapshot.docs.filter((doc) => (doc.data().category || "general") === "fillypath").length;
+        setAdminStat("admin-stat-news-total", snapshot.size);
+        setAdminStat("admin-stat-news-general", generalCount);
+        setAdminStat("admin-stat-news-fillypath", fillypathCount);
+        renderAdminActivity(latestNewsDocs, latestTicketDocs);
+    }, () => {
+        setAdminStat("admin-stat-news-total", "-");
+        setAdminStat("admin-stat-news-general", "-");
+        setAdminStat("admin-stat-news-fillypath", "-");
+    });
+
+    db.collection("messages").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+        latestTicketDocs = snapshot.docs;
+        setAdminStat("admin-stat-tickets-total", snapshot.size);
+        renderAdminActivity(latestNewsDocs, latestTicketDocs);
+    }, () => {
+        setAdminStat("admin-stat-tickets-total", "-");
     });
 }
 
@@ -765,6 +897,7 @@ function updateAuthUi(user) {
         if (adminNavLink) adminNavLink.style.display = isAdmin ? "inline-flex" : "none";
         if (path.includes("admin.html")) {
             if (isAdmin) {
+                initAdminDashboard();
                 renderAdminMessages();
             } else {
         showGlobalStatus("Dieser Bereich ist nur für Administratoren sichtbar.", "warning");

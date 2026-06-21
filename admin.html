@@ -38,13 +38,13 @@
         </header>
 
         <main class="page-main">
-            <section class="hero">
+            <section class="hero is-compact">
                 <div class="hero-content">
                     <span class="eyebrow">Admin Dashboard</span>
-                    <h1>Hier schaltest du Inhalte frei und hältst die Seite aktuell.</h1>
-                    <p>News, Support und sichtbare Bereiche der Website liegen jetzt an einem Ort, damit du später nicht in den Code musst.</p>
+                    <h1>Alles Wichtige für Website, News und Support an einem Ort.</h1>
+                    <p>Dieses Dashboard bündelt Freischaltungen, Content und eingehende Anfragen, damit du die Seite schnell pflegen und live steuern kannst.</p>
                     <div class="hero-actions">
-                        <a class="btn btn-primary" href="#admin-sections-form">Bereiche freischalten</a>
+                        <a class="btn btn-primary" href="#admin-overview">Zur Übersicht</a>
                         <a class="btn btn-secondary" href="#admin-news-form">News veröffentlichen</a>
                     </div>
                 </div>
@@ -52,153 +52,216 @@
                     <div class="panel-title-row">
                         <img class="panel-avatar" src="img/Creeperflori.png" alt="Creeperflori Profilbild">
                         <div>
-                            <span class="eyebrow">Schnellstart</span>
-                            <h2>Direkt zur Funktion</h2>
+                            <span class="eyebrow">Arbeitsbereiche</span>
+                            <h2>Direkt zur Aufgabe</h2>
                         </div>
                     </div>
                     <nav class="quick-actions" aria-label="Admin Schnellzugriff">
-                        <a class="btn btn-primary" href="#admin-sections-form">Website-Bereiche</a>
-                        <a class="btn btn-secondary" href="#admin-news-form">News erstellen</a>
-                        <a class="btn btn-outline" href="#admin-messages">Support-Tickets</a>
+                        <a class="btn btn-primary" href="#admin-overview">Dashboard</a>
+                        <a class="btn btn-secondary" href="#admin-sections-form">Freischaltungen</a>
+                        <a class="btn btn-secondary" href="#admin-news-form">News</a>
+                        <a class="btn btn-outline" href="#admin-messages">Tickets</a>
                     </nav>
                     <div class="legacy-hero-cards">
                         <div class="hero-mini-card">
-                            <strong>Schalter</strong>
-                            <span>Discord, Fillypath, Partnerbereich und Support ein- oder ausblenden.</span>
+                            <strong>Live-Status</strong>
+                            <span>Sieh sofort, welche Bereiche aktiv sind und wo gerade Arbeit anliegt.</span>
                         </div>
                         <div class="hero-mini-card">
-                            <strong>News</strong>
-                            <span>Neue Meldungen für Startseite oder Fillypath direkt posten.</span>
+                            <strong>Content</strong>
+                            <span>Veröffentliche News für Startseite oder Fillypath direkt ohne Umweg.</span>
                         </div>
                         <div class="hero-mini-card">
-                            <strong>Tickets</strong>
-                            <span>Support-Nachrichten bleiben getrennt und schnell lesbar.</span>
+                            <strong>Inbox</strong>
+                            <span>Alle Support-Nachrichten bleiben gesammelt und schnell beantwortbar.</span>
                         </div>
                         <div class="hero-mini-card">
-                            <strong>Ohne Umweg</strong>
-                            <span>Wenn etwas später live gehen soll, reicht ein Haken im Admin.</span>
+                            <strong>Kontrolle</strong>
+                            <span>Schalte Bereiche frei oder aus, wenn etwas vorbereitet oder verborgen bleiben soll.</span>
                         </div>
                     </div>
                 </aside>
             </section>
 
-            <section class="section">
-                <div class="news-panel dashboard-panel">
-                    <div class="section-header">
-                        <div>
-                            <span class="eyebrow">Bereiche freischalten</span>
-                            <h2>Was auf der Website sichtbar sein soll</h2>
-                        </div>
-                        <p>Wenn etwas noch nicht fertig ist, kannst du es hier ausblenden, ohne die Seite umbauen zu müssen.</p>
-                    </div>
-                    <form id="admin-sections-form" class="form-block" onsubmit="saveSectionSettings(event)">
-                        <div class="settings-list">
-                            <label class="settings-item">
-                                <span>
-                                    <strong>Fillypath anzeigen</strong>
-                                    <span>Steuert Minecraft-Bereich, Server-Hinweise und Fillypath-Support.</span>
-                                </span>
-                                <span class="settings-switch">
-                                    <input type="checkbox" data-settings-input="fillypathEnabled" checked>
-                                    <span>Aktiv</span>
-                                </span>
-                            </label>
-                            <label class="settings-item">
-                                <span>
-                                    <strong>Creepercave anzeigen</strong>
-                                    <span>Schaltet den eigenen Discord-Bereich und Discord-Support frei.</span>
-                                </span>
-                                <span class="settings-switch">
-                                    <input type="checkbox" data-settings-input="creepercaveEnabled" checked>
-                                    <span>Aktiv</span>
-                                </span>
-                            </label>
-                            <label class="settings-item">
-                                <span>
-                                    <strong>Partner-Discord anzeigen</strong>
-                                    <span>Zeigt den Partnerblock auf der Social-Seite an.</span>
-                                </span>
-                                <span class="settings-switch">
-                                    <input type="checkbox" data-settings-input="partnerDiscordEnabled" checked>
-                                    <span>Aktiv</span>
-                                </span>
-                            </label>
-                            <label class="settings-item">
-                                <span>
-                                    <strong>Support-Formulare anzeigen</strong>
-                                    <span>Blendet die Kontaktformulare auf allen Seiten ein oder aus.</span>
-                                </span>
-                                <span class="settings-switch">
-                                    <input type="checkbox" data-settings-input="supportEnabled" checked>
-                                    <span>Aktiv</span>
-                                </span>
-                            </label>
-                        </div>
-                        <div class="status-box" data-status-for="admin-sections-form"></div>
-                        <div class="button-row">
-                            <button class="save-btn btn-highlight" type="submit">Freischaltungen speichern</button>
-                        </div>
-                    </form>
-                </div>
-            </section>
-
-            <section class="section">
-                <div class="news-panel dashboard-panel">
-                    <div class="section-header">
-                        <div>
-                            <span class="eyebrow">News</span>
-                            <h2>Neue News veröffentlichen</h2>
-                        </div>
-                        <p>Für kurze Updates, Changelogs oder Fillypath-Neuigkeiten.</p>
-                    </div>
-                    <form id="admin-news-form" class="form-block" onsubmit="event.preventDefault(); uploadNewsWithImage();">
-                        <div class="field-group">
-                            <label for="n-title">Titel</label>
-                            <input class="editor-input" type="text" id="n-title" placeholder="Titel des Beitrags" required>
-                        </div>
-                        <div class="form-grid two-col">
-                            <div class="field-group">
-                                <label for="n-category">Zielbereich</label>
-                                <select class="editor-input" id="n-category">
-                                    <option value="general">Allgemeine News (Startseite)</option>
-                                    <option value="fillypath">Fillypath Update</option>
-                                </select>
-                            </div>
-                            <div class="field-group">
-                                <label for="n-type">Beitragstyp</label>
-                                <select class="editor-input" id="n-type">
-                                    <option value="news">Normale News</option>
-                                    <option value="patchnotes">Patchnotes</option>
-                                    <option value="changelog">Changelog</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="field-group">
-                            <label for="n-content">Inhalt</label>
-                            <textarea class="editor-input" id="n-content" rows="6" placeholder="Kurz und normal schreiben reicht hier völlig." required></textarea>
-                        </div>
-                        <div class="field-group">
-                            <label for="n-image">Optionales Bild</label>
-                            <input class="editor-input" type="file" id="n-image" accept="image/*">
-                            <p class="helper-text">Das Bild wird vor dem Upload automatisch kleiner gemacht.</p>
-                        </div>
-                        <div class="status-box" data-status-for="admin-news-form"></div>
-                        <div class="button-row">
-                            <button class="save-btn btn-highlight" type="submit" id="post-btn">Beitrag veröffentlichen</button>
-                        </div>
-                    </form>
-                </div>
-            </section>
-
-            <section class="section">
+            <section class="section" id="admin-overview">
                 <div class="section-header">
-                    <div>
+                    <div class="section-copy">
+                        <span class="eyebrow">Übersicht</span>
+                        <h2 class="section-title">Dein Live-Dashboard</h2>
+                    </div>
+                    <p>Hier siehst du auf einen Blick, was online ist, wie viele Inhalte vorhanden sind und ob neue Anfragen warten.</p>
+                </div>
+                <div class="admin-stats-grid">
+                    <article class="admin-stat-card">
+                        <span class="admin-stat-label">News gesamt</span>
+                        <strong class="admin-stat-value" id="admin-stat-news-total">-</strong>
+                        <p>Alle veröffentlichten Beiträge auf Startseite und Fillypath zusammen.</p>
+                    </article>
+                    <article class="admin-stat-card">
+                        <span class="admin-stat-label">Startseiten-News</span>
+                        <strong class="admin-stat-value" id="admin-stat-news-general">-</strong>
+                        <p>Beiträge im allgemeinen Feed der Website.</p>
+                    </article>
+                    <article class="admin-stat-card">
+                        <span class="admin-stat-label">Fillypath-News</span>
+                        <strong class="admin-stat-value" id="admin-stat-news-fillypath">-</strong>
+                        <p>Patchnotes und Server-Updates für den Minecraft-Bereich.</p>
+                    </article>
+                    <article class="admin-stat-card">
+                        <span class="admin-stat-label">Offene Tickets</span>
+                        <strong class="admin-stat-value" id="admin-stat-tickets-total">-</strong>
+                        <p>Alle eingegangenen Support-Nachrichten im aktuellen Postfach.</p>
+                    </article>
+                </div>
+                <div class="admin-board-grid">
+                    <article class="admin-board-card">
+                        <div class="section-header">
+                            <div class="section-copy">
+                                <span class="eyebrow">Bereiche</span>
+                                <h3 class="section-title">Aktive Freischaltungen</h3>
+                            </div>
+                        </div>
+                        <div id="admin-feature-status" class="admin-feature-status">
+                            <div class="empty-state">
+                                <h3>Lade Freischaltungen...</h3>
+                                <p>Die aktuellen Website-Bereiche werden geladen.</p>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="admin-board-card">
+                        <div class="section-header">
+                            <div class="section-copy">
+                                <span class="eyebrow">Zuletzt</span>
+                                <h3 class="section-title">Neueste Aktivitäten</h3>
+                            </div>
+                        </div>
+                        <div id="admin-activity-feed" class="admin-activity-feed">
+                            <div class="empty-state">
+                                <h3>Lade Aktivitäten...</h3>
+                                <p>Neueste News und Support-Eingänge erscheinen gleich hier.</p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="admin-workspace-grid">
+                    <div class="news-panel dashboard-panel">
+                        <div class="section-header">
+                            <div>
+                                <span class="eyebrow">Bereiche freischalten</span>
+                                <h2>Was auf der Website sichtbar sein soll</h2>
+                            </div>
+                            <p>Wenn etwas noch nicht fertig ist, blendest du es hier aus, ohne an den Seiten selbst zu arbeiten.</p>
+                        </div>
+                        <form id="admin-sections-form" class="form-block" onsubmit="saveSectionSettings(event)">
+                            <div class="settings-list">
+                                <label class="settings-item">
+                                    <span>
+                                        <strong>Fillypath anzeigen</strong>
+                                        <span>Steuert Minecraft-Bereich, Server-Hinweise und Fillypath-Support.</span>
+                                    </span>
+                                    <span class="settings-switch">
+                                        <input type="checkbox" data-settings-input="fillypathEnabled" checked>
+                                        <span>Aktiv</span>
+                                    </span>
+                                </label>
+                                <label class="settings-item">
+                                    <span>
+                                        <strong>Creepercave anzeigen</strong>
+                                        <span>Schaltet den eigenen Discord-Bereich und Discord-Support frei.</span>
+                                    </span>
+                                    <span class="settings-switch">
+                                        <input type="checkbox" data-settings-input="creepercaveEnabled" checked>
+                                        <span>Aktiv</span>
+                                    </span>
+                                </label>
+                                <label class="settings-item">
+                                    <span>
+                                        <strong>Partner-Discord anzeigen</strong>
+                                        <span>Zeigt den Partnerblock auf der Social-Seite an.</span>
+                                    </span>
+                                    <span class="settings-switch">
+                                        <input type="checkbox" data-settings-input="partnerDiscordEnabled" checked>
+                                        <span>Aktiv</span>
+                                    </span>
+                                </label>
+                                <label class="settings-item">
+                                    <span>
+                                        <strong>Support-Formulare anzeigen</strong>
+                                        <span>Blendet die Kontaktformulare auf allen Seiten ein oder aus.</span>
+                                    </span>
+                                    <span class="settings-switch">
+                                        <input type="checkbox" data-settings-input="supportEnabled" checked>
+                                        <span>Aktiv</span>
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="status-box" data-status-for="admin-sections-form"></div>
+                            <div class="button-row">
+                                <button class="save-btn btn-highlight" type="submit">Freischaltungen speichern</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="news-panel dashboard-panel">
+                        <div class="section-header">
+                            <div>
+                                <span class="eyebrow">News</span>
+                                <h2>Neue News veröffentlichen</h2>
+                            </div>
+                            <p>Für kurze Updates, Changelogs, Patchnotes oder Hinweise an die Community.</p>
+                        </div>
+                        <form id="admin-news-form" class="form-block" onsubmit="event.preventDefault(); uploadNewsWithImage();">
+                            <div class="field-group">
+                                <label for="n-title">Titel</label>
+                                <input class="editor-input" type="text" id="n-title" placeholder="Titel des Beitrags" required>
+                            </div>
+                            <div class="form-grid two-col">
+                                <div class="field-group">
+                                    <label for="n-category">Zielbereich</label>
+                                    <select class="editor-input" id="n-category">
+                                        <option value="general">Allgemeine News (Startseite)</option>
+                                        <option value="fillypath">Fillypath Update</option>
+                                    </select>
+                                </div>
+                                <div class="field-group">
+                                    <label for="n-type">Beitragstyp</label>
+                                    <select class="editor-input" id="n-type">
+                                        <option value="news">Normale News</option>
+                                        <option value="patchnotes">Patchnotes</option>
+                                        <option value="changelog">Changelog</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="field-group">
+                                <label for="n-content">Inhalt</label>
+                                <textarea class="editor-input" id="n-content" rows="7" placeholder="Kurz, klar und direkt schreiben reicht hier völlig." required></textarea>
+                            </div>
+                            <div class="field-group">
+                                <label for="n-image">Optionales Bild</label>
+                                <input class="editor-input" type="file" id="n-image" accept="image/*">
+                                <p class="helper-text">Das Bild wird vor dem Upload automatisch kleiner gemacht.</p>
+                            </div>
+                            <div class="status-box" data-status-for="admin-news-form"></div>
+                            <div class="button-row">
+                                <button class="save-btn btn-highlight" type="submit" id="post-btn">Beitrag veröffentlichen</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" id="admin-messages">
+                <div class="section-header">
+                    <div class="section-copy">
                         <span class="eyebrow">Support Inbox</span>
                         <h2 class="section-title">Eingehende Nachrichten</h2>
                     </div>
-                    <p>Hier landen alle Nachrichten, die über die Formulare abgeschickt wurden.</p>
+                    <p>Hier landen alle Nachrichten aus den Formularen. Du kannst direkt reagieren oder den Eintrag löschen.</p>
                 </div>
-                <div id="admin-messages">
+                <div id="admin-messages-list">
                     <div class="empty-state">
                         <h3>Lade Support-Tickets...</h3>
                         <p>Die Inbox wird vorbereitet.</p>

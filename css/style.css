@@ -1459,6 +1459,120 @@ textarea.editor-input {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
+.admin-stats-grid,
+.admin-board-grid,
+.admin-workspace-grid {
+    display: grid;
+    gap: 20px;
+}
+
+.admin-stats-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.admin-stat-card,
+.admin-board-card {
+    padding: 22px 22px 20px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 22px;
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.16);
+}
+
+.admin-stat-label {
+    display: inline-flex;
+    margin-bottom: 10px;
+    color: var(--text-soft);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.admin-stat-value {
+    display: block;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1;
+    color: var(--text);
+    margin-bottom: 12px;
+}
+
+.admin-stat-card p,
+.admin-board-card p {
+    color: var(--text-muted);
+}
+
+.admin-board-grid,
+.admin-workspace-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 22px;
+}
+
+.admin-feature-status,
+.admin-activity-feed {
+    display: grid;
+    gap: 14px;
+}
+
+.admin-feature-item,
+.admin-activity-item {
+    display: grid;
+    gap: 8px;
+    padding: 14px 16px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02) 62%, transparent 100%);
+    border-left: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0 16px 16px 0;
+}
+
+.admin-feature-top,
+.admin-activity-top {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.admin-feature-item strong,
+.admin-activity-item strong {
+    color: var(--text);
+    font-size: 1.02rem;
+}
+
+.admin-feature-item p,
+.admin-activity-item p {
+    margin: 0;
+}
+
+.admin-state-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 84px;
+    padding: 7px 10px;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.admin-state-pill.is-on {
+    background: rgba(126, 231, 135, 0.16);
+    color: #d9ffe0;
+    border: 1px solid rgba(126, 231, 135, 0.24);
+}
+
+.admin-state-pill.is-off {
+    background: rgba(255, 127, 141, 0.14);
+    color: #ffe4e8;
+    border: 1px solid rgba(255, 127, 141, 0.22);
+}
+
+.admin-activity-meta {
+    color: var(--text-soft);
+    font-size: 0.9rem;
+}
+
 .ticket-meta {
     display: grid;
     gap: 10px;
@@ -1693,8 +1807,14 @@ textarea.editor-input {
     .support-shell-inner,
     .summary-grid,
     .media-spotlight,
-    .discord-layout {
+    .discord-layout,
+    .admin-board-grid,
+    .admin-workspace-grid {
         grid-template-columns: 1fr;
+    }
+
+    .admin-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .nav-wrap {
@@ -1734,7 +1854,8 @@ textarea.editor-input {
     .form-split,
     .profile-meta,
     .summary-grid,
-    .media-spotlight {
+    .media-spotlight,
+    .admin-stats-grid {
         grid-template-columns: 1fr;
     }
 
