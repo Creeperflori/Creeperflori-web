@@ -238,35 +238,20 @@ li {
     grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
     gap: clamp(30px, 5vw, 56px);
     padding: clamp(28px, 5vw, 54px);
-    background:
-        linear-gradient(135deg, rgba(126, 231, 135, 0.11), rgba(110, 198, 255, 0.07)),
-        var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow);
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
     min-height: 460px;
     align-items: center;
 }
 
 .hero::after {
-    content: "";
-    position: absolute;
-    inset: auto -80px -80px auto;
-    width: 220px;
-    height: 220px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(126, 231, 135, 0.12), transparent 65%);
-    pointer-events: none;
+    content: none;
 }
 
 .hero::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-        linear-gradient(90deg, rgba(255, 255, 255, 0.06), transparent 38%),
-        linear-gradient(180deg, rgba(126, 231, 135, 0.05), transparent 45%);
-    pointer-events: none;
+    content: none;
 }
 
 .hero-content,
@@ -355,8 +340,8 @@ li {
     justify-self: center;
     border-radius: 28px;
     object-fit: cover;
-    border: 2px solid var(--border-strong);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.26);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: none;
 }
 
 .action-panel {
@@ -475,10 +460,10 @@ li {
 .news-panel,
 .login-tips,
 .empty-state {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow);
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
 }
 
 .hero-mini-card,
@@ -504,7 +489,7 @@ li {
 .feature-card,
 .info-card,
 .empty-state {
-    padding: var(--card-padding);
+    padding: 10px 0;
 }
 
 .hero-mini-card strong,
@@ -528,6 +513,8 @@ li {
 .section {
     margin-top: clamp(36px, 6vw, 64px);
     scroll-margin-top: 110px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .section-header {
@@ -1053,9 +1040,7 @@ textarea.editor-input {
 
 .support-shell {
     overflow: hidden;
-    background:
-        linear-gradient(135deg, rgba(110, 198, 255, 0.08), transparent 42%),
-        var(--surface);
+    background: transparent;
 }
 
 .support-shell-inner {
@@ -1101,35 +1086,27 @@ textarea.editor-input {
 
 .social-btn {
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
         "main tag"
         "main cta";
     gap: 18px 22px;
-    min-height: 168px;
-    padding: var(--card-padding);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background:
-        linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
-        var(--surface);
-    transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
+    min-height: auto;
+    padding: 16px 0 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.22s ease, border-color 0.22s ease, opacity 0.22s ease;
 }
 
 .social-btn:hover {
-    transform: translateY(-4px);
+    transform: translateY(-2px);
     border-color: rgba(255, 255, 255, 0.16);
-    box-shadow: 0 26px 50px rgba(0, 0, 0, 0.28);
+    opacity: 1;
 }
 
 .social-btn::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(120deg, rgba(255, 255, 255, 0.08), transparent 40%);
-    opacity: 0.8;
-    pointer-events: none;
+    content: none;
 }
 
 .social-icon {
@@ -1297,7 +1274,7 @@ textarea.editor-input {
 
 .profile-shell,
 .news-panel {
-    padding: var(--card-padding);
+    padding: 0;
 }
 
 .settings-list {
@@ -1346,10 +1323,11 @@ textarea.editor-input {
 }
 
 .notice-card {
-    padding: var(--card-padding);
-    border-radius: 18px;
-    background: rgba(255, 189, 92, 0.08);
-    border: 1px solid rgba(255, 189, 92, 0.24);
+    padding: 18px 0;
+    border-radius: 0;
+    background: transparent;
+    border-top: 1px solid rgba(255, 189, 92, 0.24);
+    border-bottom: 1px solid rgba(255, 189, 92, 0.24);
     color: #ffe9bf;
 }
 
@@ -1484,6 +1462,12 @@ textarea.editor-input {
 .discord-layout {
     display: grid;
     gap: 18px;
+}
+
+.summary-grid > *,
+.discord-layout > * {
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .summary-grid {
