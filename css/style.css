@@ -1450,8 +1450,10 @@ textarea.editor-input {
 
 .hero-panel.is-clean {
     gap: 14px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.035);
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
 }
 
 .hero-list {
@@ -1461,11 +1463,14 @@ textarea.editor-input {
 
 .hero-list li {
     list-style: none;
-    padding: 14px 16px;
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    background: rgba(255, 255, 255, 0.035);
+    padding: 0 0 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     color: var(--text-muted);
+}
+
+.hero-list li:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
 }
 
 .hero-list strong {
@@ -1497,11 +1502,11 @@ textarea.editor-input {
 .surface-card,
 .embed-card,
 .media-banner {
-    padding: 22px;
-    border-radius: 22px;
-    border: 1px solid var(--border);
-    background: rgba(255, 255, 255, 0.035);
-    box-shadow: var(--shadow);
+    padding: 8px 0;
+    border-radius: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
 }
 
 .surface-card h3,
@@ -1522,15 +1527,11 @@ textarea.editor-input {
     overflow: hidden;
     display: grid;
     gap: 12px;
-    min-height: 170px;
+    min-height: auto;
 }
 
 .media-banner::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(130deg, rgba(255, 255, 255, 0.08), transparent 45%);
-    pointer-events: none;
+    content: none;
 }
 
 .media-banner > * {
@@ -1542,25 +1543,6 @@ textarea.editor-input {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-}
-
-.media-banner.twitch-banner {
-    background: radial-gradient(circle at top right, rgba(145, 70, 255, 0.26), transparent 34%), rgba(255, 255, 255, 0.035);
-}
-
-.media-banner.youtube-banner {
-    background: radial-gradient(circle at top right, rgba(255, 0, 0, 0.24), transparent 34%), rgba(255, 255, 255, 0.035);
-}
-
-.media-banner.tiktok-banner {
-    background:
-        radial-gradient(circle at top right, rgba(0, 255, 204, 0.14), transparent 30%),
-        radial-gradient(circle at bottom right, rgba(255, 0, 102, 0.16), transparent 32%),
-        rgba(255, 255, 255, 0.035);
-}
-
-.media-banner.instagram-banner {
-    background: radial-gradient(circle at top right, rgba(225, 48, 108, 0.24), transparent 32%), rgba(255, 255, 255, 0.035);
 }
 
 .discord-preview-frame {
@@ -1577,9 +1559,11 @@ textarea.editor-input {
     min-height: 420px;
     padding: 24px;
     text-align: center;
-    border-radius: 18px;
-    border: 1px dashed rgba(255, 255, 255, 0.12);
-    background: rgba(4, 7, 9, 0.55);
+    border-radius: 0;
+    border: 0;
+    border-top: 1px dashed rgba(255, 255, 255, 0.12);
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
+    background: transparent;
     color: var(--text-muted);
 }
 
