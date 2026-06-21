@@ -1073,7 +1073,10 @@ textarea.editor-input {
 
 .support-shell {
     overflow: hidden;
-    background: transparent;
+    position: relative;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(126, 231, 135, 0.07) 36%, rgba(110, 198, 255, 0.04) 62%, transparent 100%);
+    border-radius: 28px;
 }
 
 .support-shell-inner {
@@ -1081,6 +1084,11 @@ textarea.editor-input {
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
     gap: clamp(28px, 5vw, 48px);
     padding: clamp(26px, 4vw, 38px);
+    border-radius: 27px;
+    background:
+        linear-gradient(180deg, rgba(16, 24, 23, 0.9), rgba(9, 15, 14, 0.82)),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03), transparent 70%);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.16);
 }
 
 .support-copy h2,
@@ -1096,6 +1104,13 @@ textarea.editor-input {
     max-width: var(--copy-width);
 }
 
+.support-copy p {
+    padding: 12px 18px 12px 14px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03) 60%, transparent 100%);
+    border-left: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0 16px 16px 0;
+}
+
 .support-highlights {
     display: none;
     gap: 14px;
@@ -1105,6 +1120,10 @@ textarea.editor-input {
 .support-form {
     display: grid;
     gap: 20px;
+    padding: 20px 22px 22px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015));
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 22px;
 }
 
 .footer-bottom {
@@ -1529,6 +1548,13 @@ textarea.editor-input {
     border: 0;
     background: transparent;
     box-shadow: none;
+}
+
+.summary-grid > .surface-card,
+.discord-layout > .surface-card,
+.discord-layout > .embed-card,
+.media-spotlight > .media-banner {
+    min-height: 100%;
 }
 
 .surface-card h3,
